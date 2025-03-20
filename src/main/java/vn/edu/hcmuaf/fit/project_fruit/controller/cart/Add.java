@@ -19,7 +19,15 @@ public class Add extends HttpServlet {
         try {
             // Lấy tham số "pid" từ request và chuyển thành số nguyên
             int productId = Integer.parseInt(request.getParameter("addToCartPid"));
-
+            int quantity = 1; // Mặc định là 1
+            String quantityParam = request.getParameter("quantity");
+            if (quantityParam != null) {
+                try {
+                    quantity = Integer.parseInt(quantityParam);
+                } catch (NumberFormatException e) {
+                    quantity = 1; // Nếu có lỗi thì đặt lại là 1
+                }
+            }
             // Sử dụng service để lấy thông tin sản phẩm
             ProductService productService = new ProductService();
             Product product = productService.getDetails(productId);
@@ -39,7 +47,7 @@ public class Add extends HttpServlet {
             }
 
             // Thêm sản phẩm vào giỏ hàng
-            cart.addProduct(product);
+            cart.addProduct(product, quantity);
 
             // Cập nhật giỏ hàng vào session
             session.setAttribute("cart", cart);

@@ -322,9 +322,7 @@
                             <i>Đánh giá: ${product.rating} <i class="fas fa-star"></i></i>
                         </div>
                         <!-- Nút thêm vào giỏ hàng -->
-                        <a href="${pageContext.request.contextPath}/add-cart?addToCartPid=${product.id_product}"
-                           class="btn">Thêm vào giỏ hàng</a>
-                    </a>
+                        <a href="#" onclick="addToCart(${product.id_product})" class="btn">Thêm vào giỏ hàng</a>
                 </div>
             </c:forEach>
         </div>
@@ -1004,6 +1002,12 @@
     });
 </script>
 <script src="${pageContext.request.contextPath}/assets/js/fruit.js" defer></script>
+<script>
+    function addToCart(productId) {
+        let quantity = 1; // Mặc định số lượng là 1
+        window.location.href = `${pageContext.request.contextPath}/add-cart?addToCartPid=` + productId + "&quantity=" + quantity;
+    }
+</script>
 </body>
 
 </html>

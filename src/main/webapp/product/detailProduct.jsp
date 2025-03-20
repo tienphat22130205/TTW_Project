@@ -179,11 +179,6 @@
                     <img src="${not empty product.imageUrl ? product.imageUrl : '/assets/img/default.jpg'}"
                          alt="${product.name}" class="carousel-img active">
                 </div>
-                <!-- Navigation Controls -->
-                <div class="carousel-controls">
-                    <i class="fas fa-chevron-left prev"></i>
-                    <i class="fas fa-chevron-right next"></i>
-                </div>
             </div>
 
             <!-- Phần chi tiết sản phẩm -->
@@ -207,19 +202,20 @@
 
                 <!-- Phần thêm số lượng -->
                 <div class="quantity">
-                    <button class="minus"><i class="fa-solid fa-minus"></i></button>
-                    <input type="number" value="1" min="1"/>
-                    <button class="plus"><i class="fa-solid fa-plus"></i></button>
+                    <button type="button" class="minus"><i class="fa-solid fa-minus"></i></button>
+                    <input id="quantity" type="number" value="1" min="1"/>
+                    <button type="button" class="plus"><i class="fa-solid fa-plus"></i></button>
                 </div>
 
                 <!-- Nút thêm vào giỏ hàng -->
                 <!-- Nút Thêm vào giỏ hàng -->
-                <button class="add-to-cart">
-                    <a href="${pageContext.request.contextPath}/add-cart?addToCartPid=${product.id_product}"
-                       style="text-decoration: none; color: white;">
+                <form action="${pageContext.request.contextPath}/add-cart" method="get">
+                    <input type="hidden" name="addToCartPid" value="${product.id_product}">
+                    <input type="hidden" name="quantity" id="cartQuantity" value="1">
+                    <button type="submit" class="add-to-cart">
                         THÊM VÀO GIỎ HÀNG
-                    </a>
-                </button>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -429,6 +425,32 @@
 <script src="${pageContext.request.contextPath}/assets/js/fruit.js" defer></script>
 <script src="${pageContext.request.contextPath}/assets/js/login.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const minusBtn = document.querySelector(".minus");
+        const plusBtn = document.querySelector(".plus");
+        const quantityInput = document.getElementById("quantity");
+        const cartQuantity = document.getElementById("cartQuantity");
+
+        minusBtn.addEventListener("click", function () {
+            let value = parseInt(quantityInput.value);
+            if (value > 1) {
+                quantityInput.value = value - 1;
+                cartQuantity.value = quantityInput.value;
+            }
+        });
+
+        plusBtn.addEventListener("click", function () {
+            let value = parseInt(quantityInput.value);
+            quantityInput.value = value + 1;
+            cartQuantity.value = quantityInput.value;
+        });
+
+        quantityInput.addEventListener("input", function () {
+            cartQuantity.value = quantityInput.value;
+        });
+    });
+</script>
 </body>
 
 </html>

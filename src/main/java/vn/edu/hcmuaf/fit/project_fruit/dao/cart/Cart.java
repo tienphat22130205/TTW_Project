@@ -13,13 +13,16 @@ public class Cart {
     private Map<Integer, CartProduct> cartProduct = new HashMap<>();
 
     // Thêm sản phẩm vào giỏ hàng
-    public boolean addProduct(Product p){
+    public boolean addProduct(Product p, int quantity){
         if (cartProduct.containsKey(p.getId_product())){
-            return update(p.getId_product(), cartProduct.get(p.getId_product()).getQuantity() + 1);
+            return update(p.getId_product(), cartProduct.get(p.getId_product()).getQuantity() + quantity);
         }
-        cartProduct.put(p.getId_product(), convert(p));
+        CartProduct cartItem = convert(p);
+        cartItem.setQuantity(quantity); // Đặt số lượng mong muốn
+        cartProduct.put(p.getId_product(), cartItem);
         return true;
     }
+
 
     // Cập nhật số lượng của sản phẩm trong giỏ hàng
     public boolean update(int id, int quantity){

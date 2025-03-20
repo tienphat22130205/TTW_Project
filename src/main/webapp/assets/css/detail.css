@@ -694,57 +694,6 @@ body.scrolled-up .menu-bar {
     display: block;
 }
 
-.carousel-controls {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-    cursor: pointer;
-}
-
-.carousel-controls {
-    position: absolute;
-    top: 45%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-}
-
-.carousel-controls .prev,
-.carousel-controls .next {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 24px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-controls .prev:hover,
-.carousel-controls .next:hover {
-    background-color: #f27939;
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-}
-
-.carousel-controls .prev {
-    left: 10px;
-}
-
-.carousel-controls .next {
-    right: 10px;
-}
-
-
 .thumbnails {
     display: flex;
     justify-content: center;
