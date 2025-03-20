@@ -1,13 +1,12 @@
 package vn.edu.hcmuaf.fit.project_fruit.controller;
 
-import vn.edu.hcmuaf.fit.project_fruit.service.CustomerService;
-import vn.edu.hcmuaf.fit.project_fruit.dao.model.Customer;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Customer;
+import vn.edu.hcmuaf.fit.project_fruit.service.CustomerService;
 
 import java.io.IOException;
 

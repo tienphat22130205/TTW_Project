@@ -2,13 +2,9 @@ package vn.edu.hcmuaf.fit.project_fruit.service;
 
 import org.mindrot.jbcrypt.BCrypt;
 import vn.edu.hcmuaf.fit.project_fruit.dao.UserDao;
-import vn.edu.hcmuaf.fit.project_fruit.dao.auth.FacebookAuthHelper;
-import vn.edu.hcmuaf.fit.project_fruit.dao.auth.GoogleAuthHelper;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
+
 import java.util.UUID;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import java.security.GeneralSecurityException;
-import java.io.IOException;
 
 public class UserService {
     private final UserDao userDao = new UserDao();
@@ -87,42 +83,13 @@ public class UserService {
         }
         return null; // Cập nhật thất bại
     }
-    public User validateGoogleUser(String idTokenString) {
-        try {
-            GoogleIdToken.Payload payload = GoogleAuthHelper.verifyToken(idTokenString);
-            if (payload != null) {
-                String email = payload.getEmail();
-                String fullName = (String) payload.get("name");
-                return findOrCreateUser(email, fullName, "google");
-            }
-        } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public User getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
+    }
+    public boolean linkGoogleAccount(String email, String googleId) {
+        return userDao.linkGoogleAccount(email, googleId);
     }
 
-    public User validateFacebookUser(String accessToken) {
-        com.restfb.types.User facebookUser = FacebookAuthHelper.getUser(accessToken);
-        if (facebookUser != null) {
-            String email = facebookUser.getEmail();
-            String fullName = facebookUser.getName();
-            return findOrCreateUser(email, fullName, "facebook");
-        }
-        return null;
-    }
-
-    private User findOrCreateUser(String email, String fullName, String authProvider) {
-        User user = userDao.getUserByEmail(email); // Thêm hàm getUserByEmail vào UserDao
-        if (user == null) {
-            // Tạo người dùng mới
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setRole("user");
-            userDao.registerUser(newUser, fullName);
-            user = userDao.getUserByEmail(email);
-        }
-        return user;
-    }
 }
 
 

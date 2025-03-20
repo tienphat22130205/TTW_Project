@@ -10,7 +10,6 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.cart.Cart;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Product;
 import vn.edu.hcmuaf.fit.project_fruit.service.ProductService;
 
-
 import java.io.IOException;
 
 @WebServlet(name = "Add", value = "/add-cart")

@@ -1,6 +1,5 @@
 package vn.edu.hcmuaf.fit.project_fruit.dao.db;
 
-import com.mysql.cj.MysqlConnection;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.jdbi.v3.core.Jdbi;
 

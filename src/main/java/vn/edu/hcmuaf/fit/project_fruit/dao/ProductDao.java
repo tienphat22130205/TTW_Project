@@ -198,42 +198,6 @@ public class ProductDao {
             return new ArrayList<>();
         }
     }
-    public List<Product> getRelatedProducts(int categoryId, int excludeProductId) {
-        try {
-            List<Product> relatedProducts = new ArrayList<>();
-            String query = """
-            SELECT p.*, pr.percent_discount
-            FROM products p
-            LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion
-            WHERE p.id_category = ? AND p.id_product != ?
-            LIMIT 6
-        """;
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
-            ps.setInt(1, categoryId); // Lấy theo danh mục
-            ps.setInt(2, excludeProductId); // Loại trừ sản phẩm hiện tại
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                // Lấy danh sách hình ảnh
-                List<ProductImg> listImg = getImagesByProductId(rs.getInt("id_product"));
-                // Tạo đối tượng Product
-                Product product = new Product(
-                        rs.getInt("id_product"),
-                        rs.getString("product_name"),
-                        listImg,
-                        rs.getDouble("price"),
-                        rs.getString("rating"),
-                        rs.getDouble("percent_discount")
-                );
-                product.calculateDiscountedPrice();
-                relatedProducts.add(product);
-            }
-            return relatedProducts;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
     public int getCategoryIdByProductId(int productId) {
         try {
             String query = "SELECT id_category FROM products WHERE id_product = ?";
@@ -426,24 +390,63 @@ public class ProductDao {
             throw e; // Ném lại ngoại lệ
         }
     }
-    
+    public List<Product> getRelatedProducts(int categoryId, int excludeProductId) {
+        List<Product> relatedProducts = new ArrayList<>();
+        String query = """
+            SELECT p.*, pr.percent_discount
+            FROM products p
+            LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion
+            WHERE p.id_category = ? AND p.id_product != ?
+            LIMIT 10
+            """;
+
+        try (Connection conn = DbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setInt(1, categoryId);
+            ps.setInt(2, excludeProductId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                List<ProductImg> listImg = getImagesByProductId(rs.getInt("id_product"));
+                Product product = new Product(
+                        rs.getInt("id_product"),
+                        rs.getString("product_name"),
+                        listImg,
+                        rs.getDouble("price"),
+                        rs.getString("rating"),
+                        rs.getDouble("percent_discount")
+                );
+                product.calculateDiscountedPrice();
+                relatedProducts.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return relatedProducts;
+    }
+
+// ========================== MAIN TEST ==========================
+
     public static void main(String[] args) {
         ProductDao productDao = new ProductDao();
-// Kiểm tra phương thức lấy tất cả sản phẩm
-        List<ProductList> allProducts = productDao.getProductsByPage(1,150);
-        System.out.println("All Products: ");
-        for (ProductList productList : allProducts) {
-            System.out.println("Product ID: " + productList.getId_product());
-            System.out.println("Product Name: " + productList.getName());
-            System.out.println("Product Category: " + productList.getCategoryName());
-            System.out.println("Product Origin: " + productList.getOrigin());
-            System.out.println("Product Price: " + productList.getPrice());
-            System.out.println("Product Status: " + (productList.isStatus() ? "Còn Hàng" : "Hết Hàng"));
 
-            // Hiển thị mô tả sản phẩm
-            System.out.println("Product Description: " + productList.getDescribe_1());
-            System.out.println("URL: " + productList.getProductImgUrl());
+        // Kiểm tra phương thức lấy sản phẩm liên quan
+        int sampleCategoryId = 1; // Giả sử danh mục 1
+        int sampleProductId = 5;  // Giả sử sản phẩm có ID 5
+
+        List<Product> relatedProducts = productDao.getRelatedProducts(sampleCategoryId, sampleProductId);
+        System.out.println("Related Products:");
+
+        for (Product product : relatedProducts) {
+            System.out.println("Product ID: " + product.getId_product());
+            System.out.println("Product Name: " + product.getName());
+            System.out.println("Price: " + product.getPrice());
+            System.out.println("Discounted Price: " + product.getDiscountedPrice());
+            System.out.println("Rating: " + product.getRating());
+            System.out.println("Images: " + product.getListimg().size() + " images available");
             System.out.println("--------------------------------------------");
         }
     }
+
 }

@@ -37,21 +37,14 @@ public class ProductService {
     }
     public static void main(String[] args) {
         ProductService productService = new ProductService();
+        int categoryId = 1;  // ID danh mục cần lấy
+        int excludeProductId = 10;  // ID sản phẩm cần loại trừ
 
-        // Lấy sản phẩm bán chạy nhất
-        List<Product> bestSellingProducts = productService.getBestSellingProducts();
+        List<Product> relatedProducts = productService.getRelatedProducts(categoryId, excludeProductId);
 
-        // Kiểm tra và in ra thông tin các sản phẩm bán chạy nhất
-        if (bestSellingProducts != null && !bestSellingProducts.isEmpty()) {
-            System.out.println("Sản phẩm bán chạy nhất:");
-            for (Product product : bestSellingProducts) {
-                System.out.println("Tên sản phẩm: " + product.getName());
-                System.out.println("Tổng số lượng mua: " + product.getTotalQuantity());
-                System.out.println("Tổng số tiền: " + product.getTotalAmount() + " VND");
-                System.out.println("---------------------------");
-            }
-        } else {
-            System.out.println("Không có sản phẩm bán chạy nào.");
+        System.out.println("Related Products:");
+        for (Product product : relatedProducts) {
+            System.out.println("ID: " + product.getId_product() + ", Name: " + product.getName());
         }
     }
 

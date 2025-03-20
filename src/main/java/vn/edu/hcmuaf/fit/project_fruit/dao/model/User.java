@@ -8,15 +8,17 @@ public class User implements Serializable {
     private String password;
     private String role;
     private int idCustomer;
+    private String googleId;
 
     public User() {
     }
-    public User(int id_account, String email, String password, String role, int idCustomer) {
+    public User(int id_account, String email, String password, String role, int idCustomer, String googleId) {
         this.id_account = id_account;
         this.email = email;
         this.password = password;
         this.role = role;
         this.idCustomer = idCustomer;
+        this.googleId = googleId;
     }
 
     public int getIdCustomer() {
@@ -57,5 +59,12 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 }

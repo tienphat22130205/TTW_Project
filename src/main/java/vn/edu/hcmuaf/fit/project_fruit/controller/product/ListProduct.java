@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller.product;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Product;
 import vn.edu.hcmuaf.fit.project_fruit.service.ProductService;
-
 
 import java.io.IOException;
 import java.util.ArrayList;

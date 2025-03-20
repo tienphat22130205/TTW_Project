@@ -68,7 +68,15 @@
                 <span class="form__social-text">Đăng nhập bằng</span>
 
                 <a href="#" class="form__social-icon" onclick="signInWithFacebook();"><i class='bx bxl-facebook' ></i></a>
-                <a href="#" class="form__social-icon" onclick="signInWithGoogle();"><i class='bx bxl-google' ></i></a>
+                <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
+
+&redirect_uri=http://localhost:9090/project_fruit/google-login
+
+&response_type=code
+
+&client_id=1033832143997-6e97eqtcre3a5em76s2fo28rld9dpf8v.apps.googleusercontent.com
+
+&approval_prompt=force" class="form__social-icon" onclick="signInWithGoogle();"><i class='bx bxl-google' ></i></a>
                 <a href="#" class="form__social-icon"><i class='bx bxl-instagram' ></i></a>
             </div>
         </form>

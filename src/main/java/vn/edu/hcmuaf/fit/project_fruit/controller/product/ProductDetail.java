@@ -1,18 +1,18 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller.product;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import vn.edu.hcmuaf.fit.project_fruit.dao.FeedbackDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.ProductDao;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Feedback;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Product;
 import vn.edu.hcmuaf.fit.project_fruit.service.ProductService;
-import vn.edu.hcmuaf.fit.project_fruit.dao.FeedbackDao;
-import vn.edu.hcmuaf.fit.project_fruit.dao.model.Feedback;
-import java.util.List;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "ProductDetail", value = "/product-detail")
 public class ProductDetail extends HttpServlet {

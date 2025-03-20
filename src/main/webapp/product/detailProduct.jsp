@@ -253,9 +253,34 @@
             </ul>
         </div>
     </div>
-
 </section>
-
+<section class="products" id="products">
+    <h1 class="heading"><span>Sản phẩm liên quan</span></h1>
+    <div class="swiper product-slider">
+        <div class="swiper-wrapper">
+            <c:forEach var="relatedProduct" items="${relatedProducts}">
+                <div class="swiper-slide box">
+                    <a href="${pageContext.request.contextPath}/product-detail?pid=${relatedProduct.id_product}">
+                        <!-- Hiển thị hình ảnh sản phẩm -->
+                        <img src="${relatedProduct.imageUrl != null ? relatedProduct.imageUrl : '/assets/img/default.jpg'}"
+                             alt="${relatedProduct.name}"/>
+                        <!-- Hiển thị thông tin sản phẩm -->
+                        <h4 style="color: red">Mã sản phẩm: ${relatedProduct.id_product}</h4>
+                        <h3>${relatedProduct.name}</h3>
+                        <h3 class="price" style="color: red">${relatedProduct.discountedPrice}đ
+                        </h3>
+                        <div class="stars">
+                            <i>Đánh giá: ${relatedProduct.rating} <i class="fas fa-star"></i></i>
+                        </div>
+                        <!-- Nút thêm vào giỏ hàng -->
+                        <a href="${pageContext.request.contextPath}/add-cart?addToCartPid=${relatedProduct.id_product}"
+                           class="btn">Thêm vào giỏ hàng</a>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+</section>
 
 <section class="product-reviews">
     <h2 class="reviews-title">KHÁCH HÀNG NÓI VỀ SẢN PHẨM</h2>

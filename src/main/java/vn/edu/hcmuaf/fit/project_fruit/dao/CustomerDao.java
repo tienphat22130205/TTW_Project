@@ -3,10 +3,11 @@ package vn.edu.hcmuaf.fit.project_fruit.dao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Customer;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class CustomerDao {

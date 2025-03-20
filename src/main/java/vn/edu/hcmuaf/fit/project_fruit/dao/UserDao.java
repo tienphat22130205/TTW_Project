@@ -1,12 +1,9 @@
 package vn.edu.hcmuaf.fit.project_fruit.dao;
 
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
-import vn.edu.hcmuaf.fit.project_fruit.dao.model.Customer;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserDao {
 
@@ -24,7 +21,8 @@ public class UserDao {
                         rs.getString("email"),
                         rs.getString("password"), // Mật khẩu hash
                         rs.getString("role"),
-                        rs.getInt("id_customer")
+                        rs.getInt("id_customer"),
+                        rs.getString("google_id") // Thêm Google ID
                 );
             }
         } catch (SQLException e) {
@@ -32,6 +30,7 @@ public class UserDao {
         }
         return user;
     }
+
     // Kiểm tra email đã tồn tại chưa
     public boolean isEmailExists(String email) {
         String query = "SELECT COUNT(*) FROM accounts WHERE email = ?";
@@ -48,6 +47,7 @@ public class UserDao {
         }
         return false;
     }
+
     // Đăng ký người dùng vào bảng customers và accounts
     public boolean registerUser(User user, String fullName) {
         String insertCustomerQuery = "INSERT INTO customers (customer_name, customer_phone, address) VALUES (?, ?, ?)";
@@ -80,7 +80,7 @@ public class UserDao {
             psAccount.setString(1, user.getEmail());
             psAccount.setString(2, user.getPassword()); // Mật khẩu đã hash
             psAccount.setString(3, user.getRole()); // Vai trò (mặc định là "user")
-            psAccount.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now())); // Ngày tạo
+            psAccount.setDate(4, Date.valueOf(java.time.LocalDate.now())); // Ngày tạo
             psAccount.setInt(5, idCustomer); // Liên kết id_customer từ bảng customers
             psAccount.executeUpdate();
 
@@ -121,18 +121,40 @@ public class UserDao {
         }
         return false;
     }
+
+    // Lấy thông tin người dùng qua email
     public User getUserByEmail(String email) {
-        User user = null;
         String query = "SELECT * FROM accounts WHERE email = ?";
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                user = new User(rs.getInt("id_account"), rs.getString("email"), rs.getString("password"), rs.getString("role"), rs.getInt("id_customer"));
+                return new User(
+                        rs.getInt("id_account"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getInt("id_customer"),
+                        rs.getString("google_id") // Lấy thêm Google ID
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user;
+        return null;
+    }
+
+    // Liên kết tài khoản Google với tài khoản email đã có trong hệ thống
+    public boolean linkGoogleAccount(String email, String googleId) {
+        String query = "UPDATE accounts SET google_id = ? WHERE email = ?";
+        try (Connection conn = DbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, googleId);
+            ps.setString(2, email);
+            return ps.executeUpdate() > 0; // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

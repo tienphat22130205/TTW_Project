@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 
 import java.io.IOException;
@@ -13,8 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
-import org.mindrot.jbcrypt.BCrypt;
 @WebServlet("/AddAccountServlet")
 public class AddAccount extends HttpServlet {
     @Override

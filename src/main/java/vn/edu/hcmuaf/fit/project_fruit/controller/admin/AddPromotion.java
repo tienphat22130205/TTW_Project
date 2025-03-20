@@ -1,16 +1,15 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller.promotion;
+package vn.edu.hcmuaf.fit.project_fruit.controller.admin;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 
 @WebServlet("/AddPromotionServlet")
 public class AddPromotion extends HttpServlet {
