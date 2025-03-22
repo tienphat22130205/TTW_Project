@@ -1,235 +1,194 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh toán</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/payment.css">
+    <title>Thanh toán đơn giản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .content {
+            display: flex;
+        }
+        .left, .right {
+            width: 50%;
+            padding: 20px;
+        }
+        .right {
+            border-left: 2px solid #ddd;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, input {
+            width: 90%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cod {
+            background: green;
+            color: white;
+        }
+        .transfer {
+            background: blue;
+            color: white;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("https://provinces.open-api.vn/api/?depth=3")
+                .then(response => response.json())
+                .then(data => {
+                    const provinceSelect = document.getElementById("province");
+                    const districtSelect = document.getElementById("district");
+                    const wardSelect = document.getElementById("ward");
+
+                    data.forEach(province => {
+                        let option = document.createElement("option");
+                        option.value = province.code;
+                        option.textContent = province.name;
+                        provinceSelect.appendChild(option);
+                    });
+
+                    provinceSelect.addEventListener("change", function () {
+                        const selectedProvince = data.find(p => p.code == this.value);
+                        districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
+                        wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
+
+                        selectedProvince.districts.forEach(district => {
+                            let option = document.createElement("option");
+                            option.value = district.code;
+                            option.textContent = district.name;
+                            districtSelect.appendChild(option);
+                        });
+                    });
+
+                    districtSelect.addEventListener("change", function () {
+                        const selectedProvince = data.find(p => p.code == provinceSelect.value);
+                        const selectedDistrict = selectedProvince.districts.find(d => d.code == this.value);
+                        wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
+
+                        selectedDistrict.wards.forEach(ward => {
+                            let option = document.createElement("option");
+                            option.value = ward.code;
+                            option.textContent = ward.name;
+                            wardSelect.appendChild(option);
+                        });
+                    });
+                });
+        });
+    </script>
 </head>
-
 <body>
-<div class="checkout-container">
-    <div class="header">
-        <button class="back-button" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i> Quay lại
-        </button>
-        <h2 class="page-title">Thanh toán</h2>
-    </div>
-    <div class="tab-navigation">
-        <div class="tab active" id="infoTabButton" onclick="switchTab('infoTab')">1. THÔNG TIN</div>
-        <div class="tab" id="paymentTabButton">2. THANH TOÁN</div>
-    </div>
-    <div id="paymentTab" class="tab-content">
-        <div id="discountForm" class="discount-form">
-            <div class="discount-form">
-                <div class="discount-input-container">
-                    <input type="text" id="discountCode" placeholder="Nhập mã giảm giá (chỉ áp dụng 1 lần)">
-                    <button onclick="applyDiscount()">Áp dụng</button>
-                </div>
-                <p class="available-discounts" onclick="toggleAvailableDiscounts()">hoặc chọn từ 1 mã giảm giá có
-                    sẵn</p>
-                <div id="discountList" class="discount-list">
-                    <div class="discount-item" onclick="selectDiscount('S-Student')">Giảm S-Student - 400.000đ</div>
-                    <div class="discount-item" onclick="selectDiscount('Freeship')">Giảm giá Freeship - Miễn phí vận
-                        chuyển</div>
-                    <div class="discount-item" onclick="selectDiscount('Discount10')">Giảm 10% - Tối đa 200.000đ
-                    </div>
-                </div>
-            </div>
-            <div class="summary">
-                <p>Số lượng sản phẩm: <span id="productQuantity">01</span></p>
-                <p>Tiền hàng (tạm tính): <span id="subtotal">20.590.000đ</span></p>
-                <p>Phí vận chuyển: <span id="shippingFee">Miễn phí</span></p>
-                <p>Giảm giá: <span id="discountAmount">- 400.000đ</span></p>
-                <p><small>Quyền lợi dành riêng cho Học sinh - Sinh viên</small></p>
-                <h3>Tổng tiền (đã gồm VAT): <span id="totalAmount">20.590.000đ</span></h3>
-            </div>
-        </div>
-        <div class="section-header">Thông tin thanh toán</div>
-        <div class="payment-option" onclick="openOverlay()">
-            <div class="option-icon" id="selectedIcon">
-                <img src="../assets/img/logoBank/hinhthucthanhtoan.png" alt="Default Icon">
-            </div>
-            <div class="option-text">
-                <p id="selectedPaymentMethod" class="main-text">Chọn phương thức thanh toán</p>
-                <p class="sub-text">Nhận thêm nhiều ưu đãi tại cổng</p>
-            </div>
-        </div>
-        <div class="delivery-info">
-            <h3>THÔNG TIN NHẬN HÀNG</h3>
-            <div class="delivery-details">
-                <p>Khách hàng: <span id="customerName"></span></p>
-                <p>Số điện thoại: <span id="customerPhone"></span></p>
-                <p>Email: <span id="customerEmail"></span></p>
-                <p>Nhận hàng tại: <span id="deliveryAddress"></span></p>
-                <p>Người nhận: <span id="receiverInfo"></span></p>
-            </div>
-        </div>
-        <div class="checkout-summary">
-            <div class="total-summary">
-                <p class="summary-text">Tổng tiền tạm tính:</p>
-                <p class="summary-amount">20.590.000đ</p>
-            </div>
-            <button>Thanh toán</button>
-        </div>
-    </div>
-    <div class="information">
-        <div id="infoTab" class="tab-content active">
-            <!-- Sản phẩm -->
-            <div class="section">
-                <div class="section-header">SẢN PHẨM</div>
-                <div class="section-content">
-                    <!-- Kiểm tra nếu giỏ hàng không rỗng -->
-                    <c:if test="${not empty cart.list}">
-                        <c:forEach var="item" items="${cart.list}">
-                            <div class="product-summary">
-                                <!-- Hiển thị hình ảnh sản phẩm -->
-                                <c:if test="${not empty item.listImg and not empty item.listImg[0].url}">
-                                    <img src="${item.listImg[0].url}" alt="${item.name}">
-                                </c:if>
-                                <!-- Hiển thị thông tin sản phẩm -->
-                                <div>
-                                    <h4>${item.name}</h4>
-                                    <p>Giá: ${item.price}₫</p>
-                                    <p>Số lượng: ${item.quantity}</p>
-                                    <p><strong>Tổng: ${item.price * item.quantity}₫</strong></p>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:if>
-                    <c:if test="${empty cart.list}">
-                        <p>Giỏ hàng trống!</p>
-                    </c:if>
-                </div>
-            </div>
-            <!-- Thông tin khách hàng -->
-            <div class="section">
-                <div class="section-header">THÔNG TIN KHÁCH HÀNG</div>
-                <div class="section-content">
-                    <div class="row">
-                        <div class="col">
-                            <label for="name">Họ và tên:</label>
-                            <input type="text" id="name" name="name" value="${user.name}" placeholder="Nhập họ và tên">
-                        </div>
-                        <div class="col">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value="${user.email}" placeholder="Nhập email">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label for="phone">Số điện thoại:</label>
-                            <input type="text" id="phone" name="phone" value="${user.phone}" placeholder="Nhập số điện thoại">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <c:out value="${cart}" />
-            <!-- Thông tin nhận hàng -->
-            <div class="section">
-                <div class="section-header">THÔNG TIN NHẬN HÀNG</div>
-                <div class="section-content">
-                    <div class="delivery-method">
-                        <div class="method-option active" onclick="selectMethod(this, 'storePickupContent')">Nhận
-                            tại cửa hàng</div>
-                        <div class="method-option" onclick="selectMethod(this, 'homeDeliveryContent')">Giao hàng tận
-                            nơi</div>
-                    </div>
-                    <!-- Nội dung của từng hình thức -->
-                    <div id="storePickupContent" class="method-content active-content">
-                        <label for="storeBranch">Chọn chi nhánh:</label>
-                        <select id="storeBranch">
-                            <option>Chi nhánh 1 - 43 Nguyễn Thái Học</option>
-                            <option>Chi nhánh 2 - 28 Mai Chí Thọ</option>
-                        </select>
-                    </div>
+<div class="container">
+    <div class="content">
+        <!-- Bên trái: Thông tin đơn hàng -->
+        <div class="left">
+            <h2>Thông tin thanh toán</h2>
+            <form>
+                <label>Họ và Tên:</label>
+                <input type="text" required><br>
 
-                    <div id="homeDeliveryContent" class="method-content">
-                        <div class="row">
-                            <div class="col">
-                                <label for="province">Tỉnh/Thành phố:</label>
-                                <select id="province">
-                                    <option>Hồ Chí Minh</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="district">Quận/Huyện:</label>
-                                <select id="district">
-                                    <option>Quận 1</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <label for="ward">Phường/Xã:</label>
-                                <select id="ward">
-                                    <option>Phường 1</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="address">Số nhà, tên đường:</label>
-                                <input type="text" id="address" placeholder="Nhập địa chỉ">
-                            </div>
-                        </div>
-                        <label for="note">Ghi chú khác (nếu có):</label>
-                        <textarea id="note" placeholder="Nhập ghi chú..."></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tip-and-invoice">
-            <div class="invoice-request">
-                <label class="invoice-checkbox">
-                    <input type="checkbox" id="companyInvoice" />
-                    <span>Yêu cầu xuất hóa đơn công ty</span>
-                </label>
-                <p class="invoice-note">
-                    Với đơn hàng <strong>trên 20 triệu đồng</strong>, vui lòng thanh toán bằng phương thức chuyển
-                    khoản từ tài khoản công ty hoặc bằng thẻ công ty.
-                    <a href="#" class="policy-link">Xem chính sách</a>
-                </p>
-            </div>
-        </div>
-        <div class="checkout-summary">
-            <div class="total-summary">
-                <p class="summary-text">Tổng tiền tạm tính:</p>
-                <p class="summary-amount">${cart.totalPrice}₫</p>
-            </div>
-            <button class="continue-button" onclick="nextTab()">Tiếp tục</button>
-        </div>
-    </div>
-    <div id="overlay" class="overlay hidden">
-        <div class="overlay-content">
-            <div class="overlay-header">
-                <h3>Chọn phương thức thanh toán</h3>
-                <button class="close-button" onclick="closeOverlay()">×</button>
-            </div>
-            <div class="overlay-body">
-                <ul class="payment-methods">
-                    <li onclick="selectPaymentMethod('Thanh toán khi nhận hàng', '../assets/img/logoBank/thanhtoankhinhanhang.png')">
-                        <img src="../assets/img/logoBank/thanhtoankhinhanhang.png" alt="Cash Icon"> Thanh toán khi nhận hàng
-                    </li>
-                    <li onclick="selectPaymentMethod('Chuyển khoản ngân hàng qua mã QR', '../assets/img/logoBank/thanhtoanqr.png')">
-                        <img src="../assets/img/logoBank/thanhtoanqr.png" alt="QR Icon"> Chuyển khoản ngân hàng qua mã QR
-                    </li>
-                    <li onclick="selectPaymentMethod('VNPAY', '../assets/img/logoBank/vnpay.jpg')">
-                        <img src="../assets/img/logoBank/vnpay.jpg" alt="VNPAY Icon"> VNPAY
-                    </li>
-                    <li onclick="selectPaymentMethod('Qua thẻ Visa/Master/JCB/Napas', '../assets/img/logoBank/visa.png')">
-                        <img src="../assets/img/logoBank/visa.png" alt="Card Icon"> Qua thẻ Visa/Master/JCB/Napas
-                    </li>
-                    <li onclick="selectPaymentMethod('Ví MoMo', '../assets/img/logoBank/momo.webp')">
-                        <img src="../assets/img/logoBank/momo.webp" alt="MoMo Icon"> Ví MoMo
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+                <label>Số điện thoại:</label>
+                <input type="tel" required><br>
 
-    <script src="../assets/js/payment.js"></script>
+                <label>Email:</label>
+                <input type="email" required><br>
+
+                <label>Tỉnh/Thành phố:</label>
+                <select id="province">
+                    <option value="">Chọn Tỉnh/Thành phố</option>
+                </select><br>
+
+                <label>Quận/Huyện:</label>
+                <select id="district">
+                    <option value="">Chọn Quận/Huyện</option>
+                </select><br>
+
+                <label>Phường/Xã:</label>
+                <select id="ward">
+                    <option value="">Chọn Phường/Xã</option>
+                </select><br>
+
+                <label>Số nhà, địa chỉ cụ thể:</label>
+                <input type="text" required><br>
+
+                <h3>Phương thức thanh toán</h3>
+                <div class="btn-container">
+                    <button type="button" class="cod">Nhận hàng rồi trả tiền (COD)</button>
+                    <button type="button" class="transfer">Chuyển khoản</button>
+                </div>
+
+                <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
+            </form>
+        </div>
+        <!-- Bên phải: Hiển thị sản phẩm và tổng tiền -->
+        <div class="right">
+            <h2>Giỏ hàng</h2>
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Sản phẩm 1">
+                <span>Sản phẩm 1 - 500,000đ</span>
+            </div>
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Sản phẩm 2">
+                <span>Sản phẩm 2 - 250,000đ</span>
+            </div>
+            <h3>Tổng tiền: <strong>750,000đ</strong></h3>
+        </div>
+    </div>
+</div>
 </body>
-
 </html>
+
