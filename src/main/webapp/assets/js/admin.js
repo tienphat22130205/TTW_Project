@@ -385,37 +385,6 @@ new Chart(productStatsChartCtx, {
         },
     },
 });
-document.addEventListener("DOMContentLoaded", function () {
-    const logoutBtn = document.getElementById("logoutBtn");
-    const logoutOverlay = document.getElementById("logoutOverlay");
-    const logoutNotification = document.getElementById("logoutNotification");
-    const confirmLogoutBtn = document.getElementById("confirmLogoutBtn");
-    const cancelLogoutBtn = document.getElementById("cancelLogoutBtn");
-    const contextPath = "${pageContext.request.contextPath}";
-
-    // Khi người dùng nhấn vào "Đăng xuất"
-    logoutBtn.onclick = function () {
-        logoutOverlay.style.display = "block";
-        logoutNotification.style.display = "block";
-    };
-
-    // Khi người dùng nhấn "Không" (Hủy đăng xuất)
-    cancelLogoutBtn.onclick = function () {
-        logoutOverlay.style.display = "none";
-        logoutNotification.style.display = "none";
-    };
-
-    // Khi người dùng nhấn "Có" (Xác nhận đăng xuất)
-    confirmLogoutBtn.onclick = function () {
-        window.location.href = contextPath + "/logout";
-    };
-});
-    const contextPath = "${pageContext.request.contextPath}";
-    document.getElementById("confirmLogoutBtn").onclick = function() {
-    window.location.href = contextPath + "/logout";
-};
-
-
 // Khi người dùng nhấn vào overlay (bên ngoài thông báo), đóng thông báo
 document.getElementById("logoutOverlay").onclick = function () {
     document.getElementById("logoutOverlay").style.display = "none";
