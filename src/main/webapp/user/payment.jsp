@@ -8,27 +8,28 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f4;
         }
         .container {
-            display: flex;
-            flex-direction: column;
-            width: 60%;
-            background: white;
+            max-width: 1200px;
+            margin: auto;
             padding: 20px;
+            background: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            margin-top: 50px;
         }
         .content {
             display: flex;
+            flex-wrap: wrap;
         }
         .left, .right {
-            width: 50%;
+            flex: 1;
+            min-width: 300px;
             padding: 20px;
+            box-sizing: border-box;
         }
         .right {
             border-left: 2px solid #ddd;
@@ -37,18 +38,20 @@
             font-weight: bold;
         }
         select, input {
-            width: 90%;
-            padding: 15px;
+            width: 100%;
+            padding: 12px;
             margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 5px;
+            box-sizing: border-box;
         }
         .btn-container {
             display: flex;
             justify-content: space-between;
+            gap: 10px;
         }
         button {
-            width: 48%;
+            flex: 1;
             padding: 10px;
             border: none;
             cursor: pointer;
@@ -77,13 +80,25 @@
         }
         .submit-btn {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: #ff6600;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-top: 15px;
+        }
+        .voucher {
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            .right {
+                border-left: none;
+                border-top: 2px solid #ddd;
+            }
         }
     </style>
     <script>
@@ -139,31 +154,31 @@
             <h2>Thông tin thanh toán</h2>
             <form>
                 <label>Họ và Tên:</label>
-                <input type="text" required><br>
+                <input type="text" required>
 
                 <label>Số điện thoại:</label>
-                <input type="tel" required><br>
+                <input type="tel" required>
 
                 <label>Email:</label>
-                <input type="email" required><br>
+                <input type="email" required>
 
                 <label>Tỉnh/Thành phố:</label>
                 <select id="province">
                     <option value="">Chọn Tỉnh/Thành phố</option>
-                </select><br>
+                </select>
 
                 <label>Quận/Huyện:</label>
                 <select id="district">
                     <option value="">Chọn Quận/Huyện</option>
-                </select><br>
+                </select>
 
                 <label>Phường/Xã:</label>
                 <select id="ward">
                     <option value="">Chọn Phường/Xã</option>
-                </select><br>
+                </select>
 
                 <label>Số nhà, địa chỉ cụ thể:</label>
-                <input type="text" required><br>
+                <input type="text" required>
 
                 <h3>Phương thức thanh toán</h3>
                 <div class="btn-container">
@@ -185,10 +200,13 @@
                 <img src="https://via.placeholder.com/50" alt="Sản phẩm 2">
                 <span>Sản phẩm 2 - 250,000đ</span>
             </div>
+            <div class="voucher">
+                <label for="voucher">Mã giảm giá:</label>
+                <input type="text" id="voucher" placeholder="Nhập mã giảm giá nếu có">
+            </div>
             <h3>Tổng tiền: <strong>750,000đ</strong></h3>
         </div>
     </div>
 </div>
 </body>
 </html>
-
