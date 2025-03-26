@@ -167,4 +167,27 @@ public class PromotionsDao {
         return null;
     }
 
+    public static void main(String[] args) {
+        PromotionsDao dao = new PromotionsDao();
+
+        // Gọi phương thức getAll()
+        List<Promotions> promotionsList = dao.getAll();
+
+        // Kiểm tra danh sách có dữ liệu không
+        if (promotionsList.isEmpty()) {
+            System.out.println("Không có khuyến mãi nào trong cơ sở dữ liệu.");
+        } else {
+            System.out.println("Danh sách khuyến mãi:");
+            for (Promotions promotion : promotionsList) {
+                System.out.println("ID: " + promotion.getId_promotion() +
+                        ", Name: " + promotion.getPromotion_name() +
+                        ", Description: " + promotion.getDescribe_1() +
+                        ", Start Date: " + promotion.getStart_date() +
+                        ", End Date: " + promotion.getEnd_date() +
+                        ", Discount: " + promotion.getPercent_discount() +
+                        ", Type: " + promotion.getType());
+            }
+        }
+    }
+
 }

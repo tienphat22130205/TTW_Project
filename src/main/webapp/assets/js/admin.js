@@ -657,12 +657,13 @@ function openModal(data, modalType) {
         const modal = document.getElementById("deletePromotionModal");
         modal.style.display = "block";
 
+        // Hiển thị tên chương trình cần xóa
         document.getElementById("promoToDelete").textContent = data.promoTitle || "Chương Trình Không Xác Định";
 
-        document.getElementById("confirmDeleteButton").onclick = () => {
-            console.log(`Chương trình "${data.promoTitle}" đã bị xóa.`);
-            closeModal("deletePromotion");
-        };
+        // Gán ID khuyến mãi vào nút "Xóa"
+        document.getElementById("confirmDeleteButton").setAttribute("data-id", data.promoId);
+
+        console.log("Đã mở modal xóa cho ID:", data.promoId); // Debug kiểm tra ID
     }
 }
 
