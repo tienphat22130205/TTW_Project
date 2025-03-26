@@ -174,6 +174,8 @@
         <ul>
             <li><a class="active" href="#" onclick="showSection('account-info', this)"><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
             <li><a href="#" onclick="showSection('order-management', this)"><i class="fas fa-box"></i> Quản lý đơn hàng</a></li>
+            <li><a href="#" onclick="showSection('recent-viewed', this)"><i class="fas fa-clock"></i> Sản phẩm đã xem</a></li>
+            <li><a href="#" onclick="showSection('change-password', this)"><i class="fas fa-key"></i> Đổi Mật Khẩu</a></li>
             <li><a href="${pageContext.request.contextPath}/logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>
     </div>
@@ -256,6 +258,34 @@
                     <p>Không có đơn hàng bị hủy.</p>
                 </div>
             </div>
+        </div>
+<%--        Xem gần đây--%>
+        <div id="recent-viewed" class="section">
+            <h2>Sản phẩm đã xem gần đây</h2>
+            <div class="recent-products-list" id="recentProductsList">
+                <p>Chưa có sản phẩm nào được xem.</p>
+            </div>
+        </div>
+    <%-- Đổi mật khẩu--%>
+        <div id="change-password" class="section">
+            <h2>Đổi Mật Khẩu</h2>
+            <form action="${pageContext.request.contextPath}/change-password" method="post" class="change-password-form">
+                <div class="form-group">
+                    <label for="currentPassword">Mật khẩu hiện tại</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required placeholder="Nhập mật khẩu cũ">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Mật khẩu mới</label>
+                    <input type="password" id="newPassword" name="newPassword" required placeholder="Nhập mật khẩu mới">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Nhập lại mật khẩu mới</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Xác nhận mật khẩu mới">
+                </div>
+                <div class="form-group">
+                    <button type="submit">XÁC NHẬN ĐỔI MẬT KHẨU</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
