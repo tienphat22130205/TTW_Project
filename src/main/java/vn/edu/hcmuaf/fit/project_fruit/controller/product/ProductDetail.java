@@ -12,6 +12,7 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.model.Product;
 import vn.edu.hcmuaf.fit.project_fruit.service.ProductService;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 @WebServlet(name = "ProductDetail", value = "/product-detail")
@@ -51,6 +52,20 @@ public class ProductDetail extends HttpServlet {
                 request.setAttribute("relatedMessage", "No related products found.");
             }
             request.setAttribute("relatedProducts", relatedProducts);
+            // === XỬ LÝ SẢN PHẨM ĐÃ XEM GẦN ĐÂY ===
+            List<Product> recentlyViewed = (List<Product>) request.getSession().getAttribute("recentlyViewed");
+            if (recentlyViewed == null) {
+                recentlyViewed = new LinkedList<>();
+            }
+            // Xoá sản phẩm nếu đã tồn tại
+            recentlyViewed.removeIf(p -> p.getId_product() == product.getId_product());
+            // Thêm vào đầu danh sách
+            recentlyViewed.add(0, product);
+            // Giới hạn danh sách tối đa 5 sản phẩm
+            if (recentlyViewed.size() > 5) {
+                recentlyViewed = recentlyViewed.subList(0, 5);
+            }
+            request.getSession().setAttribute("recentlyViewed", recentlyViewed);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product ID format.");
         }
