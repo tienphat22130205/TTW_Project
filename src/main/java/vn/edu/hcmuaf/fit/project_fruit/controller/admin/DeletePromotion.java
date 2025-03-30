@@ -21,7 +21,6 @@ public class DeletePromotion extends HttpServlet {
             response.sendRedirect("promotion-list.jsp?status=invalid"); // ID không hợp lệ
             return;
         }
-
         try {
             // Xóa khuyến mãi sử dụng DAO
             boolean isDeleted = PromotionsDao.deletePromotionById(promotionId);

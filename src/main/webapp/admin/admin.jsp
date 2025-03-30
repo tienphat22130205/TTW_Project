@@ -1291,17 +1291,12 @@
             <h3>Xác Nhận Xóa Chương Trình</h3>
             <p id="promoToDelete"></p> <!-- Hiển thị tên chương trình -->
             <div class="delete-cancel">
-                <%
-                    for (Promotions promotion : promotionsList) {
-                %>
-                <button class="delete-btn" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
-                <%
-                    }
-                %>
+                <button id="confirmDeleteButton" class="delete-btn">Xóa</button>
                 <button type="button" onclick="closeModal('deletePromotionModal')">Hủy</button>
             </div>
         </div>
     </div>
+
 
 
 </div>
@@ -1334,6 +1329,28 @@
     });
 </script>
 <script src="${pageContext.request.contextPath}/assets/js/admin.js" defer></script>
+<script>// xóa khuyến mãi
+    document.addEventListener("DOMContentLoaded", function () {
+        const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+
+        if (confirmDeleteButton) {
+            confirmDeleteButton.onclick = function () {
+                const promotionId = this.getAttribute("data-id");
+                const contextPath = "<%= request.getContextPath() %>";
+
+                if (!promotionId) {
+                    alert("Không tìm thấy ID khuyến mãi để xóa!");
+                    return;
+                }
+
+                console.log("Đang gửi yêu cầu xóa khuyến mãi ID:", promotionId);
+                window.location.href = contextPath + "/remove-promotion?pid=" + promotionId;
+            };
+        } else {
+            console.warn("Không tìm thấy nút confirmDeleteButton trong DOM!");
+        }
+    });
+</script>
 </body>
 
 </html>

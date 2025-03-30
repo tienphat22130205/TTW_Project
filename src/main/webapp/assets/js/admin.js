@@ -664,8 +664,12 @@ function openModal(data, modalType) {
         document.getElementById("confirmDeleteButton").setAttribute("data-id", data.promoId);
 
         console.log("Đã mở modal xóa cho ID:", data.promoId); // Debug kiểm tra ID
+
+
     }
 }
+
+
 
 // Hàm đóng modal và ẩn overlay
 function closeModal(modalType) {
@@ -1296,4 +1300,3 @@ window.addEventListener("click", function (e) {
         modal.style.display = "none";
     }
 });
-
