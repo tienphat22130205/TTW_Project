@@ -22,39 +22,60 @@ public class ApplyVoucherServlet extends HttpServlet {
         Cart cart = (Cart) session.getAttribute("cart");
 
         if (cart == null) {
-            response.sendRedirect("show-cart");
+            response.sendRedirect("checkout");
             return;
         }
 
         String voucherCode = request.getParameter("voucherCode");
         if (voucherCode == null || voucherCode.trim().isEmpty()) {
-            session.setAttribute("discountError", "Mã giảm giá không hợp lệ.");
-            response.sendRedirect("show-cart");
+            session.setAttribute("discountError", "Vui lòng nhập mã giảm giá.");
+            response.sendRedirect("checkout");
             return;
         }
 
         PromotionService promotionService = new PromotionService();
         Promotions promotion = promotionService.getPromotionByCode(voucherCode.trim());
 
-        if (promotion != null && promotion.getStart_date() != null && promotion.getEnd_date() != null) {
+        if (promotion == null) {
+            session.setAttribute("discountError", "Mã giảm giá không tồn tại.");
+            response.sendRedirect("checkout");
+            return;
+        }
+
+        try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate startDate = LocalDate.parse(promotion.getStart_date(), formatter);
             LocalDate endDate = LocalDate.parse(promotion.getEnd_date(), formatter);
+            LocalDate today = LocalDate.now();
 
-            if (!LocalDate.now().isBefore(startDate) && !LocalDate.now().isAfter(endDate)) {
-                double discount = (promotion.getPercent_discount() / 100.0) * cart.getTotalPrice();
-                double newTotalPrice = cart.getTotalPrice() - discount;
-
-                session.setAttribute("discount", discount);
-                session.setAttribute("newTotalPrice", newTotalPrice);
-                session.setAttribute("discountSuccess", "Áp dụng mã giảm giá thành công!");
-            } else {
-                session.setAttribute("discountError", "Mã giảm giá đã hết hạn.");
+            if (today.isBefore(startDate) || today.isAfter(endDate)) {
+                session.setAttribute("discountError", "Mã giảm giá đã hết hạn hoặc chưa có hiệu lực.");
+                response.sendRedirect("checkout");
+                return;
             }
-        } else {
-            session.setAttribute("discountError", "Mã giảm giá không hợp lệ.");
+
+            double totalPrice = cart.getTotalPrice();
+            double minOrderAmount = promotion.getMin_order_amount();
+
+            if (totalPrice < minOrderAmount) {
+                session.setAttribute("discountError", "Đơn hàng cần tối thiểu " + minOrderAmount + "₫ để áp dụng mã giảm giá.");
+                response.sendRedirect("checkout");
+                return;
+            }
+
+            double discount = (promotion.getPercent_discount() / 100.0) * totalPrice;
+            double newTotalPrice = totalPrice - discount;
+
+            session.setAttribute("discount", discount);
+            session.setAttribute("newTotalPrice", newTotalPrice);
+            session.setAttribute("appliedPromotion", promotion);
+            session.setAttribute("discountSuccess", "Áp dụng mã giảm giá thành công!");
+
+        } catch (Exception e) {
+            session.setAttribute("discountError", "Lỗi khi xử lý mã giảm giá: " + e.getMessage());
         }
 
-        response.sendRedirect("show-cart");
+        // 👉 Redirect về lại servlet /checkout để hiển thị trang payment.jsp
+        response.sendRedirect("checkout");
     }
 }

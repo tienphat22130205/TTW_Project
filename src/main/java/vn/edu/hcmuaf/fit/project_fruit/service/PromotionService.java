@@ -4,6 +4,8 @@ package vn.edu.hcmuaf.fit.project_fruit.service;
 import vn.edu.hcmuaf.fit.project_fruit.dao.PromotionsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Promotions;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 public class PromotionService {
 
@@ -40,30 +42,49 @@ public class PromotionService {
         return promotionsDao.getPromotionByCode(code);
     }
     public static void main(String[] args) {
-        // Khởi tạo dịch vụ PromotionService
-        PromotionService promotionService = new PromotionService();
+        // Mã giảm giá cần test
+        String testCode = "FRUIT10"; // đổi thành mã có trong DB của bạn
 
-        // Mã giảm giá cần kiểm tra
-        String testVoucherCode = "TESTCODE"; // Thay bằng mã voucher bạn muốn kiểm tra
+        // Tổng tiền đơn hàng giả lập (test với cả dưới và trên min)
+        double testTotal = 450000; // đổi thành 350000 để test mã hợp lệ
 
-        // Thực hiện kiểm tra
-        try {
-            Promotions promotion = promotionService.getPromotionByCode(testVoucherCode);
+        // Khởi tạo service
+        PromotionService service = new PromotionService();
+        Promotions promotion = service.getPromotionByCode(testCode);
 
-            if (promotion != null) {
-                System.out.println("Mã giảm giá hợp lệ!");
-                System.out.println("Tên: " + promotion.getPromotion_name());
-                System.out.println("Mô tả: " + promotion.getDescribe_1());
-                System.out.println("Ngày bắt đầu: " + promotion.getStart_date());
-                System.out.println("Ngày kết thúc: " + promotion.getEnd_date());
-                System.out.println("Phần trăm giảm giá: " + promotion.getPercent_discount());
-                System.out.println("Loại: " + promotion.getType());
-            } else {
-                System.out.println("Mã giảm giá không hợp lệ hoặc không tồn tại.");
+        if (promotion != null) {
+            System.out.println("Tìm thấy mã giảm giá: " + promotion.getPromotion_name());
+
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate now = LocalDate.now();
+                LocalDate startDate = LocalDate.parse(promotion.getStart_date(), formatter);
+                LocalDate endDate = LocalDate.parse(promotion.getEnd_date(), formatter);
+
+                if (now.isBefore(startDate) || now.isAfter(endDate)) {
+                    System.out.println("❌ Mã giảm giá đã hết hạn hoặc chưa có hiệu lực.");
+                    return;
+                }
+
+                if (testTotal < promotion.getMin_order_amount()) {
+                    System.out.println("❌ Tổng đơn hàng không đủ điều kiện áp dụng. Cần >= " + promotion.getMin_order_amount());
+                    return;
+                }
+
+                double discount = (promotion.getPercent_discount() / 100.0) * testTotal;
+                double newTotal = testTotal - discount;
+
+                System.out.println("✅ Mã hợp lệ. Giảm " + promotion.getPercent_discount() + "%");
+                System.out.println("→ Giảm được: " + discount + "₫");
+                System.out.println("→ Tổng sau giảm: " + newTotal + "₫");
+
+            } catch (Exception e) {
+                System.out.println("❌ Lỗi xử lý ngày: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("Đã xảy ra lỗi: " + e.getMessage());
-            e.printStackTrace();
+
+        } else {
+            System.out.println("❌ Không tìm thấy mã giảm giá.");
         }
     }
+
 }

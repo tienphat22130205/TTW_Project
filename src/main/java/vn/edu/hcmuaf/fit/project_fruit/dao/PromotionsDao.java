@@ -146,12 +146,12 @@ public class PromotionsDao {
     }
     // Lấy khuyến mãi theo mã giảm giá
     public Promotions getPromotionByCode(String code) {
-        String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type FROM promotions WHERE promotion_name = ?";
+        String query = "SELECT id_promotion, code, promotion_name, describe_1, start_date, end_date, percent_discount, type, min_order_amount FROM promotions WHERE code = ?";
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
             ps.setString(1, code);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new Promotions(
+                Promotions promotion = new Promotions(
                         rs.getInt("id_promotion"),
                         rs.getString("promotion_name"),
                         rs.getString("describe_1"),
@@ -160,6 +160,9 @@ public class PromotionsDao {
                         rs.getDouble("percent_discount"),
                         rs.getString("type")
                 );
+                promotion.setCode(rs.getString("code"));
+                promotion.setMin_order_amount(rs.getDouble("min_order_amount"));
+                return promotion;
             }
         } catch (SQLException e) {
             e.printStackTrace();

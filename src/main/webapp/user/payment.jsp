@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh toán đơn giản</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,6 +103,22 @@
                 border-top: 2px solid #ddd;
             }
         }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #009688;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -146,13 +163,44 @@
                     });
                 });
         });
+        // load xử lý
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector(".voucher form");
+            const button = form.querySelector("button");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault(); // Ngăn submit ngay lập tức
+                button.disabled = true;
+                button.innerHTML = 'Đang xử lý <span class="loader"></span>';
+
+                // Giả lập delay 2.5 giây rồi mới submit
+                setTimeout(() => {
+                    form.submit();
+                }, 2500);
+            });
+        });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <div class="container">
     <div class="content">
         <!-- Bên trái: Thông tin đơn hàng -->
         <div class="left">
+            <a href="${pageContext.request.contextPath}/home" style="
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #eee;
+        color: #333;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    ">
+                <i class="fas fa-arrow-left"></i> Tiếp tục mua hàng
+            </a>
             <h2>Thông tin thanh toán</h2>
             <form>
                 <label>Họ và Tên:</label>
@@ -209,16 +257,73 @@
                     </div>
                 </c:forEach>
             <div class="voucher">
-                <label for="voucher">Mã giảm giá:</label>
-                <input type="text" id="voucher" placeholder="Nhập mã giảm giá nếu có">
+                <form action="apply-voucher" method="post" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <label for="voucher" style="width: 100%;">Mã giảm giá:</label>
+                    <input type="text" name="voucherCode" id="voucher" placeholder="Nhập mã giảm giá" style="flex: 2;">
+                    <button type="submit" class="submit-btn" style="flex: 1; background: #009688;">Áp dụng</button>
+                </form>
+
+                <c:choose>
+                    <c:when test="${not empty discountSuccess}">
+                        <p style="color: green;">${discountSuccess}</p>
+                    </c:when>
+                    <c:when test="${not empty discountError}">
+                        <p style="color: red;">${discountError}</p>
+                    </c:when>
+                </c:choose>
             </div>
-            <h3>Tổng tiền:
-                <strong>
-                    <fmt:formatNumber value="${cart.getTotalPrice()}" type="currency" currencySymbol="₫"/>
-                </strong>
-            </h3>
+
+            <c:choose>
+                <c:when test="${not empty newTotalPrice}">
+                    <h3>Tổng tiền sau giảm:
+                        <strong style="color: red;">
+                            <fmt:formatNumber value="${newTotalPrice}" type="currency" currencySymbol="₫"/>
+                        </strong>
+                    </h3>
+                    <p>
+                        (Đã giảm:
+                        <fmt:formatNumber value="${discount}" type="currency" currencySymbol="₫"/>
+                        với mã: <strong>${appliedPromotion.code}</strong>)
+                    </p>
+                </c:when>
+                <c:otherwise>
+                    <h3>Tổng tiền:
+                        <strong>
+                            <fmt:formatNumber value="${cart.getTotalPrice()}" type="currency" currencySymbol="₫"/>
+                        </strong>
+                    </h3>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </div>
+<c:if test="${not empty discountSuccess}">
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: '${discountSuccess}',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    </script>
+    <%
+        session.removeAttribute("discountSuccess");
+    %>
+</c:if>
+
+<c:if test="${not empty discountError}">
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '${discountError}',
+            showConfirmButton: true
+        });
+    </script>
+    <%
+        session.removeAttribute("discountError");
+    %>
+</c:if>
 </body>
 </html>
