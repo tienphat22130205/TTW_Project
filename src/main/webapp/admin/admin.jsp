@@ -729,9 +729,17 @@
                             <td style="text-align: center"><%= promotion.getType() %>
                             </td>
                             <td>
-                                <button onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">
-                                    Sửa
+                                <button onclick="openModal({
+                                        promoId: '<%= promotion.getId_promotion() %>',
+                                        promoTitle: '<%= promotion.getPromotion_name() %>',
+                                        promoDesc: '<%= promotion.getDescribe_1() %>',
+                                        promoStart: '<%= promotion.getStart_date() %>',
+                                        promoEnd: '<%= promotion.getEnd_date() %>',
+                                        promoDiscount: '<%= promotion.getPercent_discount() %>',
+                                        promoType: '<%= promotion.getType() %>'
+                                        }, 'editPromotion')">Sửa
                                 </button>
+
                                 <button class="delete-btn"
                                         onclick="openModal({ promoId: '<%= promotion.getId_promotion() %>', promoTitle: '<%= promotion.getPromotion_name() %>' }, 'deletePromotion')">
                                     Xóa
@@ -1207,84 +1215,48 @@
             </div>
         </div>
     </div>
-    <!-- Quản lý khuyến mãi -->
-    <div id="promotionModal1" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="custom-close-button" onclick="closeModal('promotion')">&times;</span>
-            <h2>Thêm Khuyến Mãi</h2>
-            <form id="promotionForm">
-                <div class="form-group">
-                    <label for="promotionName">Tên Khuyến Mãi:</label>
-                    <input type="text" id="promotionName" placeholder="Nhập tên khuyến mãi" required>
-                </div>
-                <div class="form-group">
-                    <label for="discount">Giảm Giá (%):</label>
-                    <input type="text" id="discount" min="1" max="100" placeholder="Nhập giảm giá" required>
-                </div>
-                <div class="form-group">
-                    <label for="startDate">Ngày Bắt Đầu:</label>
-                    <input type="date" id="startDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="endDate">Ngày Kết Thúc:</label>
-                    <input type="date" id="endDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="productTypeSelect">Loại Sản Phẩm Áp Dụng</label>
-                    <select id="productTypeSelect">
-                        <option value="all">Tất cả sản phẩm</option>
-                        <option value="domestic">Sản phẩm trong nước</option>
-                        <option value="imported">Sản phẩm nhập khẩu</option>
-                        <option value="today_fruits">Trái Ngon Hôm Nay</option>
-                        <option value="vietnam_fruits">Trái Cây Việt Nam</option>
-                        <option value="imported_fruits">Trái Cây Nhập Khẩu</option>
-                        <option value="precut_fruits">Trái Cây Cắt Sẵn</option>
-                        <option value="fruit_gifts">Quà Tặng Trái Cây</option>
-                        <option value="mooncake_gifts">Hộp Quà Nguyệt Cát</option>
-                        <option value="dried_fruits">Trái Cây Sấy Khô</option>
-                        <option value="fruit_jam">Mứt Trái Cây</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" id="savePromotionBtn" class="btn-save">Lưu</button>
-                </div>
-            </form>
-        </div>
-    </div>
+
     <!-- Modal Sửa Khuyến Mãi -->
-    <div id="editPromotionModal" class="modal">
+    <div id="editPromotionModal" class="modal" style="display: none;">
         <div class="editPromotionModal-content">
             <h3>Chỉnh Sửa Chương Trình Khuyến Mãi</h3>
-            <form id="editPromotionForm" class="editPromotion">
+            <form id="editPromotionForm" class="editPromotion"
+                  method="POST" action="${pageContext.request.contextPath}/EditPromotionServlet">
+
+                <!-- Hidden ID -->
+                <input type="hidden" id="promoId" name="id_promotion">
+
                 <label for="promoTitle">Tên Chương Trình</label>
-                <input type="text" id="promoTitle" placeholder="Nhập tên chương trình">
+                <input type="text" id="promoTitle" name="promotion_name" placeholder="Nhập tên chương trình" required>
+
+                <label for="promoDesc">Mô Tả</label>
+                <input type="text" id="promoDesc" name="describe_1" placeholder="Nhập mô tả" required>
+
                 <label for="promoDiscount">Phần Trăm Giảm Giá</label>
-                <input type="number" id="promoDiscount" placeholder="Nhập % giảm giá">
+                <input type="number" id="promoDiscount" name="percent_discount" placeholder="% giảm giá" min="0"
+                       max="100" required>
+
                 <label for="promoStart">Thời Gian Bắt Đầu</label>
-                <input type="date" id="promoStart">
+                <input type="date" id="promoStart" name="start_date" required>
+
                 <label for="promoEnd">Thời Gian Kết Thúc</label>
-                <input type="date" id="promoEnd">
-                <label for="productTypeSelect">Loại Sản Phẩm Áp Dụng</label>
-                <select id="productTypeSelect">
-                    <option value="all">Tất cả sản phẩm</option>
-                    <option value="domestic">Sản phẩm trong nước</option>
-                    <option value="imported">Sản phẩm nhập khẩu</option>
-                    <option value="today_fruits">Trái Ngon Hôm Nay</option>
-                    <option value="vietnam_fruits">Trái Cây Việt Nam</option>
-                    <option value="imported_fruits">Trái Cây Nhập Khẩu</option>
-                    <option value="precut_fruits">Trái Cây Cắt Sẵn</option>
-                    <option value="fruit_gifts">Quà Tặng Trái Cây</option>
-                    <option value="mooncake_gifts">Hộp Quà Nguyệt Cát</option>
-                    <option value="dried_fruits">Trái Cây Sấy Khô</option>
-                    <option value="fruit_jam">Mứt Trái Cây</option>
+                <input type="date" id="promoEnd" name="end_date" required>
+
+                <label for="productTypeSelect">Loại Khuyến Mãi</label>
+                <select id="productTypeSelect" name="type" required>
+                    <option value="weekly">Weekly</option>
+                    <option value="general">General</option>
                 </select>
+
+                <div class="save-close" style="padding-top: 30px">
+                    <button type="submit">Lưu</button>
+                    <button type="button" onclick="closeModal()">Hủy</button>
+                </div>
             </form>
-            <div class="save-close" style="padding-top: 30px">
-                <button type="submit">Lưu</button>
-                <button type="button" onclick="closeModal()">Hủy</button>
-            </div>
         </div>
     </div>
+
+
     <!-- Modal Xóa Khuyến Mãi -->
     <div id="deletePromotionModal" class="modal" style="display: none;">
         <div class="deletePromotionModal-content">
@@ -1296,7 +1268,6 @@
             </div>
         </div>
     </div>
-
 
 
 </div>
@@ -1330,26 +1301,26 @@
 </script>
 <script src="${pageContext.request.contextPath}/assets/js/admin.js" defer></script>
 <script>// xóa khuyến mãi
-    document.addEventListener("DOMContentLoaded", function () {
-        const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+document.addEventListener("DOMContentLoaded", function () {
+    const confirmDeleteButton = document.getElementById("confirmDeleteButton");
 
-        if (confirmDeleteButton) {
-            confirmDeleteButton.onclick = function () {
-                const promotionId = this.getAttribute("data-id");
-                const contextPath = "<%= request.getContextPath() %>";
+    if (confirmDeleteButton) {
+        confirmDeleteButton.onclick = function () {
+            const promotionId = this.getAttribute("data-id");
+            const contextPath = "<%= request.getContextPath() %>";
 
-                if (!promotionId) {
-                    alert("Không tìm thấy ID khuyến mãi để xóa!");
-                    return;
-                }
+            if (!promotionId) {
+                alert("Không tìm thấy ID khuyến mãi để xóa!");
+                return;
+            }
 
-                console.log("Đang gửi yêu cầu xóa khuyến mãi ID:", promotionId);
-                window.location.href = contextPath + "/remove-promotion?pid=" + promotionId;
-            };
-        } else {
-            console.warn("Không tìm thấy nút confirmDeleteButton trong DOM!");
-        }
-    });
+            console.log("Đang gửi yêu cầu xóa khuyến mãi ID:", promotionId);
+            window.location.href = contextPath + "/remove-promotion?pid=" + promotionId;
+        };
+    } else {
+        console.warn("Không tìm thấy nút confirmDeleteButton trong DOM!");
+    }
+});
 </script>
 </body>
 

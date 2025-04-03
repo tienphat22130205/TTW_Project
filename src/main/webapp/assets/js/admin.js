@@ -648,12 +648,18 @@ function openModal(data, modalType) {
     if (modalType === "editPromotion") {
         const modal = document.getElementById("editPromotionModal");
         modal.style.display = "block";
-
+        console.log("📦 Data gửi vào modal edit:", data);
+        // Gán dữ liệu vào các trường trong form
+        document.getElementById("promoId").value = data.promoId || "";
         document.getElementById("promoTitle").value = data.promoTitle || "";
+        document.getElementById("promoDesc").value = data.promoDesc || "";
         document.getElementById("promoDiscount").value = data.promoDiscount || "";
         document.getElementById("promoStart").value = data.promoStart || "";
         document.getElementById("promoEnd").value = data.promoEnd || "";
-    } else if (modalType === "deletePromotion") {
+        document.getElementById("productTypeSelect").value = data.promoType || "general";
+    }
+
+    else if (modalType === "deletePromotion") {
         const modal = document.getElementById("deletePromotionModal");
         modal.style.display = "block";
 
