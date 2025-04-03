@@ -6,11 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.edu.hcmuaf.fit.project_fruit.dao.ShippingMethodDAO;
 import vn.edu.hcmuaf.fit.project_fruit.dao.cart.Cart;
 import vn.edu.hcmuaf.fit.project_fruit.dao.cart.CartProduct;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.ShippingMethod;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 @WebServlet(name = "CheckoutServlet", value = "/checkout")
 public class CheckoutServlet extends HttpServlet {
@@ -38,21 +41,17 @@ public class CheckoutServlet extends HttpServlet {
             return;
         }
 
-        // Bước 3: Chuyển đến trang thanh toán
+        // Bước 3: Truy vấn danh sách phương thức vận chuyển từ database
+        ShippingMethodDAO shippingMethodDAO = new ShippingMethodDAO();
+        List<ShippingMethod> shippingMethods = shippingMethodDAO.getAllShippingMethods();
+
+        // Đưa danh sách phương thức vận chuyển vào request
+        request.setAttribute("shippingMethods", shippingMethods);
+
+        // Bước 4: Chuyển đến trang thanh toán
         request.setAttribute("cart", cart);
         request.getRequestDispatcher("/user/payment.jsp").forward(request, response);
 
-
-        for (CartProduct cp : cart.getList()) {
-            System.out.println("Tên: " + cp.getName());
-            System.out.println("Giá: " + cp.getPrice());
-            System.out.println("Số lượng: " + cp.getQuantity());
-            if (cp.getListImg() != null && !cp.getListImg().isEmpty()) {
-                System.out.println("Ảnh: " + cp.getListImg().get(0).getUrl());
-            } else {
-                System.out.println("Không có ảnh");
-            }
-        }
     }
 }
 
