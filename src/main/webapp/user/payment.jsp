@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -192,19 +194,29 @@
         <!-- Bên phải: Hiển thị sản phẩm và tổng tiền -->
         <div class="right">
             <h2>Giỏ hàng</h2>
-            <div class="cart-item">
-                <img src="https://via.placeholder.com/50" alt="Sản phẩm 1">
-                <span>Sản phẩm 1 - 500,000đ</span>
-            </div>
-            <div class="cart-item">
-                <img src="https://via.placeholder.com/50" alt="Sản phẩm 2">
-                <span>Sản phẩm 2 - 250,000đ</span>
-            </div>
+                <c:forEach var="item" items="${cart.getList()}">
+                    <div class="cart-item">
+                        <c:if test="${not empty item.listImg}">
+                            <img src="${item.listImg[0].url}" alt="${item.name}" width="50" />
+                        </c:if>
+                        <c:if test="${empty item.listImg}">
+                            <img src="${pageContext.request.contextPath}/assets/img/default.png" alt="No image" width="50" />
+                        </c:if>
+                        <span>
+            ${item.name} -
+            <fmt:formatNumber value="${item.price * item.quantity}" type="currency" currencySymbol="₫" />
+        </span>
+                    </div>
+                </c:forEach>
             <div class="voucher">
                 <label for="voucher">Mã giảm giá:</label>
                 <input type="text" id="voucher" placeholder="Nhập mã giảm giá nếu có">
             </div>
-            <h3>Tổng tiền: <strong>750,000đ</strong></h3>
+            <h3>Tổng tiền:
+                <strong>
+                    <fmt:formatNumber value="${cart.getTotalPrice()}" type="currency" currencySymbol="₫"/>
+                </strong>
+            </h3>
         </div>
     </div>
 </div>

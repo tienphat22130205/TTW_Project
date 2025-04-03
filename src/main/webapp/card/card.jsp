@@ -236,15 +236,6 @@
         </c:choose>
     </span>
         </p>
-
-        <!-- Thông báo giảm giá -->
-        <c:if test="${not empty sessionScope.discount}">
-            <p style="color: green;">Giảm giá: ${sessionScope.discount}₫</p>
-        </c:if>
-        <c:if test="${empty sessionScope.cart || empty sessionScope.cart.getList()}">
-            <p style="color: red;">Giỏ hàng trống. Không thể áp dụng mã giảm giá.</p>
-        </c:if>
-
         <p class="note">Phí vận chuyển sẽ được tính ở trang thanh toán.</p>
         <p class="note">Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.</p>
         <div class="warning" id="minimum-warning">

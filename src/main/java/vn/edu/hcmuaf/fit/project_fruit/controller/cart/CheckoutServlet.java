@@ -31,7 +31,6 @@ public class CheckoutServlet extends HttpServlet {
             out.flush();
             return;
         }
-
         // Bước 2: Kiểm tra giỏ hàng
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null || cart.getList().isEmpty()) {
@@ -42,6 +41,18 @@ public class CheckoutServlet extends HttpServlet {
         // Bước 3: Chuyển đến trang thanh toán
         request.setAttribute("cart", cart);
         request.getRequestDispatcher("/user/payment.jsp").forward(request, response);
+
+
+        for (CartProduct cp : cart.getList()) {
+            System.out.println("Tên: " + cp.getName());
+            System.out.println("Giá: " + cp.getPrice());
+            System.out.println("Số lượng: " + cp.getQuantity());
+            if (cp.getListImg() != null && !cp.getListImg().isEmpty()) {
+                System.out.println("Ảnh: " + cp.getListImg().get(0).getUrl());
+            } else {
+                System.out.println("Không có ảnh");
+            }
+        }
     }
 }
 
