@@ -19,6 +19,61 @@
     <!-- link logo anh -->
     <link rel="icon" href="../assets/img/logoBank/logoweb.png" type="image/x-icon">
     <title>Selling Fruit</title>
+    <style>
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            width: 180px;
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        .product-card h4 {
+            font-size: 16px;
+            margin: 10px 0 5px;
+        }
+
+        .product-card h3 {
+            color: red;
+            font-weight: bold;
+        }
+
+        .view-detail-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #ff7800;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .view-detail-link:hover {
+            background-color: #e06700;
+        }
+        .no-viewed {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin-top: 30px;
+        }
+    </style>
 </head>
 
 <body>
@@ -138,7 +193,7 @@
         <li><a href="/project_fruit/home?category=traicaynhapkhau" onclick="setActive(this)">Trái cây nhập khẩu</a></li>
         <li><a href="/project_fruit/home?category=traicaycatsan" onclick="setActive(this)">Trái cây cắt sẵn</a></li>
         <li><a href="/project_fruit/home?category=quatangtraicay" onclick="setActive(this)">Quà tặng trái cây</a></li>
-        <li><a href="/project_fruit/home?category=hopqua" onclick="setActive(this)">Hộp quà Nguyệt Cát</a></li>
+        <li><a href="/project_fruit/home?category=hopquanguyencat" onclick="setActive(this)">Hộp quà Nguyệt Cát</a></li>
         <li><a href="/project_fruit/home?category=traicaysaykho" onclick="setActive(this)">Trái cây sấy khô</a></li>
         <li><a href="/project_fruit/home?category=muttraicay" onclick="setActive(this)">Mứt trái cây</a></li>
         <li><a href="/project_fruit/user/contact.jsp" onclick="setActive(this)">Liên hệ</a></li>
@@ -154,7 +209,7 @@
         <li><a href="/project_fruit/home?category=traicaynhapkhau" onclick="setActive(this)">Trái cây nhập khẩu</a></li>
         <li><a href="/project_fruit/home?category=traicaycatsan" onclick="setActive(this)">Trái cây cắt sẵn</a></li>
         <li><a href="/project_fruit/home?category=quatangtraicay" onclick="setActive(this)">Quà tặng trái cây</a></li>
-        <li><a href="/project_fruit/home?category=hopqua" onclick="setActive(this)">Hộp quà Nguyệt Cát</a></li>
+        <li><a href="/project_fruit/home?category=hopquanguyencat" onclick="setActive(this)">Hộp quà Nguyệt Cát</a></li>
         <li><a href="/project_fruit/home?category=traicaysaykho" onclick="setActive(this)">Trái cây sấy khô</a></li>
         <li><a href="/project_fruit/home?category=muttraicay" onclick="setActive(this)">Mứt trái cây</a></li>
         <li><a href="/project_fruit/user/contact.jsp" onclick="setActive(this)">Liên hệ</a></li>
@@ -174,6 +229,8 @@
         <ul>
             <li><a class="active" href="#" onclick="showSection('account-info', this)"><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
             <li><a href="#" onclick="showSection('order-management', this)"><i class="fas fa-box"></i> Quản lý đơn hàng</a></li>
+            <li><a href="#" onclick="showSection('recent-viewed', this)"><i class="fas fa-clock"></i> Sản phẩm đã xem</a></li>
+            <li><a href="#" onclick="showSection('change-password', this)"><i class="fas fa-key"></i> Đổi Mật Khẩu</a></li>
             <li><a href="${pageContext.request.contextPath}/logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>
     </div>
@@ -256,6 +313,54 @@
                     <p>Không có đơn hàng bị hủy.</p>
                 </div>
             </div>
+        </div>
+<%--        Xem gần đây--%>
+        <!-- Sản phẩm đã xem gần đây -->
+        <div id="recent-viewed" class="section">
+            <h2>Sản phẩm đã xem gần đây</h2>
+            <div class="recent-products-list" id="recentProductsList">
+                <c:choose>
+                    <c:when test="${not empty sessionScope.recentlyViewed}">
+                        <div class="product-list">
+                            <c:forEach var="p" items="${sessionScope.recentlyViewed}">
+                                <div class="product-card">
+                                    <img src="${p.imageUrl != null ? p.imageUrl : '/assets/img/default.jpg'}"
+                                 alt="${p.name}" />
+                                    <h4>${p.name}</h4>
+                                    <h3 class="price">${p.price}đ</del></span></h3>
+                                    <a href="${pageContext.request.contextPath}/product-detail?pid=${p.id_product}" class="view-detail-link">
+                                        Xem Chi Tiết
+                                    </a>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <p class="no-viewed">Chưa có sản phẩm nào được xem.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+    <%-- Đổi mật khẩu--%>
+        <div id="change-password" class="section">
+            <h2>Đổi Mật Khẩu</h2>
+            <form action="${pageContext.request.contextPath}/change-password" method="post" class="change-password-form">
+                <div class="form-group">
+                    <label for="currentPassword">Mật khẩu hiện tại</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required placeholder="Nhập mật khẩu cũ">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Mật khẩu mới</label>
+                    <input type="password" id="newPassword" name="newPassword" required placeholder="Nhập mật khẩu mới">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Nhập lại mật khẩu mới</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Xác nhận mật khẩu mới">
+                </div>
+                <div class="form-group">
+                    <button type="submit">XÁC NHẬN ĐỔI MẬT KHẨU</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

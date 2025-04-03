@@ -534,7 +534,7 @@
                             <table id="orderTable" class="display" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>Mã đơn hàng</th>
+                                    <th>ID </th>
                                     <th>Tên khách hàng</th>
                                     <th>Địa chỉ</th>
                                     <th>Ngày đặt hàng</th>
