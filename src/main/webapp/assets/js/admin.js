@@ -617,23 +617,34 @@ function openModal(data, modalType) {
     if (modalType === "editPromotion") {
         const modal = document.getElementById("editPromotionModal");
         modal.style.display = "block";
-
+        console.log("📦 Data gửi vào modal edit:", data);
+        // Gán dữ liệu vào các trường trong form
+        document.getElementById("promoId").value = data.promoId || "";
         document.getElementById("promoTitle").value = data.promoTitle || "";
+        document.getElementById("promoDesc").value = data.promoDesc || "";
         document.getElementById("promoDiscount").value = data.promoDiscount || "";
         document.getElementById("promoStart").value = data.promoStart || "";
         document.getElementById("promoEnd").value = data.promoEnd || "";
-    } else if (modalType === "deletePromotion") {
+        document.getElementById("productTypeSelect").value = data.promoType || "general";
+    }
+
+    else if (modalType === "deletePromotion") {
         const modal = document.getElementById("deletePromotionModal");
         modal.style.display = "block";
 
+        // Hiển thị tên chương trình cần xóa
         document.getElementById("promoToDelete").textContent = data.promoTitle || "Chương Trình Không Xác Định";
 
-        document.getElementById("confirmDeleteButton").onclick = () => {
-            console.log(`Chương trình "${data.promoTitle}" đã bị xóa.`);
-            closeModal("deletePromotion");
-        };
+        // Gán ID khuyến mãi vào nút "Xóa"
+        document.getElementById("confirmDeleteButton").setAttribute("data-id", data.promoId);
+
+        console.log("Đã mở modal xóa cho ID:", data.promoId); // Debug kiểm tra ID
+
+
     }
 }
+
+
 
 // Hàm đóng modal và ẩn overlay
 function closeModal(modalType) {
@@ -1264,4 +1275,3 @@ window.addEventListener("click", function (e) {
         modal.style.display = "none";
     }
 });
-
