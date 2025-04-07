@@ -591,6 +591,36 @@
         </div>
         <div id="suppliers" class="section">
             <div class="container">
+                <div class="addSupplier">
+                <h2>Thêm Nhà Cung Cấp</h2>
+
+                <form id="addSupplierForm">
+                    <label for="name">Tên Nhà Cung Cấp:</label>
+                    <input type="text" id="name" name="name" required placeholder="Nhập tên nhà cung cấp"><br><br>
+
+                    <label for="address">Địa Chỉ:</label>
+                    <input type="text" id="address" name="address" required placeholder="Nhập địa chỉ"><br><br>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Nhập email"><br><br>
+
+                    <label for="phone_number">Số Điện Thoại:</label>
+                    <input type="tel" id="phone_number" name="phone_number" required placeholder="Nhập số điện thoại"><br><br>
+                    <label for="id_category">Danh Mục Sản Phẩm:</label>
+                    <select id="id_category" name="id_category" required>
+                        <option value="1">Trái cây hôm nay</option>
+                        <option value="2">Trái cây Việt Nam</option>
+                        <option value="3">Trái cây nhập khẩu</option>
+                        <option value="4">Trái cây cắt sẵn</option>
+                        <option value="5">Quà tặng trái cây</option>
+                        <option value="6">Hộp quà trái cây</option>
+                        <option value="7">Trái cây sấy khô</option>
+                        <option value="8">Mứt trái cây</option>
+                    </select><br><br>
+
+                    <button type="submit">Thêm Nhà Cung Cấp</button>
+                </form>
+                </div>
                 <!-- Supplier Table -->
                 <table id="supplierTable">
                     <thead>
@@ -603,6 +633,7 @@
                         <th>Trạng thái hợp tác</th>
                         <th>Đánh giá</th>
                         <th>Danh sách sản phẩm</th>
+                        <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -627,10 +658,19 @@
                             </td>
                             <td>${supplier.rating} <i class="fas fa-star" style="color: #ffcc00;"></i></td>
                             <td>${supplier.name_category}</td>
+                            <td>
+                                <button onclick="editSupplier(${supplier.id_supplier})">
+                                    <i class="fas fa-pen" style="color: green;"></i>
+                                </button>
+                                <button onclick="deleteSupplier(${supplier.id_supplier})">
+                                    <i class="fas fa-trash" style="color: red;"></i>
+                                </button>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+
             </div>
         </div>
 
@@ -1306,6 +1346,39 @@
     });
 </script>
 <script>
+    document.getElementById("addSupplierForm").addEventListener("submit", function(e) {
+        e.preventDefault(); // Chặn form submit mặc định
+
+        const form = e.target;
+        const data = {
+            name: form.name.value,
+            address: form.address.value,
+            email: form.email.value,
+            phone_number: form.phone_number.value,
+            id_category: form.id_category.value
+        };
+
+        fetch("${pageContext.request.contextPath}/add-supplier-ajax", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    alert("Thêm thành công!");
+                    location.reload(); // load lại danh sách
+                } else {
+                    alert("Thêm thất bại: " + result.message);
+                }
+            }).catch(err => {
+            console.error("Lỗi:", err);
+            alert("Lỗi khi gửi dữ liệu");
+        });
+    });
+</script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         const logoutBtn = document.getElementById("logoutBtn");
         const overlay = document.getElementById("logoutOverlay");
@@ -1337,6 +1410,22 @@
             popup.style.display = "none";
         });
     });
+    function deleteSupplier(id) {
+        if (confirm("Bạn có chắc muốn xoá nhà cung cấp này?")) {
+            fetch('${pageContext.request.contextPath}/delete-supplier?id=' + id, {
+                method: 'POST'
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Xoá thành công");
+                        location.reload();
+                    } else {
+                        alert("Xoá thất bại: " + data.message);
+                    }
+                });
+        }
+    }
 </script>
 <script src="${pageContext.request.contextPath}/assets/js/admin.js" defer></script>
 </body>

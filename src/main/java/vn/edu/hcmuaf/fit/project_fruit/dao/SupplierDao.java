@@ -101,27 +101,60 @@ public class SupplierDao {
 
         return totalRecords;
     }
-
-    // Thêm nhà cung cấp
     public boolean addSupplier(Supplier supplier) {
         String query = """
-            INSERT INTO suppliers (name, address, email, phone_number, status, rating, id_category)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """;
+        INSERT INTO suppliers (name, address, email, phone_number, status, rating, id_category)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """;
 
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
             ps.setString(1, supplier.getName());
             ps.setString(2, supplier.getAddress());
             ps.setString(3, supplier.getEmail());
             ps.setString(4, supplier.getPhone_number());
-            ps.setString(5, supplier.getStatus());
-            ps.setDouble(6, supplier.getRating());
+            ps.setString(5, "Active"); // mặc định
+            ps.setDouble(6, 4.5); // mặc định rating
             ps.setInt(7, supplier.getId_category());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
+    }
+    public boolean deleteSupplierById(int id) {
+        String sql = "DELETE FROM suppliers WHERE id_supplier = ?";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        SupplierDao supplierDao = new SupplierDao();
+
+        // Test getAllSuppliers()
+        List<Supplier> suppliers = supplierDao.getAllSuppliers();
+        System.out.println("All Suppliers:");
+        for (Supplier supplier : suppliers) {
+            System.out.println(supplier);
+        }
+
+        // Test getSuppliersByPage()
+        int page = 1;
+        int recordsPerPage = 5;
+        List<Supplier> paginatedSuppliers = supplierDao.getSuppliersByPage(page, recordsPerPage);
+        System.out.println("\nPaginated Suppliers (Page " + page + "):");
+        for (Supplier supplier : paginatedSuppliers) {
+            System.out.println(supplier);
+        }
+
+        // Test getTotalRecords()
+        int totalRecords = supplierDao.getTotalRecords();
+        System.out.println("\nTotal Records: " + totalRecords);
+
     }
 }

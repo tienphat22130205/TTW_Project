@@ -24,9 +24,4 @@ public class SupplierService {
         return supplierDao.getTotalRecords();
     }
 
-    // Thêm nhà cung cấp
-    public boolean addSupplier(Supplier supplier) {
-        return supplierDao.addSupplier(supplier);
-    }
-
 }
