@@ -71,7 +71,7 @@
         </ul>
     </div>
     <div class="logout">
-        <a href="javascript:void(0);" class="menu-item" id="logoutBtn">
+        <a href="#" class="menu-item" id="logoutBtn">
             <span><i class="fa-solid fa-right-from-bracket"></i></span><span>Đăng xuất</span>
         </a>
     </div>
@@ -534,7 +534,7 @@
                             <table id="orderTable" class="display" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>Mã đơn hàng</th>
+                                    <th>ID </th>
                                     <th>Tên khách hàng</th>
                                     <th>Địa chỉ</th>
                                     <th>Ngày đặt hàng</th>
@@ -1302,6 +1302,39 @@
                     next: "Tiếp"
                 }
             }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutBtn = document.getElementById("logoutBtn");
+        const overlay = document.getElementById("logoutOverlay");
+        const popup = document.getElementById("logoutNotification");
+        const confirmBtn = document.getElementById("confirmLogoutBtn");
+        const cancelBtn = document.getElementById("cancelLogoutBtn");
+
+        // Mở overlay xác nhận khi nhấn nút đăng xuất
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault(); // Ngăn reload trang
+            overlay.style.display = "block";
+            popup.style.display = "block";
+        });
+
+        // Nhấn "Không" để hủy
+        cancelBtn.addEventListener("click", function () {
+            overlay.style.display = "none";
+            popup.style.display = "none";
+        });
+
+        // Nhấn "Có" để đăng xuất → gọi Servlet /logout
+        confirmBtn.addEventListener("click", function () {
+            window.location.href = "logout";
+        });
+
+        // Nhấn ra ngoài cũng tắt
+        overlay.addEventListener("click", function () {
+            overlay.style.display = "none";
+            popup.style.display = "none";
         });
     });
 </script>

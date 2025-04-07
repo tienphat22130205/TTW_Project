@@ -40,6 +40,7 @@ public class Promotions {
         this.promotion_name = promotion_name;
     }
 
+
     public String getDescribe_1() {
         return describe_1;
     }

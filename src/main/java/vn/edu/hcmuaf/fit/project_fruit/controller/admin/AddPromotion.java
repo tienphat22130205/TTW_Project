@@ -31,7 +31,7 @@ public class AddPromotion extends HttpServlet {
             ps.setString(2, description);
             ps.setString(3, startDate);
             ps.setString(4, endDate);
-            ps.setString(5, discountPercent);
+            ps.setDouble(5, Double.parseDouble(discountPercent));
             ps.setString(6, type);
 
             // Thực hiện thêm dữ liệu
@@ -41,7 +41,8 @@ public class AddPromotion extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin#");
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/admin#");
+            System.out.println("SQL Error: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/admin#?status=error");
         }
     }
 }

@@ -217,21 +217,6 @@
 
     <div class="order-info">
         <h3>Thông tin đơn hàng</h3>
-        <form action="${pageContext.request.contextPath}/apply-voucher" method="post">
-            <div id="voucher">
-                <p>Áp mã giảm giá</p>
-                <input type="text" name="voucherCode" id="voucher-input" placeholder="Nhập mã giảm giá">
-                <button type="submit" id="apply-voucher">Áp dụng</button>
-            </div>
-        </form>
-
-        <c:if test="${not empty sessionScope.discountError}">
-            <p style="color: red;">${sessionScope.discountError}</p>
-        </c:if>
-        <c:if test="${not empty sessionScope.discountSuccess}">
-            <p style="color: green;">${sessionScope.discountSuccess}</p>
-        </c:if>
-
         <p class="total"><strong>Tổng tiền:</strong>
             <span>
         <c:choose>
@@ -251,23 +236,13 @@
         </c:choose>
     </span>
         </p>
-
-        <!-- Thông báo giảm giá -->
-        <c:if test="${not empty sessionScope.discount}">
-            <p style="color: green;">Giảm giá: ${sessionScope.discount}₫</p>
-        </c:if>
-        <c:if test="${empty sessionScope.cart || empty sessionScope.cart.getList()}">
-            <p style="color: red;">Giỏ hàng trống. Không thể áp dụng mã giảm giá.</p>
-        </c:if>
-
         <p class="note">Phí vận chuyển sẽ được tính ở trang thanh toán.</p>
         <p class="note">Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.</p>
         <div class="warning" id="minimum-warning">
             Giỏ hàng của bạn hiện chưa đạt mức tối thiểu để thanh toán.
         </div>
 
-        <a href="${pageContext.request.contextPath}/checkout" class="checkout-button">Thanh toán</a>
-
+        <a href="${pageContext.request.contextPath}/checkout" class="checkout-button" id="checkoutBtn">Thanh toán</a>
         <div class="policy-info">
             <p><strong>Chính sách mua hàng</strong></p>
             <p>Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị tối thiểu 100.000₫ trở lên.</p>
@@ -329,6 +304,30 @@
 </section>
 <!-- footer section end -->
 <script src="${pageContext.request.contextPath}/assets/js/fruit.js" defer></script>
+<script>
+    const isLoggedIn = ${sessionScope.user != null};
+</script>
+<!-- Thêm thư viện SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const checkoutBtn = document.getElementById("checkoutBtn");
+
+        checkoutBtn.addEventListener("click", function (e) {
+            if (!isLoggedIn) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Bạn chưa đăng nhập',
+                    text: 'Vui lòng đăng nhập để tiếp tục thanh toán.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+</script>
+
 </body>
 
 </html>

@@ -12,6 +12,16 @@
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
 
     <title>Login - VitaminFruit</title>
+    <%
+        String message = request.getParameter("message");
+        if (message != null) {
+    %>
+    <p style="color: red; text-align: center; font-weight: bold; margin-bottom: 10px;">
+        <%= message %>
+    </p>
+    <%
+        }
+    %>
 </head>
 <body>
 <%--<form method="post" action="login">--%>

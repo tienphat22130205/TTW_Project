@@ -38,5 +38,8 @@ public class DbProperties {
 
     public static void main(String[] args) {
         System.out.println(DbProperties.dbname());
+        System.out.println(DbProperties.password());
+        System.out.println(DbProperties.username());
+        System.out.println(DbProperties.option());
     }
 }

@@ -180,57 +180,28 @@
 <!-- home section ends -->
 
 <!-- features section starts -->
-<section class="features" id="features">
-    <h1 class="heading"><span>Dịch vụ nổi bật</span></h1>
-    <div class="box-container">
-        <div class="box">
-            <img src="./assets/img/fea1.jpg" alt=""/>
-            <h3>Tươi và xanh</h3>
-            <p>
-                Trái cây tươi nhập khẩu và trong nước phục vụ theo nhu cầu của bạn.
-            </p>
-            <a href="#" class="btn">đọc thêm</a>
-        </div>
-        <div class="box">
-            <img src="./assets/img/fea2.jpg" alt=""/>
-            <h3>giao hàng miễn phí</h3>
-            <p>
-                Giao hàng mọi lúc, mọi nơi, miễn phí vận chuyển, còn chần chừ gì
-                nữa.
-            </p>
-            <a href="#" class="btn">đọc thêm</a>
-        </div>
-        <div class="box">
-            <img src="./assets/img/fea3.jpg" alt=""/>
-            <h3>thanh toán dễ dàng</h3>
-            <p>
-                Nhiều phương thức thanh toán, tùy theo nhu cầu thanh toán của bạn.
-            </p>
-            <a href="#" class="btn">đọc thêm</a>
-        </div>
-    </div>
-</section>
-<!-- features section ends -->
-<section class="products1" id="products1">
-    <h1 class="heading"><span>Ưu đãi trong tuần</span></h1>
+<section class="products" id="products">
+    <h1 class="heading"><span>quà tặng trái cây</span></h1>
     <div class="swiper product-slider">
         <div class="swiper-wrapper">
-            <c:forEach var="product" items="${weeklyDiscountedProducts}">
+            <c:forEach var="product" items="${data6}">
                 <div class="swiper-slide box">
                     <a href="${pageContext.request.contextPath}/product-detail?pid=${product.id_product}">
+                        <!-- Hiển thị hình ảnh sản phẩm -->
                         <img src="${product.imageUrl != null ? product.imageUrl : '/assets/img/default.jpg'}"
                              alt="${product.name}"/>
-                        <div class="discount">${product.percentDiscount != null ? product.percentDiscount : 0}%</div>
+                        <!-- Phần giảm giá -->
+                            <%--                        <div class="discount">${product.percentDiscount != null ? product.percentDiscount : 0}%</div>--%>
+                        <!-- Hiển thị thông tin sản phẩm -->
                         <h4 style="color: red">Mã sản phẩm: ${product.id_product}</h4>
                         <h3>${product.name}</h3>
-                        <h3 class="price">${product.discountedPrice}đ/
-                            <span style="color: gray; text-decoration: line-through">
-                    <del>${product.price}đ</del>
-                </span>
+                        <h3 class="price">${product.discountedPrice}đ/ <span
+                                style="color: gray; text-decoration: line-through"><del>${product.price}đ</del> </span>
                         </h3>
                         <div class="stars">
                             <i>Đánh giá: ${product.rating} <i class="fas fa-star"></i></i>
                         </div>
+                        <!-- Nút thêm vào giỏ hàng -->
                         <a href="${pageContext.request.contextPath}/add-cart?addToCartPid=${product.id_product}"
                            class="btn">Thêm vào giỏ hàng</a>
                     </a>
@@ -238,23 +209,21 @@
             </c:forEach>
         </div>
     </div>
-    <div class="swiper product-slider hidden" id="product-slider-1">
+    <div class="swiper product-slider">
         <div class="swiper-wrapper">
-            <c:forEach var="product" items="${weeklyDiscountedProducts}">
+            <c:forEach var="product" items="${data6}">
                 <div class="swiper-slide box">
                     <a href="${pageContext.request.contextPath}/product-detail?pid=${product.id_product}">
                         <!-- Hiển thị hình ảnh sản phẩm -->
                         <img src="${product.imageUrl != null ? product.imageUrl : '/assets/img/default.jpg'}"
                              alt="${product.name}"/>
                         <!-- Phần giảm giá -->
-                        <div class="discount">${product.percentDiscount != null ? product.percentDiscount : 0}%</div>
+                            <%--                        <div class="discount">${product.percentDiscount != null ? product.percentDiscount : 0}%</div>--%>
                         <!-- Hiển thị thông tin sản phẩm -->
                         <h4 style="color: red">Mã sản phẩm: ${product.id_product}</h4>
                         <h3>${product.name}</h3>
-                        <h3 class="price">${product.discountedPrice}đ/
-                            <span style="color: gray; text-decoration: line-through">
-                            <del>${product.price}đ</del>
-                        </span>
+                        <h3 class="price">${product.discountedPrice}đ/ <span
+                                style="color: gray; text-decoration: line-through"><del>${product.price}đ</del> </span>
                         </h3>
                         <div class="stars">
                             <i>Đánh giá: ${product.rating} <i class="fas fa-star"></i></i>
@@ -268,10 +237,11 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="#" class="view-more" id="view-more-btn">Xem tất cả sản phẩm ưu đãi</a>
+        <a href="/project_fruit/home?category=quatangtraicay" class="view-more" id="view-more-btn">Xem thêm sản
+            phẩm quà tặng</a>
     </div>
 </section>
-<!-- products section starts-->
+<!-- features section ends -->
 <!-------------------------------------------------------- trái cây hôm nay -------------------------------------->
 <section class="products" id="products">
     <h1 class="heading"><span>trái cây hôm nay</span></h1>
@@ -328,7 +298,7 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=traicayhomnay" class="view-more" id="view-more-btn">Xem thêm sản
+        <a href="/project_fruit/home?category=traicayhomnay" class="view-more" id="view-more-btn">Xem thêm sản
             phẩm hôm nay</a>
     </div>
 </section>
@@ -391,7 +361,7 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=traicayvietnam" class="view-more" id="view-more-btn">Xem thêm sản
+        <a href="/project_fruit/home?category=traicayvietnam" class="view-more" id="view-more-btn">Xem thêm sản
             phẩm việt nam</a>
     </div>
 </section>
@@ -454,7 +424,7 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=traicaynhapkhau" class="view-more" id="view-more-btn">Xem thêm sản
+        <a href="/project_fruit/home?category=traicaynhapkhau" class="view-more" id="view-more-btn">Xem thêm sản
             phẩm nhập khẩu</a>
     </div>
 </section>
@@ -516,72 +486,11 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=traicaycatsan" class="view-more" id="view-more-btn">Xem thêm sản
+        <a href="/project_fruit/home?category=traicaycatsan" class="view-more" id="view-more-btn">Xem thêm sản
             phẩm cắt sẵn</a>
     </div>
 </section>
 <!-- quà tặng trái cây -->
-<section class="products" id="products">
-    <h1 class="heading"><span>quà tặng trái cây</span></h1>
-    <div class="swiper product-slider">
-        <div class="swiper-wrapper">
-            <c:forEach var="product" items="${data6}">
-                <div class="swiper-slide box">
-                    <a href="${pageContext.request.contextPath}/product-detail?pid=${product.id_product}">
-                        <!-- Hiển thị hình ảnh sản phẩm -->
-                        <img src="${product.imageUrl != null ? product.imageUrl : '/assets/img/default.jpg'}"
-                             alt="${product.name}"/>
-                        <!-- Phần giảm giá -->
-                            <%--                        <div class="discount">${product.percentDiscount != null ? product.percentDiscount : 0}%</div>--%>
-                        <!-- Hiển thị thông tin sản phẩm -->
-                        <h4 style="color: red">Mã sản phẩm: ${product.id_product}</h4>
-                        <h3>${product.name}</h3>
-                        <h3 class="price">${product.discountedPrice}đ/ <span
-                                style="color: gray; text-decoration: line-through"><del>${product.price}đ</del> </span>
-                        </h3>
-                        <div class="stars">
-                            <i>Đánh giá: ${product.rating} <i class="fas fa-star"></i></i>
-                        </div>
-                        <!-- Nút thêm vào giỏ hàng -->
-                        <a href="${pageContext.request.contextPath}/add-cart?addToCartPid=${product.id_product}"
-                           class="btn">Thêm vào giỏ hàng</a>
-                    </a>
-                </div>
-            </c:forEach>
-        </div>
-    </div>
-    <div class="swiper product-slider">
-        <div class="swiper-wrapper">
-            <c:forEach var="product" items="${data6}">
-                <div class="swiper-slide box">
-                    <a href="${pageContext.request.contextPath}/product-detail?pid=${product.id_product}">
-                        <!-- Hiển thị hình ảnh sản phẩm -->
-                        <img src="${product.imageUrl != null ? product.imageUrl : '/assets/img/default.jpg'}"
-                             alt="${product.name}"/>
-                        <!-- Phần giảm giá -->
-                            <%--                        <div class="discount">${product.percentDiscount != null ? product.percentDiscount : 0}%</div>--%>
-                        <!-- Hiển thị thông tin sản phẩm -->
-                        <h4 style="color: red">Mã sản phẩm: ${product.id_product}</h4>
-                        <h3>${product.name}</h3>
-                        <h3 class="price">${product.discountedPrice}đ/ <span
-                                style="color: gray; text-decoration: line-through"><del>${product.price}đ</del> </span>
-                        </h3>
-                        <div class="stars">
-                            <i>Đánh giá: ${product.rating} <i class="fas fa-star"></i></i>
-                        </div>
-                        <!-- Nút thêm vào giỏ hàng -->
-                        <a href="${pageContext.request.contextPath}/add-cart?addToCartPid=${product.id_product}"
-                           class="btn">Thêm vào giỏ hàng</a>
-                    </a>
-                </div>
-            </c:forEach>
-        </div>
-    </div>
-    <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=quatangtraicay" class="view-more" id="view-more-btn">Xem thêm sản
-            phẩm quà tặng</a>
-    </div>
-</section>
 <section class="products" id="products">
     <h1 class="heading"><span>hộp quà nguyệt cát</span></h1>
     <div class="swiper product-slider">
@@ -639,7 +548,7 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=hopquanguyencat" class="view-more" id="view-more-btn">Xem thêm sản
+        <a href="/project_fruit/home?category=hopquanguyencat" class="view-more" id="view-more-btn">Xem thêm sản
             phẩm quà tặng nguyên cát</a>
     </div>
 </section>
@@ -700,7 +609,7 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=traicaysaykho" class="view-more" id="view-more-btn">Xem thêm sản
+        <a href="/project_fruit/home?category=traicaysaykho" class="view-more" id="view-more-btn">Xem thêm sản
             phẩm sấy khô</a>
     </div>
 </section>
@@ -762,7 +671,7 @@
         </div>
     </div>
     <div class="view-more-container">
-        <a href="/project_fruit/list-product?category=muttraicay" class="view-more" id="view-more-btn">Xem thêm sản phẩm
+        <a href="/project_fruit/home?category=muttraicay" class="view-more" id="view-more-btn">Xem thêm sản phẩm
             mứt trái cây</a>
     </div>
 </section>
