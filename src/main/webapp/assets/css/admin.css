@@ -2961,7 +2961,9 @@ table.dataTable td:nth-child(5) {
 #supplierTable th:nth-child(8) {
     width: 140px;
 }
+/*------------------------------------*/
 
+/*-------------------------------------*/
 #supplierTable {
     width: 100%;
     border-collapse: collapse;
@@ -3844,3 +3846,107 @@ table.dataTable thead .sorting_asc{
 .btn-submit:hover{
     background-color: #0056b3;
 }
+/*-------------------------------------------------------------*/
+/* Toàn bộ form thêm nhà cung cấp */
+.addSupplier {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề form */
+.addSupplier h2 {
+    text-align: center;
+    font-size: 26px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Các trường nhập liệu */
+.addSupplier form {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    
+}
+
+/* Cải thiện giao diện cho các ô nhập liệu */
+.addSupplier label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Input fields */
+.addSupplier input[type="text"],
+.addSupplier input[type="email"],
+.addSupplier input[type="tel"],
+.addSupplier select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border 0.3s ease;
+}
+
+/* Focus vào các trường nhập */
+.addSupplier input[type="text"]:focus,
+.addSupplier input[type="email"]:focus,
+.addSupplier input[type="tel"]:focus,
+.addSupplier select:focus {
+    border-color: #4CAF50;  /* Màu khi focus */
+    outline: none;
+}
+
+/* Nút submit */
+.addSupplier button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    grid-column: span 4;  /* Nút sẽ chiếm 2 cột */
+}
+
+/* Hiệu ứng hover cho nút submit */
+.addSupplier button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Responsive: Điều chỉnh khi màn hình nhỏ */
+@media (max-width: 768px) {
+    .addSupplier form {
+        grid-template-columns: 1fr;
+    }
+
+    .addSupplier button[type="submit"] {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .addSupplier input, .addSupplier select {
+        font-size: 13px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
