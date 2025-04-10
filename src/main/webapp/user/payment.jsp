@@ -184,6 +184,135 @@
             #shipping_method input[type="radio"]:checked + label {
                 color: #007bff; /* Đổi màu chữ khi được chọn */
             }
+            .show-voucher-link {
+                display: inline-flex;
+                align-items: center;
+                color: #007bff;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 14px;
+                margin-top: 10px;
+                transition: color 0.2s ease;
+            }
+
+            .show-voucher-link i {
+                margin-right: 6px;
+                font-size: 14px;
+            }
+
+            .show-voucher-link:hover {
+                color: #0056b3;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            .voucher-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .voucher-popup {
+                background: #fff;
+                border-radius: 10px;
+                width: 500px;
+                max-height: 90vh;
+                overflow-y: auto;
+                padding: 20px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                animation: fadeIn 0.3s ease;
+                position: relative;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
+            }
+
+            .popup-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .voucher-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #222;
+                margin: 0;
+            }
+
+            .close-btn {
+                position: absolute;
+                top: -20px;
+                right: -240px;
+                background: none;
+                border: none;
+                font-size: 30px;
+                color: #555;
+                font-weight: bold;
+                cursor: pointer;
+                transition: color 0.2s ease;
+            }
+
+            .close-btn:hover {
+                color: #000;
+            }
+
+            .voucher-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                padding: 10px 15px;
+                margin-bottom: 12px;
+                background-color: #fafafa;
+            }
+
+            .voucher-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                color: #007bff;
+            }
+
+            .voucher-desc {
+                margin: 4px 0;
+                font-size: 14px;
+            }
+
+            .voucher-date {
+                font-size: 13px;
+                color: #666;
+            }
+
+            .apply-btn {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 8px 14px;
+                border-radius: 5px;
+                font-size: 14px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+
+            .apply-btn:hover {
+                background-color: #0056b3;
+            }
+
 
         </style>
         <script>
@@ -443,6 +572,43 @@
                 provinceSelect.dispatchEvent(new Event("change"));
             });
         </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const radios = document.querySelectorAll('input[name="shipping_method"]');
+                radios.forEach(radio => {
+                    radio.addEventListener("change", function () {
+                        const selectedId = this.value;
+                        const url = new URL(window.location.href);
+                        url.searchParams.set("shipping_method", selectedId);
+                        window.location.href = url.toString(); // reload lại servlet với param mới
+                    });
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const openLink = document.querySelector(".show-voucher-link");
+                const closeBtn = document.getElementById("closeVoucherOverlay");
+                const overlay = document.getElementById("voucherOverlay");
+
+                openLink.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    overlay.style.display = "flex";
+                });
+
+                closeBtn.addEventListener("click", function () {
+                    overlay.style.display = "none";
+                });
+
+                // Đóng khi click ngoài khung
+                window.addEventListener("click", function (e) {
+                    if (e.target === overlay) {
+                        overlay.style.display = "none";
+                    }
+                });
+            });
+        </script>
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
@@ -505,10 +671,17 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <c:set var="selectedShippingId" value="${sessionScope.shipping_method != null ? sessionScope.shipping_method : param.shipping_method}" />
                         <c:forEach var="method" items="${shippingMethods}">
-                            <tr style="border-bottom: 1px solid #ddd; padding: 10px;">
+                        <tr style="border-bottom: 1px solid #ddd; padding: 10px;">
                                 <td style="padding: 10px; display: flex; align-items: center;">
-                                    <input type="radio" id="shippingMethod${method.id}" name="shipping_method" value="${method.id}" style="margin-right: 15px; transform: scale(1.3); cursor: pointer;">
+                                    <input type="radio"
+                                           id="shippingMethod${method.id}"
+                                           name="shipping_method"
+                                           value="${method.id}"
+                                           style="margin-right: 15px; transform: scale(1.3); cursor: pointer;"
+                                           <c:if test="${selectedShippingId == method.id}">checked</c:if>
+                                           required />
                                     <label for="shippingMethod${method.id}" style="font-size: 16px; color: #333; font-weight: normal; flex: 1; cursor: pointer;">
                                         <span style="font-weight: bold; color: #444;">${method.methodName}</span> - ${method.carrier}
                                     </label>
@@ -533,27 +706,31 @@
             <!-- Bên phải: Hiển thị sản phẩm và tổng tiền -->
             <div class="right">
                 <h2>Giỏ hàng</h2>
-                    <c:forEach var="item" items="${cart.getList()}">
-                        <div class="cart-item">
-                            <c:if test="${not empty item.listImg}">
-                                <img src="${item.listImg[0].url}" alt="${item.name}" width="50" />
-                            </c:if>
-                            <c:if test="${empty item.listImg}">
-                                <img src="${pageContext.request.contextPath}/assets/img/default.png" alt="No image" width="50" />
-                            </c:if>
-                            <span>
+                <c:forEach var="item" items="${cart.getList()}">
+                    <div class="cart-item">
+                        <c:if test="${not empty item.listImg}">
+                            <img src="${item.listImg[0].url}" alt="${item.name}" width="50" />
+                        </c:if>
+                        <c:if test="${empty item.listImg}">
+                            <img src="${pageContext.request.contextPath}/assets/img/default.png" alt="No image" width="50" />
+                        </c:if>
+                        <span>
                 ${item.name} -
-                <fmt:formatNumber value="${item.price * item.quantity}" type="currency" currencySymbol="₫" />
+                <fmt:formatNumber value="${item.price * item.quantity}" type="number" groupingUsed="true" /> ₫
             </span>
-                        </div>
-                    </c:forEach>
+                    </div>
+                </c:forEach>
+
                 <div class="voucher">
                     <form action="apply-voucher" method="post" style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <label for="voucher" style="width: 100%;">Mã giảm giá:</label>
                         <input type="text" name="voucherCode" id="voucher" placeholder="Nhập mã giảm giá" style="flex: 2;">
+                        <input type="hidden" name="shipping_method" value="${selectedShippingId}" />
                         <button type="submit" class="submit-btn" style="flex: 1; background: #009688;">Áp dụng</button>
                     </form>
-
+                    <a href="#" class="show-voucher-link">
+                        <i class="fas fa-ticket-alt"></i> Xem thêm mã giảm giá
+                    </a>
                     <c:choose>
                         <c:when test="${not empty discountSuccess}">
                             <p style="color: green;">${discountSuccess}</p>
@@ -566,26 +743,43 @@
 
                 <c:choose>
                     <c:when test="${not empty newTotalPrice}">
-                        <h3>Tổng tiền sau giảm:
-                            <strong style="color: red;">
-                                <fmt:formatNumber value="${newTotalPrice}" type="currency" currencySymbol="₫"/>
-                            </strong>
-                        </h3>
-                        <p>
-                            (Đã giảm:
-                            <fmt:formatNumber value="${discount}" type="currency" currencySymbol="₫"/>
-                            với mã: <strong>${appliedPromotion.code}</strong>)
+                        <!-- Nếu đã áp dụng mã giảm giá -->
+                        <p><strong>Tạm tính:</strong>
+                            <fmt:formatNumber value="${tempTotal}" type="number" groupingUsed="true" /> đ
                         </p>
+                        <p><strong>Mã giảm giá:</strong>
+                            - <fmt:formatNumber value="${discount}" type="number" groupingUsed="true" /> đ
+                        </p>
+                        <p><strong>Phí vận chuyển:</strong>
+                            <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
+                        </p>
+                        <hr />
+                        <h3><strong>Tổng cộng:</strong>
+                            <span style="color: red;">
+                    <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" /> đ
+                </span>
+                        </h3>
+                        <p>(Đã áp dụng mã: <strong>${appliedPromotion.code}</strong>)</p>
                     </c:when>
                     <c:otherwise>
-                        <h3>Tổng tiền:
-                            <strong>
-                                <fmt:formatNumber value="${cart.getTotalPrice()}" type="currency" currencySymbol="₫"/>
-                            </strong>
+                        <!-- Trường hợp chưa áp mã, hiển thị mặc định -->
+                        <p><strong>Tạm tính:</strong>
+                            <fmt:formatNumber value="${cart.getTotalPrice()}" type="number" groupingUsed="true" /> đ
+                        </p>
+                        <p><strong>Mã giảm giá:</strong> 0 ₫</p>
+                        <p><strong>Phí vận chuyển:</strong>
+                            <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
+                        </p>
+                        <hr />
+                        <h3><strong>Tổng cộng:</strong>
+                            <span style="color: red;">
+                    <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" /> đ
+                </span>
                         </h3>
                     </c:otherwise>
                 </c:choose>
             </div>
+
         </div>
     </div>
     <c:if test="${not empty discountSuccess}">
@@ -616,5 +810,45 @@
             session.removeAttribute("discountError");
         %>
     </c:if>
+
+    <div id="voucherOverlay" class="voucher-overlay" style="display: none;">
+        <div class="voucher-popup">
+            <div class="popup-header">
+                <h3 class="voucher-title">Chọn giảm giá</h3>
+                <button id="closeVoucherOverlay" class="close-btn">&times;</button>
+            </div>
+            <div class="voucher-list">
+                <c:choose>
+                    <c:when test="${not empty promotionList}">
+                        <c:forEach var="voucher" items="${promotionList}">
+                            <div class="voucher-item">
+                                <div class="voucher-info">
+                                    <div class="voucher-title">
+                                        <i class="fas fa-percent"></i>
+                                        <strong>${voucher.code}</strong>
+                                    </div>
+                                    <p class="voucher-desc">
+                                        Giảm <strong>${voucher.percent_discount}%</strong> cho đơn từ
+                                        <fmt:formatNumber value="${voucher.min_order_amount}" type="number" groupingUsed="true"/> ₫
+                                    </p>
+                                    <p class="voucher-date">
+                                        Hiệu lực: ${voucher.start_date} → ${voucher.end_date}
+                                    </p>
+                                </div>
+                                <form action="apply-voucher" method="post" style="margin-left: 10px;">
+                                    <input type="hidden" name="voucherCode" value="${voucher.code}" />
+                                    <input type="hidden" name="shipping_method" value="${sessionScope.shipping_method}" />
+                                    <button type="submit" class="apply-btn">Áp dụng</button>
+                                </form>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p style="color: red; text-align: center;">Không có mã giảm giá nào.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+    </div>
     </body>
     </html>

@@ -11,8 +11,10 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.model.Promotions;
 import vn.edu.hcmuaf.fit.project_fruit.service.PromotionService;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @WebServlet(name = "ApplyVoucherServlet", value = "/apply-voucher")
 public class ApplyVoucherServlet extends HttpServlet {
@@ -74,8 +76,20 @@ public class ApplyVoucherServlet extends HttpServlet {
         } catch (Exception e) {
             session.setAttribute("discountError", "Lỗi khi xử lý mã giảm giá: " + e.getMessage());
         }
+        String currentShipping = request.getParameter("shipping_method");
+        if (currentShipping != null && !currentShipping.isEmpty()) {
+            session.setAttribute("shipping_method", currentShipping);
+        }
 
         // 👉 Redirect về lại servlet /checkout để hiển thị trang payment.jsp
         response.sendRedirect("checkout");
     }
+    public static void main(String[] args) {
+        PromotionService ps = new PromotionService();
+        List<Promotions> list = ps.getAll();
+        for (Promotions p : list) {
+            System.out.println(p.getCode() + " - " + p.getPercent_discount());
+        }
+    }
+
 }

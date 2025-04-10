@@ -11,40 +11,39 @@ import java.util.List;
 
 public class PromotionsDao {
     public List<Promotions> getAll() {
-        PreparedStatement ps = DbConnect.getPreparedStatement("SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type FROM promotions ORDER BY id_promotion ASC");
-
-        if (ps == null) return new ArrayList<>();
-
+        String sql = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, code, min_order_amount " +
+                "FROM promotions ORDER BY id_promotion ASC";
         List<Promotions> promotionsList = new ArrayList<>();
-        ResultSet rs = null;
 
-        try {
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Promotions promotion = new Promotions(
-                        rs.getInt("id_promotion"),
-                        rs.getString("promotion_name"),
-                        rs.getString("describe_1"),
-                        rs.getString("start_date"),
-                        rs.getString("end_date"),
-                        rs.getDouble("percent_discount"),
-                        rs.getString("type")
-                );
-                promotionsList.add(promotion);
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql);
+             ResultSet rs = ps != null ? ps.executeQuery() : null) {
+
+            if (rs != null) {
+                while (rs.next()) {
+                    Promotions promotion = new Promotions(
+                            rs.getInt("id_promotion"),
+                            rs.getString("promotion_name"),
+                            rs.getString("describe_1"),
+                            rs.getString("start_date"),
+                            rs.getString("end_date"),
+                            rs.getDouble("percent_discount"),
+                            rs.getString("type")
+                    );
+                    promotion.setCode(rs.getString("code"));
+                    promotion.setMin_order_amount(rs.getDouble("min_order_amount"));
+
+                    promotionsList.add(promotion);
+                }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return promotionsList;
     }
+
+
 
     // Method to retrieve a promotion by ID
     public Promotions getById(int id) {
@@ -169,5 +168,26 @@ public class PromotionsDao {
         }
         return null;
     }
+    public static void main(String[] args) {
+        PromotionsDao promotionsDao = new PromotionsDao();
+        List<Promotions> promotionsList = promotionsDao.getAll();
 
+        if (promotionsList.isEmpty()) {
+            System.out.println("Không có khuyến mãi nào trong hệ thống.");
+        } else {
+            System.out.println("Danh sách khuyến mãi:");
+            for (Promotions promotion : promotionsList) {
+                System.out.println("----------------------------------");
+                System.out.println("ID: " + promotion.getId_promotion());
+                System.out.println("Tên: " + promotion.getPromotion_name());
+                System.out.println("Mô tả: " + promotion.getDescribe_1());
+                System.out.println("Từ ngày: " + promotion.getStart_date());
+                System.out.println("Đến ngày: " + promotion.getEnd_date());
+                System.out.println("Giảm: " + promotion.getPercent_discount() + "%");
+                System.out.println("Loại: " + promotion.getType());
+                System.out.println("Mã giảm giá: " + promotion.getCode());
+                System.out.println("Đơn tối thiểu: " + promotion.getMin_order_amount());
+            }
+        }
+    }
 }
