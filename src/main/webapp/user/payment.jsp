@@ -187,48 +187,6 @@
 
         </style>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                fetch("https://provinces.open-api.vn/api/?depth=3")
-                    .then(response => response.json())
-                    .then(data => {
-                        const provinceSelect = document.getElementById("province");
-                        const districtSelect = document.getElementById("district");
-                        const wardSelect = document.getElementById("ward");
-
-                        data.forEach(province => {
-                            let option = document.createElement("option");
-                            option.value = province.code;
-                            option.textContent = province.name;
-                            provinceSelect.appendChild(option);
-                        });
-
-                        provinceSelect.addEventListener("change", function () {
-                            const selectedProvince = data.find(p => p.code == this.value);
-                            districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
-                            wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
-
-                            selectedProvince.districts.forEach(district => {
-                                let option = document.createElement("option");
-                                option.value = district.code;
-                                option.textContent = district.name;
-                                districtSelect.appendChild(option);
-                            });
-                        });
-
-                        districtSelect.addEventListener("change", function () {
-                            const selectedProvince = data.find(p => p.code == provinceSelect.value);
-                            const selectedDistrict = selectedProvince.districts.find(d => d.code == this.value);
-                            wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
-
-                            selectedDistrict.wards.forEach(ward => {
-                                let option = document.createElement("option");
-                                option.value = ward.code;
-                                option.textContent = ward.name;
-                                wardSelect.appendChild(option);
-                            });
-                        });
-                    });
-            });
             // load xử lý
             document.addEventListener("DOMContentLoaded", function () {
                 const form = document.querySelector(".voucher form");
@@ -244,6 +202,245 @@
                         form.submit();
                     }, 2500);
                 });
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const provinceSelect = document.getElementById("province");
+                const districtSelect = document.getElementById("district");
+                const wardSelect = document.getElementById("ward");
+
+                const hcmData = {
+                    code: 79,
+                    name: "TP. Hồ Chí Minh",
+                    districts: [
+                        {
+                            code: 760,
+                            name: "Quận 1",
+                            wards: [
+                                { code: 26734, name: "Phường Bến Nghé" },
+                                { code: 26737, name: "Phường Bến Thành" },
+                                { code: 26740, name: "Phường Cô Giang" },
+                                { code: 26743, name: "Phường Cầu Kho" },
+                                { code: 26746, name: "Phường Cầu Ông Lãnh" },
+                                { code: 26749, name: "Phường Đa Kao" },
+                                { code: 26752, name: "Phường Nguyễn Thái Bình" },
+                                { code: 26755, name: "Phường Nguyễn Cư Trinh" },
+                                { code: 26758, name: "Phường Phạm Ngũ Lão" },
+                                { code: 26761, name: "Phường Tân Định" }
+                            ]
+                        },
+                        {
+                            code: 769,
+                            name: "Quận 3",
+                            wards: [
+                                { code: 26824, name: "Phường 1" },
+                                { code: 26827, name: "Phường 2" },
+                                { code: 26830, name: "Phường 3" },
+                                { code: 26833, name: "Phường 4" },
+                                { code: 26836, name: "Phường 5" },
+                                { code: 26839, name: "Phường 6" },
+                                { code: 26842, name: "Phường 7" },
+                                { code: 26845, name: "Phường 8" },
+                                { code: 26848, name: "Phường 9" },
+                                { code: 26851, name: "Phường 10" },
+                                { code: 26854, name: "Phường 11" },
+                                { code: 26857, name: "Phường 12" },
+                                { code: 26860, name: "Phường 13" },
+                                { code: 26863, name: "Phường 14" }
+                            ]
+                        },
+                        {
+                            code: 768,
+                            name: "Quận Phú Nhuận",
+                            wards: [
+                                { code: 27118, name: "Phường 1" },
+                                { code: 27121, name: "Phường 2" },
+                                { code: 27124, name: "Phường 3" },
+                                { code: 27127, name: "Phường 4" },
+                                { code: 27130, name: "Phường 5" },
+                                { code: 27133, name: "Phường 7" },
+                                { code: 27136, name: "Phường 8" },
+                                { code: 27139, name: "Phường 9" },
+                                { code: 27142, name: "Phường 10" },
+                                { code: 27145, name: "Phường 11" },
+                                { code: 27148, name: "Phường 13" },
+                                { code: 27151, name: "Phường 15" },
+                                { code: 27154, name: "Phường 17" }
+                            ]
+                        },
+                        {
+                            code: 773,
+                            name: "Quận Gò Vấp",
+                            wards: [
+                                { code: 27037, name: "Phường 1" },
+                                { code: 27040, name: "Phường 3" },
+                                { code: 27043, name: "Phường 4" },
+                                { code: 27046, name: "Phường 5" },
+                                { code: 27049, name: "Phường 6" },
+                                { code: 27052, name: "Phường 7" },
+                                { code: 27055, name: "Phường 8" },
+                                { code: 27058, name: "Phường 9" },
+                                { code: 27061, name: "Phường 10" },
+                                { code: 27064, name: "Phường 11" },
+                                { code: 27067, name: "Phường 12" },
+                                { code: 27070, name: "Phường 13" },
+                                { code: 27073, name: "Phường 14" },
+                                { code: 27076, name: "Phường 15" },
+                                { code: 27079, name: "Phường 16" },
+                                { code: 27082, name: "Phường 17" }
+                            ]
+                        },
+                        {
+                            code: 776,
+                            name: "Quận Bình Thạnh",
+                            wards: [
+                                { code: 27085, name: "Phường 1" },
+                                { code: 27088, name: "Phường 2" },
+                                { code: 27091, name: "Phường 3" },
+                                { code: 27094, name: "Phường 5" },
+                                { code: 27097, name: "Phường 6" },
+                                { code: 27100, name: "Phường 7" },
+                                { code: 27103, name: "Phường 11" },
+                                { code: 27106, name: "Phường 12" },
+                                { code: 27109, name: "Phường 13" },
+                                { code: 27112, name: "Phường 14" },
+                                { code: 27115, name: "Phường 15" },
+                                { code: 27118, name: "Phường 17" },
+                                { code: 27121, name: "Phường 19" },
+                                { code: 27124, name: "Phường 21" },
+                                { code: 27127, name: "Phường 22" },
+                                { code: 27130, name: "Phường 24" },
+                                { code: 27133, name: "Phường 25" },
+                                { code: 27136, name: "Phường 26" },
+                                { code: 27139, name: "Phường 27" },
+                                { code: 27142, name: "Phường 28" }
+                            ]
+                        },
+                        {
+                            code: 770,
+                            name: "Quận 10",
+                            wards: [
+                                { code: 26890, name: "Phường 1" },
+                                { code: 26893, name: "Phường 2" },
+                                { code: 26896, name: "Phường 3" },
+                                { code: 26899, name: "Phường 4" },
+                                { code: 26902, name: "Phường 5" },
+                                { code: 26905, name: "Phường 6" },
+                                { code: 26908, name: "Phường 7" },
+                                { code: 26911, name: "Phường 8" },
+                                { code: 26914, name: "Phường 9" },
+                                { code: 26917, name: "Phường 10" },
+                                { code: 26920, name: "Phường 11" },
+                                { code: 26923, name: "Phường 12" },
+                                { code: 26926, name: "Phường 13" },
+                                { code: 26929, name: "Phường 14" },
+                                { code: 26932, name: "Phường 15" }
+                            ]
+                        },
+                        {
+                            code: 771,
+                            name: "Quận 11",
+                            wards: [
+                                { code: 26935, name: "Phường 1" },
+                                { code: 26938, name: "Phường 2" },
+                                { code: 26941, name: "Phường 3" },
+                                { code: 26944, name: "Phường 4" },
+                                { code: 26947, name: "Phường 5" },
+                                { code: 26950, name: "Phường 6" },
+                                { code: 26953, name: "Phường 7" },
+                                { code: 26956, name: "Phường 8" },
+                                { code: 26959, name: "Phường 9" },
+                                { code: 26962, name: "Phường 10" },
+                                { code: 26965, name: "Phường 11" },
+                                { code: 26968, name: "Phường 12" },
+                                { code: 26971, name: "Phường 13" },
+                                { code: 26974, name: "Phường 14" },
+                                { code: 26977, name: "Phường 15" },
+                                { code: 26980, name: "Phường 16" }
+                            ]
+                        },
+                        {
+                            code: 778,
+                            name: "Quận 7",
+                            wards: [
+                                { code: 27190, name: "Phường Tân Thuận Đông" },
+                                { code: 27193, name: "Phường Tân Thuận Tây" },
+                                { code: 27196, name: "Phường Tân Kiểng" },
+                                { code: 27199, name: "Phường Tân Hưng" },
+                                { code: 27202, name: "Phường Bình Thuận" },
+                                { code: 27205, name: "Phường Tân Phong" },
+                                { code: 27208, name: "Phường Phú Mỹ" }
+                            ]
+                        },
+                        {
+                            code: 774,
+                            name: "Quận 12",
+                            wards: [
+                                { code: 27052, name: "Phường Tân Chánh Hiệp" },
+                                { code: 27055, name: "Phường Tân Thới Hiệp" },
+                                { code: 27058, name: "Phường Trung Mỹ Tây" },
+                                { code: 27061, name: "Phường Tân Hưng Thuận" },
+                                { code: 27064, name: "Phường Đông Hưng Thuận" },
+                                { code: 27067, name: "Phường Tân Thới Nhất" },
+                                { code: 27070, name: "Phường An Phú Đông" },
+                                { code: 27073, name: "Phường Thạnh Lộc" },
+                                { code: 27076, name: "Phường Thạnh Xuân" }
+                            ]
+                        },
+                        {
+                            code: 7691,
+                            name: "TP Thủ Đức",
+                            wards: [
+                                { code: 27001, name: "Phường Linh Trung" },
+                                { code: 27004, name: "Phường Linh Đông" },
+                                { code: 27007, name: "Phường Linh Tây" },
+                                { code: 27010, name: "Phường Bình Thọ" },
+                                { code: 27013, name: "Phường Trường Thọ" },
+                                { code: 27016, name: "Phường Hiệp Bình Chánh" },
+                                { code: 27019, name: "Phường Hiệp Bình Phước" },
+                                { code: 27022, name: "Phường Tam Phú" },
+                                { code: 27025, name: "Phường Tam Bình" }
+                            ]
+                        }
+                    ]
+                };
+
+                // Gán sẵn TP.HCM vào <select>
+                let option = document.createElement("option");
+                option.value = hcmData.code;
+                option.textContent = hcmData.name;
+                provinceSelect.appendChild(option);
+
+                provinceSelect.addEventListener("change", function () {
+                    if (this.value == hcmData.code) {
+                        districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
+                        wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
+                        hcmData.districts.forEach(district => {
+                            let opt = document.createElement("option");
+                            opt.value = district.code;
+                            opt.textContent = district.name;
+                            districtSelect.appendChild(opt);
+                        });
+                    }
+                });
+
+                districtSelect.addEventListener("change", function () {
+                    const selectedDistrict = hcmData.districts.find(d => d.code == this.value);
+                    wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
+                    if (selectedDistrict) {
+                        selectedDistrict.wards.forEach(ward => {
+                            let opt = document.createElement("option");
+                            opt.value = ward.code;
+                            opt.textContent = ward.name;
+                            wardSelect.appendChild(opt);
+                        });
+                    }
+                });
+
+                // Auto chọn TP.HCM luôn
+                provinceSelect.value = hcmData.code;
+                provinceSelect.dispatchEvent(new Event("change"));
             });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -281,16 +478,19 @@
                     <label>Tỉnh/Thành phố:</label>
                     <select id="province">
                         <option value="">Chọn Tỉnh/Thành phố</option>
+                        <!-- Chỉ TP.HCM sẽ được thêm vào đây -->
                     </select>
 
                     <label>Quận/Huyện:</label>
                     <select id="district">
                         <option value="">Chọn Quận/Huyện</option>
+                        <!-- Các quận, huyện của TP.HCM sẽ được thêm vào đây -->
                     </select>
 
                     <label>Phường/Xã:</label>
                     <select id="ward">
                         <option value="">Chọn Phường/Xã</option>
+                        <!-- Các phường/xã của quận/huyện sẽ được thêm vào đây -->
                     </select>
 
                     <label>Số nhà, địa chỉ cụ thể:</label>
