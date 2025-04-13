@@ -3936,6 +3936,47 @@ table.dataTable thead .sorting_asc{
         font-size: 13px;
     }
 }
+.modal1 {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal1-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    top: 0; left: 0;
+}
+
+.modal1-content {
+    position: relative;
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 12px;
+    width: 400px;
+    z-index: 1001;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal1-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal1-content input,
+.modal1-content select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
 
 
 
