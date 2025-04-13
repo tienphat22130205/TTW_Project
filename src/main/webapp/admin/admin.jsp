@@ -650,34 +650,35 @@
                 </div>
                 <!-- Form Thêm Khuyến Mãi -->
                 <h3>Thêm khuyến mãi</h3>
-                <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
-                      method="POST">
+                <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet" method="POST">
                     <div class="form-group">
-                        <label for="promotion-code">Tên khuyến mãi:</label>
-                        <input type="text" id="promotion-code" name="promotion_code" placeholder="Nhập mã giảm giá"
-                               required/>
+                        <label for="promotion-name">Tên khuyến mãi:</label>
+                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promotion-code">Mã khuyến mãi:</label>
+                        <input type="text" id="promotion-code0" name="promotion_code" placeholder="Nhập mã giảm giá" required />
                     </div>
 
                     <div class="form-group">
                         <label for="description-add">Mô tả:</label>
-                        <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
-                               required/>
+                        <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả" required />
                     </div>
 
                     <div class="form-group">
                         <label for="start-date">Ngày bắt đầu:</label>
-                        <input type="date" id="start-date" name="start_date" required/>
+                        <input type="date" id="start-date" name="start_date" required />
                     </div>
 
                     <div class="form-group">
                         <label for="expiration-date">Ngày hết hạn:</label>
-                        <input type="date" id="expiration-date" name="expiration_date" required/>
+                        <input type="date" id="expiration-date" name="expiration_date" required />
                     </div>
 
                     <div class="form-group">
                         <label for="promotion-discount">Mức giảm (%):</label>
-                        <input type="number" id="promotion-discount" name="promotion_discount"
-                               placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
+                        <input type="number" id="promotion-discount" name="promotion_discount" placeholder="Nhập mức giảm (%)" min="0" max="100" required />
                     </div>
 
                     <div class="form-group">
@@ -687,8 +688,19 @@
                             <option value="general">General</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-submit">Cập nhật</button>
+
+                    <div class="form-group">
+                        <label for="min-order-amount">Giá trị đơn tối thiểu (VNĐ):</label>
+                        <input type="number" id="min-order-amount" name="min_order_amount" placeholder="Nhập giá trị tối thiểu" min="0" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="max-usage">Số lượt sử dụng tối đa:</label>
+                        <input type="number" id="max-usage" name="max_usage" placeholder="Nhập số lượt tối đa" min="1" required />
+                    </div>
+                    <button type="submit" class="btn-submit">Thêm khuyến mãi</button>
                 </form>
+                <!-- Form Thêm Khuyến Mãi -->
 
                 <h3>Danh sách Khuyến mãi</h3>
                 <div class="promotion-table">
@@ -701,11 +713,15 @@
                         <tr style="text-align: center">
                             <th>ID</th>
                             <th style="text-align: left">Tên Khuyến Mãi</th>
+                            <th>Mã</th>
                             <th>Mô Tả</th>
                             <th>Ngày Bắt Đầu</th>
                             <th>Ngày Kết Thúc</th>
-                            <th>Phần Trăm Giảm Giá</th>
+                            <th>Phần Trăm Giảm</th>
                             <th>Loại</th>
+                            <th>Giá trị đơn tối thiểu</th>
+                            <th>Số lượt sử dụng tối đa</th>
+                            <th>Số lượt đã sử dụng</th>
                             <th>Hành Động</th>
                         </tr>
                         </thead>
@@ -714,20 +730,17 @@
                             for (Promotions promotion : promotionsList) {
                         %>
                         <tr>
-                            <td><%= promotion.getId_promotion() %>
-                            </td>
-                            <td><%= promotion.getPromotion_name() %>
-                            </td>
-                            <td><%= promotion.getDescribe_1() %>
-                            </td>
-                            <td><%= promotion.getStart_date() %>
-                            </td>
-                            <td style="text-align: center"><%= promotion.getEnd_date() %>
-                            </td>
-                            <td style="text-align: center"><%= promotion.getPercent_discount()%>%
-                            </td>
-                            <td style="text-align: center"><%= promotion.getType() %>
-                            </td>
+                            <td><%= promotion.getId_promotion() %></td>
+                            <td><%= promotion.getPromotion_name() %></td>
+                            <td><%= promotion.getCode() %></td>
+                            <td><%= promotion.getDescribe_1() %></td>
+                            <td><%= promotion.getStart_date() %></td>
+                            <td style="text-align: center"><%= promotion.getEnd_date() %></td>
+                            <td style="text-align: center"><%= promotion.getPercent_discount() %>%</td>
+                            <td style="text-align: center"><%= promotion.getType() %></td>
+                            <td style="text-align: center"><%= promotion.getMin_order_amount() %></td>
+                            <td style="text-align: center"><%= promotion.getMax_usage() %></td>
+                            <td style="text-align: center"><%= promotion.getUsage_count() %></td>
                             <td>
                                 <button onclick="openModal({
                                         promoId: '<%= promotion.getId_promotion() %>',
@@ -736,10 +749,12 @@
                                         promoStart: '<%= promotion.getStart_date() %>',
                                         promoEnd: '<%= promotion.getEnd_date() %>',
                                         promoDiscount: '<%= promotion.getPercent_discount() %>',
-                                        promoType: '<%= promotion.getType() %>'
+                                        promoType: '<%= promotion.getType() %>',
+                                        promoCode: '<%= promotion.getCode() %>',
+                                        promoMinOrder: '<%= promotion.getMin_order_amount() %>',
+                                        promoMaxUsage: '<%= promotion.getMax_usage() %>'
                                         }, 'editPromotion')">Sửa
                                 </button>
-
 
                                 <button class="delete-btn" onclick="openModal({
                                         promoId: '<%= promotion.getId_promotion() %>',
@@ -747,7 +762,6 @@
                                         }, 'deletePromotion')">Xóa
                                 </button>
                             </td>
-
                         </tr>
                         <%
                             }
@@ -755,6 +769,7 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
         <div id="feedback" class="section">
@@ -1245,7 +1260,7 @@
                 </select>
                 <div class="save-close" style="padding-top: 30px">
                     <button type="submit">Lưu</button>
-                    <button type="button" onclick="closeEditModal()">Hủy</button>
+                    <button type="button" onclick="closeModal()">Hủy</button>
                 </div>
             </form>
         </div>

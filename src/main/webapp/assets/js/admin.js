@@ -617,7 +617,8 @@ function openModal(data, modalType) {
     if (modalType === "editPromotion") {
         const modal = document.getElementById("editPromotionModal");
         modal.style.display = "block";
-        console.log("📦 Data gửi vào modal edit:", data);
+        console.log(" Data gửi vào modal edit:", data);
+
         // Gán dữ liệu vào các trường trong form
         document.getElementById("promoId").value = data.promoId || "";
         document.getElementById("promoTitle").value = data.promoTitle || "";
@@ -626,7 +627,11 @@ function openModal(data, modalType) {
         document.getElementById("promoStart").value = data.promoStart || "";
         document.getElementById("promoEnd").value = data.promoEnd || "";
         document.getElementById("productTypeSelect").value = data.promoType || "general";
+        document.getElementById("promoCode").value = data.promoCode || "";
+        document.getElementById("promoMinOrder").value = data.promoMinOrder || "";
+        document.getElementById("promoMaxUsage").value = data.promoMaxUsage || "";
     }
+
 
     else if (modalType === "deletePromotion") {
         const modal = document.getElementById("deletePromotionModal");
@@ -642,6 +647,7 @@ function openModal(data, modalType) {
 
 
     }
+
 }
 
 

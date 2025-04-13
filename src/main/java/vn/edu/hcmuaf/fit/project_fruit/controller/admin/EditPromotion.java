@@ -21,8 +21,14 @@ public class EditPromotion extends HttpServlet {
         String end = request.getParameter("end_date");
         double discount = Double.parseDouble(request.getParameter("percent_discount"));
         String type = request.getParameter("type");
+        String code = request.getParameter("code");
+        double minOrderAmount = Double.parseDouble(request.getParameter("min_order_amount"));
+        int maxUsage = Integer.parseInt(request.getParameter("max_usage"));
+        int usageCount = Integer.parseInt(request.getParameter("usage_count"));
 
-        Promotions updatedPromo = new Promotions(id, name, desc, start, end, discount, type);
+        Promotions updatedPromo = new Promotions(id, name, desc, start, end, discount, type,
+                code, minOrderAmount, maxUsage, usageCount);
+
         PromotionsDao dao = new PromotionsDao();
         boolean success = dao.updatePromotion(updatedPromo);
 
