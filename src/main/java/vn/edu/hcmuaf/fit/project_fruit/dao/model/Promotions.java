@@ -2,12 +2,14 @@ package vn.edu.hcmuaf.fit.project_fruit.dao.model;
 
 public class Promotions {
     private int id_promotion;
+    private String code;
     private String promotion_name;
     private String describe_1;
     private String start_date;
     private String end_date;
     private double percent_discount;
     private String type; // Thêm thuộc tính type
+    private double min_order_amount;
 
     public Promotions() {
     }
@@ -38,6 +40,13 @@ public class Promotions {
 
     public void setPromotion_name(String promotion_name) {
         this.promotion_name = promotion_name;
+    }
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 
@@ -81,16 +90,21 @@ public class Promotions {
         this.type = type;
     }
 
+    public double getMin_order_amount() { return min_order_amount; }
+    public void setMin_order_amount(double min_order_amount) { this.min_order_amount = min_order_amount; }
+
     @Override
     public String toString() {
         return "Promotions{" +
                 "id_promotion=" + id_promotion +
                 ", promotion_name='" + promotion_name + '\'' +
+                ", code='" + code + '\'' +
                 ", describe_1='" + describe_1 + '\'' +
                 ", start_date='" + start_date + '\'' +
                 ", end_date='" + end_date + '\'' +
                 ", percent_discount='" + percent_discount + '\'' +
                 ", type='" + type + '\'' +
+                ", min_order_amount=" + min_order_amount +
                 '}';
     }
 
