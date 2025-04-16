@@ -630,10 +630,7 @@ function openModal(data, modalType) {
         document.getElementById("promoCode").value = data.promoCode || "";
         document.getElementById("promoMinOrder").value = data.promoMinOrder || "";
         document.getElementById("promoMaxUsage").value = data.promoMaxUsage || "";
-    }
-
-
-    else if (modalType === "deletePromotion") {
+    } else if (modalType === "deletePromotion") {
         const modal = document.getElementById("deletePromotionModal");
         modal.style.display = "block";
 
@@ -646,10 +643,20 @@ function openModal(data, modalType) {
         console.log("Đã mở modal xóa cho ID:", data.promoId); // Debug kiểm tra ID
 
 
+    } else if (modalType === "deleteFeedback") {
+        const modal = document.getElementById("deleteFeedbackModal");
+        modal.style.display = "block";
+
+        document.getElementById("FeedbackDelete").innerText =
+            `Bạn có chắc muốn xóa phản hồi id #${data.feedbackId}?`;
+
+        const deleteBtn = document.getElementById("FeedbackDeleteButton");
+        deleteBtn.setAttribute("data-feedback-id", data.feedbackId);
     }
 
-}
 
+
+}
 
 
 // Hàm đóng modal và ẩn overlay
@@ -1281,3 +1288,26 @@ window.addEventListener("click", function (e) {
         modal.style.display = "none";
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const feedbackDeleteButton = document.getElementById("FeedbackDeleteButton");
+    const contextPath = "<%= request.getContextPath() %>";
+
+    if (feedbackDeleteButton && !feedbackDeleteButton.hasAttribute("data-listener")) {
+        feedbackDeleteButton.setAttribute("data-listener", "true");
+
+        feedbackDeleteButton.onclick = function () {
+            const feedbackId = this.getAttribute("data-feedback-id");
+            if (!feedbackId) {
+                alert("Không tìm thấy ID phản hồi để xóa!");
+                return;
+            }
+
+            if (confirm(`Bạn chắc chắn muốn xoá phản hồi #${feedbackId}?`)) {
+                console.log("Đang gửi yêu cầu xóa phản hồi ID:", feedbackId);
+                window.location.href = contextPath + "/remove-feedback?fid=" + feedbackId;
+            }
+        };
+    }
+});
+

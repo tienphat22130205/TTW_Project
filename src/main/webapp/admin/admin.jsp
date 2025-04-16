@@ -650,35 +650,40 @@
                 </div>
                 <!-- Form Thêm Khuyến Mãi -->
                 <h3>Thêm khuyến mãi</h3>
-                <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet" method="POST">
+                <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
+                      method="POST">
                     <div class="form-group">
                         <label for="promotion-name">Tên khuyến mãi:</label>
-                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi" required />
+                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
+                               required/>
                     </div>
 
                     <div class="form-group">
                         <label for="promotion-code">Mã khuyến mãi:</label>
-                        <input type="text" id="promotion-code0" name="promotion_code" placeholder="Nhập mã giảm giá" required />
+                        <input type="text" id="promotion-code0" name="promotion_code" placeholder="Nhập mã giảm giá"
+                               required/>
                     </div>
 
                     <div class="form-group">
                         <label for="description-add">Mô tả:</label>
-                        <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả" required />
+                        <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
+                               required/>
                     </div>
 
                     <div class="form-group">
                         <label for="start-date">Ngày bắt đầu:</label>
-                        <input type="date" id="start-date" name="start_date" required />
+                        <input type="date" id="start-date" name="start_date" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="expiration-date">Ngày hết hạn:</label>
-                        <input type="date" id="expiration-date" name="expiration_date" required />
+                        <input type="date" id="expiration-date" name="expiration_date" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="promotion-discount">Mức giảm (%):</label>
-                        <input type="number" id="promotion-discount" name="promotion_discount" placeholder="Nhập mức giảm (%)" min="0" max="100" required />
+                        <input type="number" id="promotion-discount" name="promotion_discount"
+                               placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
                     </div>
 
                     <div class="form-group">
@@ -691,12 +696,14 @@
 
                     <div class="form-group">
                         <label for="min-order-amount">Giá trị đơn tối thiểu (VNĐ):</label>
-                        <input type="number" id="min-order-amount" name="min_order_amount" placeholder="Nhập giá trị tối thiểu" min="0" required />
+                        <input type="number" id="min-order-amount" name="min_order_amount"
+                               placeholder="Nhập giá trị tối thiểu" min="0" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="max-usage">Số lượt sử dụng tối đa:</label>
-                        <input type="number" id="max-usage" name="max_usage" placeholder="Nhập số lượt tối đa" min="1" required />
+                        <input type="number" id="max-usage" name="max_usage" placeholder="Nhập số lượt tối đa" min="1"
+                               required/>
                     </div>
                     <button type="submit" class="btn-submit">Thêm khuyến mãi</button>
                 </form>
@@ -730,17 +737,27 @@
                             for (Promotions promotion : promotionsList) {
                         %>
                         <tr>
-                            <td><%= promotion.getId_promotion() %></td>
-                            <td><%= promotion.getPromotion_name() %></td>
-                            <td><%= promotion.getCode() %></td>
-                            <td><%= promotion.getDescribe_1() %></td>
-                            <td><%= promotion.getStart_date() %></td>
-                            <td style="text-align: center"><%= promotion.getEnd_date() %></td>
+                            <td><%= promotion.getId_promotion() %>
+                            </td>
+                            <td><%= promotion.getPromotion_name() %>
+                            </td>
+                            <td><%= promotion.getCode() %>
+                            </td>
+                            <td><%= promotion.getDescribe_1() %>
+                            </td>
+                            <td><%= promotion.getStart_date() %>
+                            </td>
+                            <td style="text-align: center"><%= promotion.getEnd_date() %>
+                            </td>
                             <td style="text-align: center"><%= promotion.getPercent_discount() %>%</td>
-                            <td style="text-align: center"><%= promotion.getType() %></td>
-                            <td style="text-align: center"><%= promotion.getMin_order_amount() %></td>
-                            <td style="text-align: center"><%= promotion.getMax_usage() %></td>
-                            <td style="text-align: center"><%= promotion.getUsage_count() %></td>
+                            <td style="text-align: center"><%= promotion.getType() %>
+                            </td>
+                            <td style="text-align: center"><%= promotion.getMin_order_amount() %>
+                            </td>
+                            <td style="text-align: center"><%= promotion.getMax_usage() %>
+                            </td>
+                            <td style="text-align: center"><%= promotion.getUsage_count() %>
+                            </td>
                             <td>
                                 <button onclick="openModal({
                                         promoId: '<%= promotion.getId_promotion() %>',
@@ -785,18 +802,26 @@
                             <th>Nội dung</th>
                             <th>Ngày tạo</th>
                             <th>Đánh giá</th>
+                            <th>Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                         <!-- Lặp qua danh sách feedback -->
                         <c:forEach var="feedback" items="${feedback}">
                             <tr>
-                                <td>${feedback.idFeedback}</td>
-                                <td>${feedback.productName}</td>
-                                <td>${feedback.cusName}</td>
+                                <td style="text-align: center">${feedback.idFeedback}</td>
+                                <td style="text-align: center">${feedback.productName}</td>
+                                <td style="text-align: center">${feedback.cusName}</td>
                                 <td>${feedback.content}</td>
                                 <td>${feedback.dateCreate}</td>
-                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star"></i></td>
+                                <td style="text-align: center; gap: 5px;">${feedback.rating} <i class="fas fa-star"></i>
+                                </td>
+                                <td style="text-align: center">
+                                    <button class="delete-btn" onclick="openModal({
+                                            feedbackId: '${feedback.idFeedback}'
+                                            }, 'deleteFeedback')">Xóa
+                                    </button>
+                                <td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -1258,6 +1283,12 @@
                     <option value="weekly">Weekly</option>
                     <option value="general">General</option>
                 </select>
+                <label for="promoCode">Mã Code</label>
+                <input type="text" id="promoCode" name="code" placeholder="Nhập mã khuyến mãi" required>
+                <label for="minOrderAmount">Giá Trị Đơn Tối Thiểu</label>
+                <input type="number" id="minOrderAmount" name="min_order_amount" placeholder="VND" min="0" required>
+                <label for="maxUsage">Số Lần Sử Dụng Tối Đa</label>
+                <input type="number" id="maxUsage" name="max_usage" placeholder="0" min="0" required>
                 <div class="save-close" style="padding-top: 30px">
                     <button type="submit">Lưu</button>
                     <button type="button" onclick="closeModal()">Hủy</button>
@@ -1277,6 +1308,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Xóa phản hồi -->
+    <div id="deleteFeedbackModal" class="modal" style="display: none; padding: 0">
+        <div class="deletePromotionModal-content">
+            <h3>Xác Nhận Xóa Phản Hồi</h3>
+            <p id="FeedbackDelete">Bạn có chắc muốn xóa phản hồi?</p>
+            <div class="delete-cancel">
+                <button style="background-color: #dc3545" class="delete-btn" id="FeedbackDeleteButton">Xóa</button>
+                <button type="button" onclick="closeModal('deleteFeedback')">Hủy</button>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
