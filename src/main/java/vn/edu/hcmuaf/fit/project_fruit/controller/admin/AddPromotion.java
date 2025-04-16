@@ -16,28 +16,37 @@ public class AddPromotion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         // Lấy dữ liệu từ form
-        String promotionName = request.getParameter("promotion_code");
+        String promotionName = request.getParameter("promotion_name");
+        String code = request.getParameter("promotion_code");
         String description = request.getParameter("description_add");
         String startDate = request.getParameter("start_date");
         String endDate = request.getParameter("expiration_date");
         String discountPercent = request.getParameter("promotion_discount");
         String type = request.getParameter("promotion_type");
+        String minOrderAmount = request.getParameter("min_order_amount");
+        String maxUsage = request.getParameter("max_usage");
 
-        // Câu lệnh SQL để thêm dữ liệu vào cơ sở dữ liệu
-        String query = "INSERT INTO promotions (promotion_name, describe_1, start_date, end_date, percent_discount, type) VALUES (?, ?, ?, ?, ?, ?)";
+        // Câu lệnh SQL thêm khuyến mãi
+        String query = "INSERT INTO promotions (promotion_name, code, describe_1, start_date, end_date, percent_discount, type, min_order_amount, max_usage, usage_count) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
             ps.setString(1, promotionName);
-            ps.setString(2, description);
-            ps.setString(3, startDate);
-            ps.setString(4, endDate);
-            ps.setDouble(5, Double.parseDouble(discountPercent));
-            ps.setString(6, type);
+            ps.setString(2, code);
+            ps.setString(3, description);
+            ps.setString(4, startDate);
+            ps.setString(5, endDate);
+            ps.setDouble(6, Double.parseDouble(discountPercent));
+            ps.setString(7, type);
+            ps.setDouble(8, Double.parseDouble(minOrderAmount));
+            ps.setInt(9, Integer.parseInt(maxUsage));
 
-            // Thực hiện thêm dữ liệu
+            // Thực thi lệnh INSERT
             ps.executeUpdate();
 
-            // Điều hướng quay lại trang admin với anchor #
+            // Điều hướng về trang admin
             response.sendRedirect(request.getContextPath() + "/admin#");
         } catch (SQLException e) {
             e.printStackTrace();

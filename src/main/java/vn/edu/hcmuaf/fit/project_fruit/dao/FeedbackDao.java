@@ -72,6 +72,7 @@ public class FeedbackDao {
             System.out.println("------------------------------");
         }
     }
+
     public List<Feedback> getFeedbacksByPage(int page, int recordsPerPage) {
         List<Feedback> feedbackList = new ArrayList<>();
         String query = "SELECT f.id_feedback, f.id_account, f.content, f.date_create, f.rating, " +
@@ -103,6 +104,7 @@ public class FeedbackDao {
         }
         return feedbackList;
     }
+
     // Phương thức lấy tổng số bản ghi để tính số trang
     public int getTotalRecords() {
         String query = "SELECT COUNT(*) FROM feedbacks";
@@ -148,6 +150,19 @@ public class FeedbackDao {
         }
         return feedbackList;
     }
+
+    public static boolean deleteFeedbackById(String feedbackId) throws SQLException {
+        String query = "DELETE FROM feedbacks WHERE id_feedback = ?";
+        try (PreparedStatement preparedStatement = DbConnect.getPreparedStatement(query)) {
+            if (preparedStatement == null) {
+                throw new SQLException("Không thể tạo PreparedStatement.");
+            }
+            preparedStatement.setString(1, feedbackId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+
 
     // Main để kiểm tra và in ra dữ liệu
     public static void main(String[] args) {

@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;600&display=swap');
 
 
-
 :root {
     --main--color: #073a4b;
     --dark-color: #1D2231;
@@ -81,45 +80,45 @@
     padding-right: 1rem;
 }
 
-#nav-toggle:checked+.sidebar {
+#nav-toggle:checked + .sidebar {
     width: 80px;
 }
 
-#nav-toggle:checked+.sidebar .sidebar-brand,
-#nav-toggle:checked+.sidebar .li {
+#nav-toggle:checked + .sidebar .sidebar-brand,
+#nav-toggle:checked + .sidebar .li {
     padding-left: 1rem;
     text-align: center;
 }
 
-#nav-toggle:checked+.sidebar .li a {
+#nav-toggle:checked + .sidebar .li a {
     padding-left: 0rem;
 }
 
-#nav-toggle:checked+.sidebar .sidebar-brand h1 span:last-child,
-#nav-toggle:checked+.sidebar li a span:last-child {
+#nav-toggle:checked + .sidebar .sidebar-brand h1 span:last-child,
+#nav-toggle:checked + .sidebar li a span:last-child {
     display: none;
 
 }
 
-#nav-toggle:checked~.main-content {
+#nav-toggle:checked ~ .main-content {
     margin-left: 70px;
 }
 
-#nav-toggle:checked~.main-content header {
+#nav-toggle:checked ~ .main-content header {
     width: calc(100% - 70px);
     left: 70px;
 }
 
-#nav-toggle:checked+.sidebar .logout a span:last-child {
+#nav-toggle:checked + .sidebar .logout a span:last-child {
     display: none;
 }
 
-#nav-toggle:checked+.sidebar .logout {
+#nav-toggle:checked + .sidebar .logout {
     text-align: center;
     padding-left: 0;
 }
 
-#nav-toggle:checked+.sidebar .logout a span:first-child {
+#nav-toggle:checked + .sidebar .logout a span:first-child {
     padding-right: 0;
     display: inline-block;
 }
@@ -157,6 +156,7 @@
     color: var(--main--color);
     background: #fff;
 }
+
 /* Kiểu cho overlay nền đen mờ */
 .logout-overlay {
     position: fixed;
@@ -208,6 +208,7 @@
 .notification-content button#cancelLogoutBtn:hover {
     background-color: #e53935;
 }
+
 /* Overlay khi modal hiển thị */
 .delete-overlay {
     display: none; /* Mặc định ẩn */
@@ -566,6 +567,7 @@ main {
 .card-body {
     padding: 1rem;
 }
+
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -804,6 +806,7 @@ tr td:last-child {
 .status.green {
     background: var(--green);
 }
+
 .status {
     display: flex;
     align-items: center;
@@ -813,11 +816,11 @@ tr td:last-child {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    margin-right: 8px;  /* Khoảng cách giữa chấm và chữ */
+    margin-right: 8px; /* Khoảng cách giữa chấm và chữ */
 }
 
 .status-text {
-    color: black;  /* Giữ chữ màu đen */
+    color: black; /* Giữ chữ màu đen */
 }
 
 .table-reponsive {
@@ -1211,7 +1214,7 @@ td:nth-child(4) {
     transition: width 300ms;
 }
 
-#nav-toggle:checked~.dashboard {
+#nav-toggle:checked ~ .dashboard {
     margin-left: 70px;
     transition: margin-left 300ms, width 300ms;
 }
@@ -1421,6 +1424,7 @@ td:nth-child(4) {
     width: 100%;
     max-width: 1200px;
 }
+
 /* Phần tiêu đề */
 #product-description-title {
     font-size: 28px;
@@ -1485,6 +1489,7 @@ td:nth-child(4) {
     transition: border-color 0.3s;
 
 }
+
 #product-description-info input[type="text"]:focus,
 #product-description-info textarea:focus {
     border-color: #4CAF50;
@@ -1556,12 +1561,8 @@ td:nth-child(4) {
         opacity: 1;
     }
 }
+
 /* -----------------------------------------------css phan hoi khach hang -----------------------------*/
-
-
-
-
-
 
 
 /* ---------------He thong--------------- */
@@ -2092,8 +2093,6 @@ h2 {
 }
 
 
-
-
 /* Action Buttons */
 .action-buttons {
     display: flex;
@@ -2152,22 +2151,26 @@ h2 {
 }
 
 
-
-
-
-
-
 /*--css của phần phản hồi khách hàng--*/
 /* -- CSS của phần phản hồi khách hàng -- */
 .feedback-container {
     margin: 20px;
     padding: 20px;
     background-color: #fff;
-    border-radius: 12px;  /* Bo góc nhẹ hơn */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Bóng mờ sâu hơn */
+    border-radius: 12px; /* Bo góc nhẹ hơn */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng mờ sâu hơn */
+}
+.feedback-container .delete-btn{
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    font-size: .9rem;
+    cursor: pointer;
 }
 
-/* Định dạng phần tiêu đề và các box tìm kiếm, sắp xếp */
+    /* Định dạng phần tiêu đề và các box tìm kiếm, sắp xếp */
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -2258,9 +2261,11 @@ h2 {
     padding: 12px 15px;
 
 }
+
 table.dataTable td:nth-child(5) {
     text-align: center;
 }
+
 .feedback-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
@@ -2269,21 +2274,22 @@ table.dataTable td:nth-child(5) {
     background-color: #f1f1f1;
 }
 
+
 /* Chỉnh lại các trạng thái */
 .sta {
     display: inline-block;
-    padding: 8px 16px;  /* Đảm bảo các phần tử không bị chật */
-    border-radius: 30px;  /* Bo góc mềm mại */
-    font-size: 14px;  /* Kích thước chữ nhỏ và dễ đọc */
-    font-weight: 600;  /* Đậm vừa phải */
+    padding: 8px 16px; /* Đảm bảo các phần tử không bị chật */
+    border-radius: 30px; /* Bo góc mềm mại */
+    font-size: 14px; /* Kích thước chữ nhỏ và dễ đọc */
+    font-weight: 600; /* Đậm vừa phải */
     color: #fff;
     text-align: center;
     vertical-align: middle;
-    width: 120px;  /* Đảm bảo chiều rộng các trạng thái bằng nhau */
-    height: 40px;  /* Đảm bảo chiều cao các trạng thái bằng nhau */
-    line-height: 24px;  /* Căn chỉnh văn bản theo chiều dọc */
+    width: 120px; /* Đảm bảo chiều rộng các trạng thái bằng nhau */
+    height: 40px; /* Đảm bảo chiều cao các trạng thái bằng nhau */
+    line-height: 24px; /* Căn chỉnh văn bản theo chiều dọc */
     transition: background-color 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Thêm bóng mờ nhẹ */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Thêm bóng mờ nhẹ */
     margin-top: 5px;
 }
 
@@ -2302,8 +2308,9 @@ table.dataTable td:nth-child(5) {
 .sta:hover {
     transform: scale(1.1);
     cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);  /* Tăng bóng mờ khi hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Tăng bóng mờ khi hover */
 }
+
 /*--kết thúc css của phần phản hồi khách hàng--*/
 
 /* --- CSS cho Quản Lý Khuyến Mãi --- */
@@ -2420,9 +2427,9 @@ table.dataTable td:nth-child(5) {
     background-color: #dc3545;
     color: #fff;
     border: none;
-    padding: 5px 10px;
+    padding: .5rem 1rem;
     border-radius: 5px;
-    font-size: 15px;
+    font-size: .9rem;
     cursor: pointer;
 }
 
@@ -2537,9 +2544,11 @@ table.dataTable td:nth-child(5) {
     align-items: center;
     /* Canh giữa nội dung */
 }
-#deletePromotionModal.modal{
+
+#deletePromotionModal.modal {
     max-width: 360px;
 }
+
 /* Nội dung modal Xóa Khuyến Mãi */
 .deletePromotionModal-content {
     position: fixed;
@@ -2554,8 +2563,15 @@ table.dataTable td:nth-child(5) {
     width: 100%;
     text-align: center;
 }
-
-/* Tiêu đề */
+.deletePromotionModal-content .delete-btn{
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+    /* Tiêu đề */
 .editPromotionModal-content h3,
 .deletePromotionModal-content h3 {
     margin-bottom: 20px;
@@ -2691,55 +2707,7 @@ table.dataTable td:nth-child(5) {
 /* --- -------------- --- */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@media only screen and (max-width :1200px) {
+@media only screen and (max-width: 1200px) {
     .sidebar {
         width: 70px;
     }
@@ -2792,7 +2760,7 @@ table.dataTable td:nth-child(5) {
     }
 }
 
-@media only screen and (max-width :991px) {
+@media only screen and (max-width: 991px) {
     .cards {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -2802,7 +2770,7 @@ table.dataTable td:nth-child(5) {
     }
 }
 
-@media only screen and (max-width :768px) {
+@media only screen and (max-width: 768px) {
     .cards {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -2876,7 +2844,7 @@ table.dataTable td:nth-child(5) {
     }
 }
 
-@media only screen and (max-width :560px) {
+@media only screen and (max-width: 560px) {
     .cards {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -2947,6 +2915,7 @@ table.dataTable td:nth-child(5) {
     font-weight: bold;
     margin-bottom: 20px;
 }
+
 /* Điều chỉnh độ rộng cột */
 #supplierTable td:nth-child(4), /* Email */
 #supplierTable th:nth-child(4) {
@@ -2957,6 +2926,7 @@ table.dataTable td:nth-child(5) {
 #supplierTable th:nth-child(6) {
     width: 100px; /* Tăng độ rộng của cột trạng thái hợp tác */
 }
+
 #supplierTable td:nth-child(8), /* Email */
 #supplierTable th:nth-child(8) {
     width: 140px;
@@ -3066,7 +3036,6 @@ table.dataTable td:nth-child(5) {
     padding: 12px 15px;
     color: #555555;
 }
-
 
 
 #transactionTable tr:hover {
@@ -3446,6 +3415,7 @@ table.dataTable td:nth-child(5) {
 .dataTables_wrapper .dataTables_length {
     display: none;
 }
+
 .dataTables_wrapper .dataTables_info {
     display: none;
 }
@@ -3501,6 +3471,7 @@ table.dataTable td:nth-child(5) {
     font-size: 16px;
     font-weight: bold;
 }
+
 /* Thiết lập cho phân trang */
 .dataTables_wrapper .dataTables_paginate {
     display: flex;
@@ -3544,11 +3515,13 @@ table.dataTable td:nth-child(5) {
 .dataTables_wrapper .dataTables_paginate a#customerTable_next {
     padding: 5px 15px;
 }
+
 .product-table td {
     border-bottom: 1px solid #ddd;
 }
+
 table.dataTable thead .sorting,
-table.dataTable thead .sorting_asc{
+table.dataTable thead .sorting_asc {
     /*background-color: #28a745; !* Màu nền xanh lá cây *!*/
     /*color: white;  !* Màu chữ trắng *!*/
     /*font-weight: bold; !* Làm cho chữ đậm *!*/
@@ -3625,7 +3598,6 @@ table.dataTable thead .sorting_asc{
 }
 
 
-
 .productAddTable {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -3677,6 +3649,7 @@ table.dataTable thead .sorting_asc{
 .productAddTable .form-group.wide {
     grid-column: span 2;
 }
+
 #account-management h2 {
     font-size: 22px;
     font-weight: bold;
@@ -3808,6 +3781,7 @@ table.dataTable thead .sorting_asc{
 #account-list table td button:last-child:hover {
     background-color: #a71d2a;
 }
+
 .status-completed {
     color: #28a745; /* Màu xanh lá */
     font-weight: bold;
@@ -3830,7 +3804,8 @@ table.dataTable thead .sorting_asc{
     color: #6c757d; /* Màu xám */
     font-weight: bold;
 }
-.btn-submit{
+
+.btn-submit {
     background-color: #007bff;
     color: white;
     border: none;
@@ -3841,6 +3816,7 @@ table.dataTable thead .sorting_asc{
     margin-top: 10px;
     margin-bottom: 40px;
 }
-.btn-submit:hover{
+
+.btn-submit:hover {
     background-color: #0056b3;
 }
