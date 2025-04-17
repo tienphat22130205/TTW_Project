@@ -6,17 +6,14 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.model.Invoice;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class InvoiceDao {
-
     public int addInvoice(Invoice invoice) {
         String sql = """
-        INSERT INTO invoices (id_account, receiver_name, phone, email, address_full,\s
-                                         payment_method, shipping_method, total_price, shipping_fee, status, create_date)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
-    """;
+            INSERT INTO invoices (id_account, receiver_name, phone, email, address_full,
+                                  payment_method, shipping_method, total_price, shipping_fee, status, create_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+        """;
         int generatedId = -1;
 
         try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
@@ -26,11 +23,10 @@ public class InvoiceDao {
             ps.setString(4, invoice.getEmail());
             ps.setString(5, invoice.getAddressFull());
             ps.setString(6, invoice.getPaymentMethod());
-            ps.setString(7, invoice.getShippingMethod()); // shipping_method
-            ps.setDouble(8, invoice.getTotalPrice());     // total_price
+            ps.setString(7, invoice.getShippingMethod());
+            ps.setDouble(8, invoice.getTotalPrice());
             ps.setDouble(9, invoice.getShippingFee());
             ps.setString(10, invoice.getStatus());
-
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
@@ -47,25 +43,24 @@ public class InvoiceDao {
 
         return generatedId;
     }
+
+    // Main test
     public static void main(String[] args) {
         InvoiceDao dao = new InvoiceDao();
 
         Invoice invoice = new Invoice();
-        invoice.setAccountId(2); // Đảm bảo tồn tại
+        invoice.setAccountId(2);
         invoice.setReceiverName("Test A");
         invoice.setPhone("0901234567");
         invoice.setEmail("a@test.com");
         invoice.setAddressFull("HCM");
         invoice.setPaymentMethod("COD");
+        invoice.setShippingMethod("Giao hàng tiêu chuẩn");
         invoice.setTotalPrice(100000);
         invoice.setShippingFee(0);
-        invoice.setShippingMethod("Giao hàng tiêu chuẩn"); // hoặc Giao nhanh, GHTK, v.v.
         invoice.setStatus("Chưa thanh toán");
 
         int id = dao.addInvoice(invoice);
         System.out.println("Kết quả thêm: " + id);
     }
-
-
-
 }
