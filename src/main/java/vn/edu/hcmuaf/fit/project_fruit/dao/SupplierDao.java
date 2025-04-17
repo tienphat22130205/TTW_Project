@@ -133,6 +133,54 @@ public class SupplierDao {
         }
         return false;
     }
+    public Supplier getSupplierById(int id) {
+        String sql = "SELECT * FROM suppliers WHERE id_supplier = ?";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Supplier(
+                        rs.getInt("id_supplier"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("phone_number"),
+                        rs.getString("status"),
+                        rs.getDouble("rating"),
+                        "", rs.getInt("id_category")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean updateSupplier(Supplier s) {
+        String sql = """
+        UPDATE suppliers
+        SET name = ?, address = ?, email = ?, phone_number = ?, id_category = ?, rating = ?, status = ?
+        WHERE id_supplier = ?
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql)) {
+            ps.setString(1, s.getName());
+            ps.setString(2, s.getAddress());
+            ps.setString(3, s.getEmail());
+            ps.setString(4, s.getPhone_number());
+            ps.setInt(5, s.getId_category());
+            ps.setDouble(6, s.getRating());
+            ps.setString(7, s.getStatus());
+            ps.setInt(8, s.getId_supplier());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public static void main(String[] args) {
         SupplierDao supplierDao = new SupplierDao();
 

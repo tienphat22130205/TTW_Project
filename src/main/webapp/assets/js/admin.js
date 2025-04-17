@@ -1276,3 +1276,55 @@ window.addEventListener("click", function (e) {
     }
 });
 //----------------------------------
+
+function editSupplier(id) {
+    fetch("get-supplier?id=" + id)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("editSupplierId").value = data.id_supplier;
+            document.getElementById("editSupplierName").value = data.name;
+            document.getElementById("editSupplierAddress").value = data.address;
+            document.getElementById("editSupplierEmail").value = data.email;
+            document.getElementById("editSupplierPhone").value = data.phone_number;
+            document.getElementById("editSupplierStatus").value = data.status || "Active";
+            document.getElementById("editSupplierRating").value = data.rating;
+
+            // Gán đúng id_category vào select
+            document.getElementById("editSupplierProducts").value = data.id_category;
+
+            // Hiển thị modal
+            document.getElementById("editSupplierModal").style.display = "flex";
+        });
+}
+function closeModal() {
+    document.getElementById("editSupplierModal").style.display = "none";
+}
+function saveSupplier() {
+    const data = {
+        id_supplier: parseInt(document.getElementById("editSupplierId").value),
+        name: document.getElementById("editSupplierName").value,
+        address: document.getElementById("editSupplierAddress").value,
+        email: document.getElementById("editSupplierEmail").value,
+        phone_number: document.getElementById("editSupplierPhone").value,
+        status: document.getElementById("editSupplierStatus").value,
+        rating: parseFloat(document.getElementById("editSupplierRating").value),
+        id_category: parseInt(document.getElementById("editSupplierProducts").value)
+    };
+
+    fetch("update-supplier", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+        .then(res => res.text())
+        .then(msg => {
+            alert("✅ Cập nhật thành công!");
+            closeModal();
+            location.reload();
+        })
+        .catch(err => {
+            alert("❌ Lỗi khi cập nhật!");
+            console.error(err);
+        });
+}
+

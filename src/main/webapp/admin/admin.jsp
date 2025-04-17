@@ -670,9 +670,55 @@
                     </c:forEach>
                     </tbody>
                 </table>
-
             </div>
         </div>
+        <!-- Overlay nền mờ và modal -->
+        <div id="editSupplierModal" class="modal-container">
+            <div class="modal-box">
+                <h3><strong>Chỉnh Sửa Thông Tin Nhà Cung Cấp</strong></h3>
+                <form id="editSupplierForm">
+                    <input type="hidden" id="editSupplierId" />
+
+                    <label>Tên Nhà Cung Cấp</label>
+                    <input type="text" id="editSupplierName" />
+
+                    <label>Địa Chỉ</label>
+                    <input type="text" id="editSupplierAddress" />
+
+                    <label>Email</label>
+                    <input type="email" id="editSupplierEmail" />
+
+                    <label>Số Điện Thoại</label>
+                    <input type="text" id="editSupplierPhone" />
+
+                    <label>Trạng Thái</label>
+                    <select id="editSupplierStatus">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+
+                    <label>Danh Sách Sản Phẩm</label>
+                    <select id="editSupplierProducts">
+                        <option value="1">Trái cây hôm nay</option>
+                        <option value="2">Trái cây Việt Nam</option>
+                        <option value="3">Trái cây nhập khẩu</option>
+                        <option value="4">Trái cây cắt sẵn</option>
+                        <option value="5">Quà tặng trái cây</option>
+                        <option value="6">Hộp quà trái cây</option>
+                        <option value="7">Trái cây sấy khô</option>
+                        <option value="8">Mứt trái cây</option>
+                    </select>
+
+                    <label>Đánh Giá</label>
+                    <input type="number" id="editSupplierRating" min="0" max="5" step="0.1" />
+                </form>
+                <div style="margin-top: 20px; text-align: right;">
+                    <button onclick="saveSupplier()" style="background-color: #007bff; padding: 8px 20px;">Lưu</button>
+                    <button onclick="closeModal()" style="background-color: red; padding: 8px 20px;">Hủy</button>
+                </div>
+            </div>
+        </div>
+
 
         <div id="promotions" class="section">
             <div class="promotion-container">
@@ -910,6 +956,7 @@
         <button id="cancelDeleteBtn">Không</button>
     </div>
 </div>
+<!-- Modal chỉnh sửa -->
 
 <div id="overlay" class="overlay">
     <!-- Modal chi tiết hóa đơn -->
@@ -1348,7 +1395,6 @@
 <script>
     document.getElementById("addSupplierForm").addEventListener("submit", function(e) {
         e.preventDefault(); // Chặn form submit mặc định
-
         const form = e.target;
         const data = {
             name: form.name.value,
@@ -1357,7 +1403,6 @@
             phone_number: form.phone_number.value,
             id_category: form.id_category.value
         };
-
         fetch("${pageContext.request.contextPath}/add-supplier-ajax", {
             method: "POST",
             headers: {
@@ -1375,39 +1420,6 @@
             }).catch(err => {
             console.error("Lỗi:", err);
             alert("Lỗi khi gửi dữ liệu");
-        });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const logoutBtn = document.getElementById("logoutBtn");
-        const overlay = document.getElementById("logoutOverlay");
-        const popup = document.getElementById("logoutNotification");
-        const confirmBtn = document.getElementById("confirmLogoutBtn");
-        const cancelBtn = document.getElementById("cancelLogoutBtn");
-
-        // Mở overlay xác nhận khi nhấn nút đăng xuất
-        logoutBtn.addEventListener("click", function (e) {
-            e.preventDefault(); // Ngăn reload trang
-            overlay.style.display = "block";
-            popup.style.display = "block";
-        });
-
-        // Nhấn "Không" để hủy
-        cancelBtn.addEventListener("click", function () {
-            overlay.style.display = "none";
-            popup.style.display = "none";
-        });
-
-        // Nhấn "Có" để đăng xuất → gọi Servlet /logout
-        confirmBtn.addEventListener("click", function () {
-            window.location.href = "logout";
-        });
-
-        // Nhấn ra ngoài cũng tắt
-        overlay.addEventListener("click", function () {
-            overlay.style.display = "none";
-            popup.style.display = "none";
         });
     });
     function deleteSupplier(id) {
