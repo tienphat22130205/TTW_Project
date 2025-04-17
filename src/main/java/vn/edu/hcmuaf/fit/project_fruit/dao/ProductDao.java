@@ -23,7 +23,7 @@ public class ProductDao {
             FROM products p
             LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion;
             """;
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 List<ProductImg> listImg = getImagesByProductId(rs.getInt("id_product"));
@@ -54,7 +54,7 @@ public class ProductDao {
             LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion 
             WHERE p.id_category = ?
             """;
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ps.setInt(1, categoryId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -85,7 +85,7 @@ public class ProductDao {
             LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion
             WHERE p.id_product BETWEEN ? AND ?
             """;
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ps.setInt(1, startId);
             ps.setInt(2, endId);
             ResultSet rs = ps.executeQuery();
@@ -113,7 +113,7 @@ public class ProductDao {
         try {
             ArrayList<ProductImg> images = new ArrayList<>();
             String query = "SELECT * FROM product_images WHERE id_product = ?";
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -143,7 +143,7 @@ public class ProductDao {
                     WHERE pr.start_date <= NOW() AND pr.end_date >= NOW()\s
                     AND pr.type = 'weekly';
         """;
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 // Lấy danh sách hình ảnh của sản phẩm
@@ -176,7 +176,7 @@ public class ProductDao {
         LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion
         WHERE p.product_name LIKE ?;
         """;
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ps.setString(1, "%" + keyword + "%"); // Tìm kiếm với từ khóa có chứa keyword
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -201,7 +201,7 @@ public class ProductDao {
     public int getCategoryIdByProductId(int productId) {
         try {
             String query = "SELECT id_category FROM products WHERE id_product = ?";
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -221,7 +221,7 @@ public class ProductDao {
             LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion
             WHERE p.id_product = ?
             """;
-            PreparedStatement ps = DbConnect.getPreparedStatement(query);
+            PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -270,7 +270,7 @@ public class ProductDao {
                 ORDER BY p.id_product ASC
                 """;
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ProductImg productImg = new ProductImg(0, rs.getString("url"), false);
@@ -305,7 +305,7 @@ public class ProductDao {
                 LIMIT ?, ?
                 """;
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setInt(1, (page - 1) * recordsPerPage);  // Tính offset
             ps.setInt(2, recordsPerPage);  // Giới hạn số bản ghi mỗi trang
             ResultSet rs = ps.executeQuery();
@@ -334,7 +334,7 @@ public class ProductDao {
     public int getTotalRecords() {
         String query = "SELECT COUNT(*) FROM products";
         int totalRecords = 0;
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 totalRecords = rs.getInt(1);  // Lấy giá trị COUNT(*) từ kết quả
@@ -356,7 +356,7 @@ public class ProductDao {
                 "ORDER BY total_quantity DESC " +
                 "LIMIT 10";  // Lấy 10 sản phẩm bán chạy nhất
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query);
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {

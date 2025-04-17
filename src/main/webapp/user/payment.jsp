@@ -631,7 +631,7 @@
                     <i class="fas fa-arrow-left"></i> Tiếp tục mua hàng
                 </a>
                 <h2>Thông tin thanh toán</h2>
-                <form>
+                <form method="post" action="checkout">
                     <label>Họ và Tên:</label>
                     <input type="text" required>
 
@@ -663,7 +663,7 @@
                     <input type="text" required>
 
                     <label for="shipping_method">Phương thức vận chuyển:</label>
-                    <table id="shipping_method" style="width: 100%; border-collapse: collapse;">
+                    <table id="shipping_method" style=" width: 100%; border-collapse: collapse;">
                         <thead>
                         <tr>
                             <th style="text-align: left;">Phương thức vận chuyển</th>

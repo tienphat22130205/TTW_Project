@@ -15,7 +15,7 @@ public class PromotionsDao {
                 "FROM promotions ORDER BY id_promotion ASC";
         List<Promotions> promotionsList = new ArrayList<>();
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql);
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
              ResultSet rs = ps != null ? ps.executeQuery() : null) {
 
             if (rs != null) {
@@ -48,7 +48,7 @@ public class PromotionsDao {
     // Method to retrieve a promotion by ID
     public Promotions getById(int id) {
         String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type FROM promotions WHERE id_promotion = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
 
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -72,7 +72,7 @@ public class PromotionsDao {
 
     public static boolean deletePromotionById(String promotionId) throws SQLException {
         String query = "DELETE FROM promotions WHERE id_promotion = ?";
-        try (PreparedStatement preparedStatement = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement preparedStatement = DbConnect.getPreparedStatement(query, true)) {
             if (preparedStatement == null) {
                 throw new SQLException("Không thể tạo PreparedStatement.");
             }
@@ -84,7 +84,7 @@ public class PromotionsDao {
 
     public boolean updatePromotion(Promotions promotion) {
         String query = "UPDATE promotions SET promotion_name = ?, describe_1 = ?, start_date = ?, end_date = ?, percent_discount = ?, type = ? WHERE id_promotion = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, promotion.getPromotion_name());  // Lấy tên khuyến mãi
             ps.setString(2, promotion.getDescribe_1());      // Mô tả khuyến mãi
             ps.setString(3, promotion.getStart_date());      // Ngày bắt đầu
@@ -107,7 +107,7 @@ public class PromotionsDao {
                 "ORDER BY id_promotion ASC " +
                 "LIMIT ?, ?";  // Phân trang ở đây
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setInt(1, (page - 1) * recordsPerPage);  // Tính offset
             ps.setInt(2, recordsPerPage);  // Giới hạn số bản ghi mỗi trang
 
@@ -133,7 +133,7 @@ public class PromotionsDao {
     public int getTotalRecords() {
         String query = "SELECT COUNT(*) FROM promotions";
         int totalRecords = 0;
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 totalRecords = rs.getInt(1);  // Trả về số bản ghi
@@ -146,7 +146,7 @@ public class PromotionsDao {
     // Lấy khuyến mãi theo mã giảm giá
     public Promotions getPromotionByCode(String code) {
         String query = "SELECT id_promotion, code, promotion_name, describe_1, start_date, end_date, percent_discount, type, min_order_amount FROM promotions WHERE code = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, code);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

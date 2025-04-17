@@ -26,7 +26,7 @@ public class AddPromotion extends HttpServlet {
 
         // Câu lệnh SQL để thêm dữ liệu vào cơ sở dữ liệu
         String query = "INSERT INTO promotions (promotion_name, describe_1, start_date, end_date, percent_discount, type) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, promotionName);
             ps.setString(2, description);
             ps.setString(3, startDate);

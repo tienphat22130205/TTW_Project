@@ -11,100 +11,61 @@ import java.util.List;
 
 public class InvoiceDao {
 
-    // Lấy tất cả các đơn hàng và thông tin khách hàng
-    public List<Invoice> getAllInvoices() {
-        String query = "SELECT i.id_invoice, i.id_account, i.total_price, i.status, i.payment_method, i.create_date, i.shipping_fee, i.shipping_method, c.customer_name, c.address " +
-                "FROM invoices i " +
-                "JOIN customers c ON i.id_account = c.id_customer " +
-                "ORDER BY i.create_date DESC";
+    public int addInvoice(Invoice invoice) {
+        String sql = """
+        INSERT INTO invoices (id_account, receiver_name, phone, email, address_full,\s
+                                         payment_method, shipping_method, total_price, shipping_fee, status, create_date)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+    """;
+        int generatedId = -1;
 
-        List<Invoice> invoiceList = new ArrayList<>();
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ps.setInt(1, invoice.getAccountId());
+            ps.setString(2, invoice.getReceiverName());
+            ps.setString(3, invoice.getPhone());
+            ps.setString(4, invoice.getEmail());
+            ps.setString(5, invoice.getAddressFull());
+            ps.setString(6, invoice.getPaymentMethod());
+            ps.setString(7, invoice.getShippingMethod()); // shipping_method
+            ps.setDouble(8, invoice.getTotalPrice());     // total_price
+            ps.setDouble(9, invoice.getShippingFee());
+            ps.setString(10, invoice.getStatus());
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query);
-             ResultSet rs = ps.executeQuery()) {
 
-            // Lặp qua tất cả các bản ghi và thêm vào danh sách
-            while (rs.next()) {
-                Invoice invoice = new Invoice();
-                invoice.setOrderCode(rs.getString("id_invoice"));
-                invoice.setCustomerName(rs.getString("customer_name"));
-                invoice.setAddress(rs.getString("address"));
-                invoice.setOrderDate(rs.getDate("create_date"));
-                invoice.setInvoiceDetails(rs.getString("total_price")); // Assuming total_price is the invoice detail for this example
-                invoice.setPaymentMethod(rs.getString("payment_method"));
-                invoice.setStatus(rs.getString("status"));
-                invoiceList.add(invoice); // Thêm đối tượng vào danh sách
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1);
+                    }
+                }
             }
         } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi thêm invoice:");
             e.printStackTrace();
         }
 
-        return invoiceList; // Trả về danh sách tất cả các đơn hàng
+        return generatedId;
     }
-    public List<Invoice> getInvoicesByPage(int page, int recordsPerPage) {
-        List<Invoice> invoices = new ArrayList<>();
-        String query = """
-            SELECT i.id_invoice, i.id_account, i.total_price, i.status, i.payment_method, 
-                   i.create_date, i.shipping_fee, i.shipping_method, 
-                   c.customer_name, c.address
-            FROM invoices i
-            JOIN customers c ON i.id_account = c.id_customer
-            ORDER BY i.create_date DESC
-            LIMIT ?, ?
-        """;
-
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
-            ps.setInt(1, (page - 1) * recordsPerPage); // Tính offset
-            ps.setInt(2, recordsPerPage); // Giới hạn số bản ghi mỗi trang
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Invoice invoice = new Invoice();
-                invoice.setOrderCode(rs.getString("id_invoice"));
-                invoice.setCustomerName(rs.getString("customer_name"));
-                invoice.setAddress(rs.getString("address"));
-                invoice.setOrderDate(rs.getDate("create_date"));
-                invoice.setInvoiceDetails(rs.getString("total_price")); // Thông tin chi tiết hóa đơn
-                invoice.setPaymentMethod(rs.getString("payment_method"));
-                invoice.setStatus(rs.getString("status"));
-                invoices.add(invoice); // Thêm hóa đơn vào danh sách
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return invoices;
-    }
-
-    // Lấy tổng số hóa đơn trong bảng
-    public int getTotalRecords() {
-        String query = "SELECT COUNT(*) AS total FROM invoices";
-        int totalRecords = 0;
-
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                totalRecords = rs.getInt("total"); // Lấy tổng số bản ghi từ kết quả
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return totalRecords;
-    }
-    // Phương thức main để kiểm tra
     public static void main(String[] args) {
-        InvoiceDao invoiceDao = new InvoiceDao();
-        List<Invoice> invoices = invoiceDao.getAllInvoices();
+        InvoiceDao dao = new InvoiceDao();
 
-        for (Invoice invoice : invoices) {
-            System.out.println("Mã đơn hàng: " + invoice.getOrderCode());
-            System.out.println("Tên khách hàng: " + invoice.getCustomerName());
-            System.out.println("Địa chỉ: " + invoice.getAddress());
-            System.out.println("Ngày đặt hàng: " + invoice.getOrderDate());
-            System.out.println("Chi tiết hóa đơn: " + invoice.getInvoiceDetails());
-            System.out.println("Phương thức thanh toán: " + invoice.getPaymentMethod());
-            System.out.println("Tình trạng: " + invoice.getStatus());
-            System.out.println("----------------------------");
-        }
+        Invoice invoice = new Invoice();
+        invoice.setAccountId(2); // Đảm bảo tồn tại
+        invoice.setReceiverName("Test A");
+        invoice.setPhone("0901234567");
+        invoice.setEmail("a@test.com");
+        invoice.setAddressFull("HCM");
+        invoice.setPaymentMethod("COD");
+        invoice.setTotalPrice(100000);
+        invoice.setShippingFee(0);
+        invoice.setShippingMethod("Giao hàng tiêu chuẩn"); // hoặc Giao nhanh, GHTK, v.v.
+        invoice.setStatus("Chưa thanh toán");
+
+        int id = dao.addInvoice(invoice);
+        System.out.println("Kết quả thêm: " + id);
     }
+
+
+
 }

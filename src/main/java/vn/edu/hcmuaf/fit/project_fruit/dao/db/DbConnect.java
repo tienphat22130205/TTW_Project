@@ -18,12 +18,16 @@ public class DbConnect {
         }
     }
     // Trả về đối tượng PreparedStatement
-    public static PreparedStatement getPreparedStatement(String query) {
+    public static PreparedStatement getPreparedStatement(String query, boolean returnGeneratedKeys) {
         try {
             if (conn == null || conn.isClosed()) {
                 makeConnect();
             }
-            return conn.prepareStatement(query);
+            if (returnGeneratedKeys) {
+                return conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            } else {
+                return conn.prepareStatement(query);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;

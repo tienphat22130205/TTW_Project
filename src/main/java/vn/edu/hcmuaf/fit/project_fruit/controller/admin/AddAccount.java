@@ -41,9 +41,9 @@ public class AddAccount extends HttpServlet {
         String customerSelectQuery = "SELECT id_customer FROM customers WHERE customer_name = ? AND customer_phone = ? AND address = ? ORDER BY id_customer DESC LIMIT 1";
         String accountInsertQuery = "INSERT INTO accounts (email, password, role, create_date, id_customer) VALUES (?, ?, ?, ?, ?)";
 
-        try (PreparedStatement psInsertCustomer = DbConnect.getPreparedStatement(customerInsertQuery);
-             PreparedStatement psSelectCustomer = DbConnect.getPreparedStatement(customerSelectQuery);
-             PreparedStatement psInsertAccount = DbConnect.getPreparedStatement(accountInsertQuery)) {
+        try (PreparedStatement psInsertCustomer = DbConnect.getPreparedStatement(customerInsertQuery, true);
+             PreparedStatement psSelectCustomer = DbConnect.getPreparedStatement(customerSelectQuery, true);
+             PreparedStatement psInsertAccount = DbConnect.getPreparedStatement(accountInsertQuery, true)) {
 
             // Bước 1: Thêm khách hàng
             psInsertCustomer.setString(1, username);

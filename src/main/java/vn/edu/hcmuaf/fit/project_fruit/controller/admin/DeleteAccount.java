@@ -29,8 +29,8 @@ public class DeleteAccount extends HttpServlet {
         String deleteAccountQuery = "DELETE FROM accounts WHERE id_customer = ?";
         String deleteCustomerQuery = "DELETE FROM customers WHERE id_customer = ?";
 
-        try (PreparedStatement psAccount = DbConnect.getPreparedStatement(deleteAccountQuery);
-             PreparedStatement psCustomer = DbConnect.getPreparedStatement(deleteCustomerQuery)) {
+        try (PreparedStatement psAccount = DbConnect.getPreparedStatement(deleteAccountQuery, true);
+             PreparedStatement psCustomer = DbConnect.getPreparedStatement(deleteCustomerQuery, true)) {
 
             // Xóa tài khoản
             psAccount.setString(1, idCustomer);

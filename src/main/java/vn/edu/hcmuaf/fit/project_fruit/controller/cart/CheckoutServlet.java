@@ -7,6 +7,8 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.ShippingMethodDAO;
 import vn.edu.hcmuaf.fit.project_fruit.dao.cart.Cart;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Promotions;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.ShippingMethod;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
+//import vn.edu.hcmuaf.fit.project_fruit.service.InvoiceService;
 import vn.edu.hcmuaf.fit.project_fruit.service.PromotionService;
 
 import java.io.IOException;
@@ -93,6 +95,42 @@ public class CheckoutServlet extends HttpServlet {
         request.setAttribute("discount", discount);
         request.setAttribute("shippingFee", shippingFee);
         request.setAttribute("finalTotal", finalTotal);
+
+        // Bước 6: Lưu invoice nếu có tham số xác nhận (vd: confirm=1)
+//        String confirm = request.getParameter("confirm");
+//        if ("1".equals(confirm)) {
+//            User account = (User) session.getAttribute("user");
+//            String receiverName = request.getParameter("receiver_name");
+//            String phone = request.getParameter("phone");
+//            String email = request.getParameter("email");
+//            String address = request.getParameter("address");
+//            String paymentMethod = request.getParameter("payment_method");
+//
+//            String finalSelectedShippingId = selectedShippingId;
+//            ShippingMethod selectedShipping = shippingMethods.stream()
+//                    .filter(s -> String.valueOf(s.getId()).equals(finalSelectedShippingId))
+//                    .findFirst()
+//                    .orElse(null);
+//
+//            String shippingMethodName = selectedShipping != null ? selectedShipping.getMethodName() : "Không rõ";
+//
+//            InvoiceService service = new InvoiceService();
+//            int invoiceId = service.createInvoice(
+//                    account, receiverName, phone, email, address,
+//                    paymentMethod, shippingMethodName,
+//                    finalTotal, shippingFee, cart
+//            );
+//
+//            if (invoiceId > 0) {
+//                session.removeAttribute("cart");
+//                session.removeAttribute("discount");
+//                response.sendRedirect("order-success.jsp?invoiceId=" + invoiceId);
+//                return;
+//            } else {
+//                request.setAttribute("error", "Thanh toán thất bại, vui lòng thử lại.");
+//            }
+//        }
+
 
         request.getRequestDispatcher("/user/payment.jsp").forward(request, response);
     }

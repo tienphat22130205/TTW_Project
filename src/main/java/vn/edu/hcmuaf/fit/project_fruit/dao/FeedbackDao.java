@@ -20,7 +20,7 @@ public class FeedbackDao {
                 "JOIN accounts a ON f.id_account = a.id_account " +
                 "JOIN products p ON f.id_product = p.id_product " +
                 "JOIN customers c ON a.id_customer = c.id_customer " +
-                "ORDER BY f.id_feedback ASC");
+                "ORDER BY f.id_feedback ASC", true);
 
         if (ps == null) return new ArrayList<>();  // Nếu không thể tạo PreparedStatement, trả về danh sách trống
 
@@ -83,7 +83,7 @@ public class FeedbackDao {
                 "ORDER BY f.id_feedback ASC " +
                 "LIMIT ?, ?";  // Phân trang ở đây
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setInt(1, (page - 1) * recordsPerPage);  // Tính offset
             ps.setInt(2, recordsPerPage);  // Giới hạn số bản ghi mỗi trang
 
@@ -107,7 +107,7 @@ public class FeedbackDao {
     public int getTotalRecords() {
         String query = "SELECT COUNT(*) FROM feedbacks";
         int totalRecords = 0;
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) { // Sử dụng getPreparedStatement
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) { // Sử dụng getPreparedStatement
             ResultSet rs = ps.executeQuery();  // Thực thi câu lệnh SQL
             if (rs.next()) {
                 totalRecords = rs.getInt(1);  // Sửa lại từ rs.getInt(2) thành rs.getInt(1) vì COUNT(*) sẽ trả về kết quả ở cột đầu tiên
@@ -129,7 +129,7 @@ public class FeedbackDao {
                 "WHERE p.id_product = ? " +
                 "ORDER BY f.id_feedback ASC";
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setInt(1, idProduct); // Gán id sản phẩm vào câu truy vấn
             ResultSet rs = ps.executeQuery();
 

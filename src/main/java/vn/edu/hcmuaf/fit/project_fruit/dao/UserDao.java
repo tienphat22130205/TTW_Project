@@ -11,7 +11,7 @@ public class UserDao {
     public User getUserByEmailAndPassword(String email, String password) {
         User user = null;
         String query = "SELECT * FROM accounts WHERE email = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -61,37 +61,53 @@ public class UserDao {
             connection = DbConnect.getConnection();
             connection.setAutoCommit(false); // Bắt đầu transaction
 
-            // Thêm thông tin vào bảng customers
+            // Thêm vào bảng customers
             psCustomer = connection.prepareStatement(insertCustomerQuery, Statement.RETURN_GENERATED_KEYS);
             psCustomer.setString(1, fullName);
-            psCustomer.setString(2, "unknown"); // Giá trị mặc định cho customer_phone
-            psCustomer.setString(3, "unknown"); // Address để NULL
-            psCustomer.executeUpdate();
+            psCustomer.setString(2, "unknown");
+            psCustomer.setString(3, "unknown");
+            int customerRows = psCustomer.executeUpdate();
 
-            // Lấy id_customer được tự động tạo
+            if (customerRows == 0) {
+                System.out.println("❌ Không thể thêm customer");
+                connection.rollback();
+                return false;
+            }
+
             ResultSet rs = psCustomer.getGeneratedKeys();
             int idCustomer = 0;
             if (rs.next()) {
                 idCustomer = rs.getInt(1);
+            } else {
+                System.out.println("❌ Không lấy được ID của customer");
+                connection.rollback();
+                return false;
             }
 
-            // Thêm thông tin vào bảng accounts
+            // Thêm vào bảng accounts
             psAccount = connection.prepareStatement(insertAccountQuery);
             psAccount.setString(1, user.getEmail());
-            psAccount.setString(2, user.getPassword()); // Mật khẩu đã hash
-            psAccount.setString(3, user.getRole()); // Vai trò (mặc định là "user")
-            psAccount.setDate(4, Date.valueOf(java.time.LocalDate.now())); // Ngày tạo
-            psAccount.setInt(5, idCustomer); // Liên kết id_customer từ bảng customers
-            psAccount.executeUpdate();
+            psAccount.setString(2, user.getPassword());
+            psAccount.setString(3, user.getRole());
+            psAccount.setDate(4, Date.valueOf(java.time.LocalDate.now()));
+            psAccount.setInt(5, idCustomer);
+            int accountRows = psAccount.executeUpdate();
 
-            connection.commit(); // Xác nhận transaction
-            return true; // Đăng ký thành công
+            if (accountRows == 0) {
+                System.out.println("❌ Không thể thêm account");
+                connection.rollback();
+                return false;
+            }
+
+            connection.commit();
+            System.out.println("✅ Đăng ký thành công cho email: " + user.getEmail());
+            return true;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("❌ Lỗi SQL trong quá trình đăng ký: " + e.getMessage());
             if (connection != null) {
                 try {
-                    connection.rollback(); // Khôi phục trạng thái ban đầu nếu có lỗi
+                    connection.rollback();
                 } catch (SQLException rollbackEx) {
                     rollbackEx.printStackTrace();
                 }
@@ -105,9 +121,10 @@ public class UserDao {
                 closeEx.printStackTrace();
             }
         }
-        return false; // Đăng ký thất bại
-    }
 
+        System.out.println("❌ Đăng ký thất bại hoàn toàn.");
+        return false;
+    }
     // Cập nhật mật khẩu theo email
     public boolean updatePasswordByEmail(String email, String hashedPassword) {
         String query = "UPDATE accounts SET password = ? WHERE email = ?";
@@ -125,7 +142,7 @@ public class UserDao {
     // Lấy thông tin người dùng qua email
     public User getUserByEmail(String email) {
         String query = "SELECT * FROM accounts WHERE email = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -157,4 +174,29 @@ public class UserDao {
         }
         return false;
     }
+
+    public static void main(String[] args) {
+        // Tạo đối tượng User
+        String email = "newuser1" + System.currentTimeMillis() + "@gmail.com"; // random để tránh trùng
+        String password = "hashed_example_password"; // Nếu có bcrypt thì hash trước
+        String role = "user";
+        String fullName = "Nguyen Van A";
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRole(role);
+
+        // Gọi hàm đăng ký
+        UserDao userDao = new UserDao();
+        boolean result = userDao.registerUser(user, fullName);
+
+        // In kết quả
+        if (result) {
+            System.out.println("✅ Đăng ký thành công cho email: " + email);
+        } else {
+            System.out.println("❌ Đăng ký thất bại.");
+        }
+    }
+
 }

@@ -35,27 +35,49 @@ public class UserService {
 
 
     public boolean registerUser(String email, String password, String confirmPassword, String fullName) {
+        // 1. Kiểm tra email đã tồn tại
         if (userDao.isEmailExists(email)) {
-            System.out.println("Email đã tồn tại: " + email);
+            System.out.println("❌ Email đã tồn tại: " + email);
             return false;
         }
 
+        // 2. Kiểm tra mật khẩu xác nhận
         if (!password.equals(confirmPassword)) {
-            System.out.println("Mật khẩu xác nhận không khớp");
+            System.out.println("❌ Mật khẩu xác nhận không khớp");
             return false;
         }
 
-        // Hash mật khẩu
+        // 3. Kiểm tra độ mạnh của mật khẩu
+        if (!isStrongPassword(password)) {
+            System.out.println("❌ Mật khẩu phải dài ít nhất 8 ký tự, chứa cả chữ và số");
+            return false;
+        }
+
+        // 4. Hash mật khẩu
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        // Tạo đối tượng User mới
+        // 5. Tạo đối tượng User
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setPassword(hashedPassword);
-        newUser.setRole("user"); // Vai trò mặc định là "user"
+        newUser.setRole("user"); // Mặc định là user
 
-        // Gọi DAO để thêm người dùng mới
-        return userDao.registerUser(newUser, fullName);
+        // 6. Gọi DAO để lưu vào database
+        boolean result = userDao.registerUser(newUser, fullName);
+
+        if (result) {
+            System.out.println("✅ Đăng ký thành công: " + email);
+        } else {
+            System.out.println("❌ Đăng ký thất bại trong DAO");
+        }
+
+        return result;
+    }
+    // ✅ Hàm kiểm tra mật khẩu mạnh
+    public boolean isStrongPassword(String password) {
+        return password.length() >= 8 &&
+                password.matches(".*[A-Za-z].*") &&
+                password.matches(".*[0-9].*");
     }
     // Tạo mật khẩu ngẫu nhiên
     public String generateRandomPassword() {

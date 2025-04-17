@@ -534,37 +534,37 @@
                             <table id="orderTable" class="display" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>ID </th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Ngày đặt hàng</th>
+                                    <th>Họ tên</th>
+                                    <th>SĐT</th>
+                                    <th>Email</th>
                                     <th>Chi tiết hóa đơn</th>
                                     <th>Phương thức thanh toán</th>
                                     <th>Tình trạng</th>
+                                    <th>Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="invoice" items="${invoices}">
                                     <tr>
-                                        <td>${invoice.orderCode}</td>
-                                        <td>${invoice.customerName}</td>
-                                        <td>${invoice.address}</td>
-                                        <td>${invoice.orderDate}</td>
-                                        <td><button class="detail-button">Xem chi tiết</button></td>
-                                        <td>${invoice.paymentMethod}</td>
-                                        <td class="<c:choose>
-                                                 <c:when test="${invoice.status == 'Hoàn thành'}">status-completed</c:when>
-                                                 <c:when test="${invoice.status == 'Chưa thanh toán'}">status-pending</c:when>
-                                                 <c:when test="${invoice.status == 'Hủy'}">status-cancelled</c:when>
-                                                 <c:otherwise>status-unknown</c:otherwise>
-                                                 </c:choose>">
-                                                ${invoice.status}
+                                        <td></td> <!-- Họ tên -->
+                                        <td></td> <!-- SĐT -->
+                                        <td></td> <!-- Email -->
+                                        <td>
+                                            <button class="detail-button" data-id="">
+                                                Xem
+                                            </button>
                                         </td>
-
+                                        <td></td> <!-- Phương thức thanh toán -->
+                                        <td class=""></td> <!-- Tình trạng -->
+                                        <td>
+                                            <button class="btn-approve">Duyệt</button>
+                                            <button class="btn-cancel">Hủy</button>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -1070,123 +1070,6 @@
             <!-- Nút Lưu thay đổi -->
             <button class="btn-save" onclick="saveChanges()"><i class="fa-solid fa-floppy-disk"></i> Lưu thay
                 đổi</button>
-        </div>
-    </div>
-    <!-- Modal Cấu Hình Hệ Thống -->
-    <div id="systemConfigModal" class="modal system-config-modal">
-        <div class="modal-content">
-            <div class="header">
-                <span class="close-button" onclick="closeModal('systemConfig')">&times;</span>
-                <h2>
-                    <i class="fa fa-cogs"></i> Cấu Hình Hệ Thống
-                </h2>
-            </div>
-
-            <form id="systemConfigForm" class="form-section">
-                <div class="form-group">
-                    <label for="systemName"><i class="fa fa-desktop"></i> Tên Hệ Thống:</label>
-                    <input type="text" id="systemName" placeholder="Nhập tên hệ thống" />
-                </div>
-
-                <div class="form-group">
-                    <label for="adminEmail"><i class="fa fa-envelope"></i> Email Quản Trị:</label>
-                    <input type="email" id="adminEmail" placeholder="Nhập email quản trị" />
-                </div>
-
-                <div class="form-group">
-                    <label for="language"><i class="fa fa-language"></i> Ngôn Ngữ:</label>
-                    <select id="language">
-                        <option value="vi">Tiếng Việt</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="timeZone"><i class="fa fa-clock"></i> Múi Giờ:</label>
-                    <select id="timeZone">
-                        <option value="UTC+7">UTC+7 (Vietnam)</option>
-                        <option value="UTC+8">UTC+8 (England)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="maintenanceMode"><i class="fa fa-wrench"></i> Chế Độ Bảo Trì:</label>
-                    <select id="maintenanceMode">
-                        <option value="off">Tắt</option>
-                        <option value="on">Bật</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="maxUsers"><i class="fa fa-users"></i> Số Lượng Người Dùng Tối Đa:</label>
-                    <input type="number" id="maxUsers" placeholder="Nhập số lượng người dùng tối đa" />
-                </div>
-            </form>
-            <div class="form-buttons">
-                <button type="button" class="btn-save" onclick="saveSystemConfig()"><i
-                        class="fa-solid fa-floppy-disk"></i> Lưu Cấu Hình</button>
-            </div>
-        </div>
-    </div>
-    <div id="activityLogModal" class="modal system-activity">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal('activityLog')">&times;</span>
-            <h2>Nhật Ký Hoạt Động</h2>
-
-            <!-- Bộ lọc -->
-            <div class="filters">
-                <!-- Phần Tìm kiếm -->
-                <div class="filter-item">
-                    <label for="searchInput">
-                        <i class="fas fa-search"></i> Tìm kiếm:
-                    </label>
-                    <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên, hoạt động..." />
-                </div>
-
-                <!-- Phần Từ ngày -->
-                <div class="filter-item">
-                    <label for="fromDate">
-                        <i class="fas fa-calendar-alt"></i> Từ ngày:
-                    </label>
-                    <input type="date" id="fromDate" />
-                </div>
-
-                <!-- Phần Đến ngày -->
-                <div class="filter-item">
-                    <label for="toDate">
-                        <i class="fas fa-calendar-alt"></i> Đến ngày:
-                    </label>
-                    <input type="date" id="toDate" />
-                </div>
-
-                <!-- Nút Lọc -->
-                <div class="filter-button">
-                    <button class="btn-filter" onclick="filterLogs()">Lọc</button>
-                </div>
-            </div>
-
-            <!-- Bảng nhật ký -->
-            <table class="activity-log">
-                <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Thời gian</th>
-                    <th>Người thực hiện</th>
-                    <th>Hành động</th>
-                    <th>Kết quả</th>
-                    <th>Ghi chú</th>
-                </tr>
-                </thead>
-                <tbody id="activityLogBody">
-                <!-- Nhật ký sẽ được thêm bằng JS -->
-                </tbody>
-            </table>
-
-            <!-- Nút hành động -->
-            <div class="action-buttons">
-                <button class="btn-clear" onclick="clearLogs()">Xóa toàn bộ nhật ký</button>
-                <button class="btn-export" onclick="exportLogs()">Xuất File</button>
-            </div>
         </div>
     </div>
     <!-- Quản lý khuyến mãi -->
