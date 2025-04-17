@@ -24,7 +24,7 @@ public class RegisterController extends HttpServlet {
         boolean isRegistered = userService.registerUser(email, password, confirmPassword, fullName);
 
         if (isRegistered) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/user/login.jsp");
         } else {
             request.setAttribute("errorMessage", "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.");
             request.getRequestDispatcher("/user/register.jsp").forward(request, response);
