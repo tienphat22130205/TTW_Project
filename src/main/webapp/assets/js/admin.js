@@ -617,7 +617,8 @@ function openModal(data, modalType) {
     if (modalType === "editPromotion") {
         const modal = document.getElementById("editPromotionModal");
         modal.style.display = "block";
-        console.log("📦 Data gửi vào modal edit:", data);
+        console.log(" Data gửi vào modal edit:", data);
+
         // Gán dữ liệu vào các trường trong form
         document.getElementById("promoId").value = data.promoId || "";
         document.getElementById("promoTitle").value = data.promoTitle || "";
@@ -626,9 +627,10 @@ function openModal(data, modalType) {
         document.getElementById("promoStart").value = data.promoStart || "";
         document.getElementById("promoEnd").value = data.promoEnd || "";
         document.getElementById("productTypeSelect").value = data.promoType || "general";
-    }
-
-    else if (modalType === "deletePromotion") {
+        document.getElementById("promoCode").value = data.promoCode || "";
+        document.getElementById("promoMinOrder").value = data.promoMinOrder || "";
+        document.getElementById("promoMaxUsage").value = data.promoMaxUsage || "";
+    } else if (modalType === "deletePromotion") {
         const modal = document.getElementById("deletePromotionModal");
         modal.style.display = "block";
 
@@ -641,9 +643,20 @@ function openModal(data, modalType) {
         console.log("Đã mở modal xóa cho ID:", data.promoId); // Debug kiểm tra ID
 
 
-    }
-}
+    } else if (modalType === "deleteFeedback") {
+        const modal = document.getElementById("deleteFeedbackModal");
+        modal.style.display = "block";
 
+        document.getElementById("FeedbackDelete").innerText =
+            `Bạn có chắc muốn xóa phản hồi id #${data.feedbackId}?`;
+
+        const deleteBtn = document.getElementById("FeedbackDeleteButton");
+        deleteBtn.setAttribute("data-feedback-id", data.feedbackId);
+    }
+
+
+
+}
 
 
 // Hàm đóng modal và ẩn overlay
@@ -1275,6 +1288,30 @@ window.addEventListener("click", function (e) {
         modal.style.display = "none";
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const feedbackDeleteButton = document.getElementById("FeedbackDeleteButton");
+    const contextPath = "<%= request.getContextPath() %>";
+
+    if (feedbackDeleteButton && !feedbackDeleteButton.hasAttribute("data-listener")) {
+        feedbackDeleteButton.setAttribute("data-listener", "true");
+
+        feedbackDeleteButton.onclick = function () {
+            const feedbackId = this.getAttribute("data-feedback-id");
+            if (!feedbackId) {
+                alert("Không tìm thấy ID phản hồi để xóa!");
+                return;
+            }
+
+            if (confirm(`Bạn chắc chắn muốn xoá phản hồi #${feedbackId}?`)) {
+                console.log("Đang gửi yêu cầu xóa phản hồi ID:", feedbackId);
+                window.location.href = contextPath + "/remove-feedback?fid=" + feedbackId;
+            }
+        };
+    }
+});
+
+
 //----------------------------------
 
 function editSupplier(id) {
