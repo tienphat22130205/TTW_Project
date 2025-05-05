@@ -9,95 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af7fb542-29e9-4d2e-8ca9-352998f6cb77" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/md5-checksums.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/dependencies-accessors/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/fileChanges/last-build.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/7.6/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/catalina.policy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/catalina.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/context.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/jaspic-providers.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/jaspic-providers.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/logging.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/server.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/tomcat-users.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/tomcat-users.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.smarttomcat/project_fruit/conf/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/Catalina/localhost/project_fruit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/catalina.policy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/catalina.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/context.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/jaspic-providers.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/jaspic-providers.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/logging.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/server.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/tomcat-users.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/tomcat-users.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/catalina.2025-04-17.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/catalina.2025-04-18.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/catalina.2025-04-25.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/catalina.2025-04-26.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/localhost.2025-04-18.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/localhost.2025-04-25.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/localhost.2025-04-26.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/localhost_access_log.2025-04-17.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/localhost_access_log.2025-04-18.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/localhost_access_log.2025-04-25.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/localhost_access_log.2025-04-26.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/resources/db.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/cart/UpdateShippingServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/InvoiceDetailDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/admin/admin_jsp.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/admin/admin_jsp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/index_jsp.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/index_jsp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/AddFeedback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/AddFeedback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/RegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/AddAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/AddAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/AddPromotion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/AddPromotion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/DeleteAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/DeleteAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/cart/CheckoutServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/cart/CheckoutServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/CustomerDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/CustomerDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/FeedbackDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/FeedbackDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/InvoiceDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/InvoiceDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/ProductDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/ProductDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/PromotionsDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/PromotionsDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/ShippingMethodDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/ShippingMethodDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/SupplierDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/SupplierDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/UserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/cart/CartProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/cart/CartProduct.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/db/DbConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/db/DbConnect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/model/Invoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/model/Invoice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/model/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/model/Promotions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/dao/model/Promotions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/service/InvoiceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/service/InvoiceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/service/PromotionService" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/admin/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/admin/admin.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/user/payment.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/user/payment.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/user/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/user/register.jsp" afterDir="false" />
-    </list>
+    <list default="true" id="af7fb542-29e9-4d2e-8ca9-352998f6cb77" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,44 +93,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.ApplyVoucherServlet.executor": "Run",
-    "Application.DbProperties.executor": "Run",
-    "Application.InvoiceDao.executor": "Run",
-    "Application.InvoiceDetailDao.executor": "Run",
-    "Application.ProductDao.executor": "Run",
-    "Application.ProductService.executor": "Run",
-    "Application.PromotionService.executor": "Run",
-    "Application.PromotionsDao.executor": "Run",
-    "Application.ShippingMethodService.executor": "Run",
-    "Application.UserDao.executor": "Run",
-    "Gradle.Build TTW_Project.executor": "Run",
-    "Gradle.Build project_fruit.executor": "Run",
-    "Gradle.project_fruit [docker_app_start].executor": "Run",
-    "Gradle.project_fruit [docker_deploy].executor": "Run",
-    "Gradle.project_fruit [docker_upload_file_to_server].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Smart Tomcat.Tomcat: project_fruit.executor": "Run",
-    "Tomcat Server.Tomcat .executor": "Run",
-    "Tomcat Server.Tomcat 10.1.31.executor": "Run",
-    "Tomcat Server.Tomcat 10.executor": "Run",
-    "git-widget-placeholder": "Merging main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/TTW_Project/project_fruit",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.applicationServers",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ApplyVoucherServlet.executor&quot;: &quot;Run&quot;,
+    &quot;Application.DbProperties.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InvoiceDao.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InvoiceDetailDao.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProductDao.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProductService.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PromotionService.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PromotionsDao.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ShippingMethodService.executor&quot;: &quot;Run&quot;,
+    &quot;Application.UserDao.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build TTW_Project.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build project_fruit.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.project_fruit [docker_app_start].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.project_fruit [docker_deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.project_fruit [docker_upload_file_to_server].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Smart Tomcat.Tomcat: project_fruit.executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat Server.Tomcat .executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.31.executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat Server.Tomcat 10.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/TTW_Project/project_fruit&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.applicationServers&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="vn.edu.hcmuaf.fit.project_fruit.utils" />
