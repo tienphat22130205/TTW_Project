@@ -28,6 +28,10 @@ public class Product implements Serializable {
 
 //    private int categoryId;
 
+
+    public Product() {
+    }
+
     public Product(String name, int totalQuantity, double totalAmount) {
         this.name = name;
         this.totalQuantity = totalQuantity;

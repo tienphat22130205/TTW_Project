@@ -26,5 +26,23 @@ public class ShippingMethodDAO {
         }
         return shippingMethods;
     }
+    public ShippingMethod getShippingMethodById(int id) {
+        String sql = "SELECT * FROM shipping_methods WHERE id = ?";
+        try (Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new ShippingMethod(
+                        rs.getInt("id"),
+                        rs.getString("method_name"),
+                        rs.getString("carrier"),
+                        rs.getDouble("shipping_fee")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 

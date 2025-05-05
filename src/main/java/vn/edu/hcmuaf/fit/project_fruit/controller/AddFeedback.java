@@ -51,7 +51,7 @@ public class AddFeedback extends HttpServlet {
 
             // Câu lệnh SQL để thêm dữ liệu
             String query = "INSERT INTO feedbacks (id_product, id_account, content, date_create, rating) VALUES (?, ?, ?, ?, ?)";
-            try (PreparedStatement preparedStatement = DbConnect.getPreparedStatement(query)) {
+            try (PreparedStatement preparedStatement = DbConnect.getPreparedStatement(query, true)) {
                 preparedStatement.setInt(1, idProduct);          // ID sản phẩm
                 preparedStatement.setInt(2, idAccount);          // ID tài khoản
                 preparedStatement.setString(3, content);         // Nội dung bình luận

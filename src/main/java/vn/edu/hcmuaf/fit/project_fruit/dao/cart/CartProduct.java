@@ -11,6 +11,7 @@ public class CartProduct implements Serializable {
     private double price;
     private List<ProductImg> listImg;
     private int quantity;
+    private double discount = 0;
 
     public CartProduct(int id_product, String name, double price, List<ProductImg> listImg, int quantity) {
         this.id_product = id_product;
@@ -63,4 +64,11 @@ public class CartProduct implements Serializable {
         this.quantity = quantity;
     }
 
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
 }

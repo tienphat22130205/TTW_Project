@@ -13,7 +13,7 @@ public class Promotions {
     private int max_usage;
     private int usage_count;
 
-    public Promotions() {
+    public Promotions(int idPromotion, String promotionName, String describe1, String startDate, String endDate, double percentDiscount, String type) {
     }
 
     public Promotions(int id_promotion, String promotion_name, String describe_1, String start_date, String end_date,
