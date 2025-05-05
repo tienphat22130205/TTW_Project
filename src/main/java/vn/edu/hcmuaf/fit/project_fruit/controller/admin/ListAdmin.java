@@ -20,7 +20,7 @@ public class ListAdmin extends HttpServlet {
         FeedbackDao feedbackDao = new FeedbackDao();
         CustomerService customerService = new CustomerService();
         ProductService productService = new ProductService();
-        InvoiceService invoiceService = new InvoiceService();
+//        InvoiceService invoiceService = new InvoiceService();
         SupplierService supplierService = new SupplierService();
 
         // Lấy số trang từ request, mặc định là trang 1 nếu không có
@@ -165,17 +165,17 @@ public class ListAdmin extends HttpServlet {
             pageInvoices = Integer.parseInt(request.getParameter("InvoicesPage"));
         }
 
-// Lấy danh sách hóa đơn theo trang
-        List<Invoice> invoices = invoiceService.getInvoicesByPage(pageInvoices, recordsPerPageInvoices);
-
-// Tính tổng số hóa đơn và số trang
-        int totalRecordsInvoices = invoiceService.getTotalRecords(); // Tổng số hóa đơn
-        int totalPagesInvoices = (int) Math.ceil(totalRecordsInvoices * 1.0 / recordsPerPageInvoices);
-
-// Đưa danh sách hóa đơn và thông tin phân trang vào request
-        request.setAttribute("invoices", invoices);
-        request.setAttribute("currentInvoicesPage", pageInvoices);
-        request.setAttribute("totalInvoicesPages", totalPagesInvoices);
+//// Lấy danh sách hóa đơn theo trang
+//        List<Invoice> invoices = invoiceService.getInvoicesByPage(pageInvoices, recordsPerPageInvoices);
+//
+//// Tính tổng số hóa đơn và số trang
+//        int totalRecordsInvoices = invoiceService.getTotalRecords(); // Tổng số hóa đơn
+//        int totalPagesInvoices = (int) Math.ceil(totalRecordsInvoices * 1.0 / recordsPerPageInvoices);
+//
+//// Đưa danh sách hóa đơn và thông tin phân trang vào request
+//        request.setAttribute("invoices", invoices);
+//        request.setAttribute("currentInvoicesPage", pageInvoices);
+//        request.setAttribute("totalInvoicesPages", totalPagesInvoices);
 
         // Chuyển tiếp tới JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin.jsp");

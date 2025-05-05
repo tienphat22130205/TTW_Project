@@ -19,7 +19,7 @@ public class CustomerDao {
                 "SELECT c.id_customer, c.customer_name, c.customer_phone, c.address, a.create_date, a.email, a.role " +
                         "FROM customers c " +
                         "JOIN accounts a ON c.id_customer = a.id_customer " +
-                        "ORDER BY c.id_customer ASC");
+                        "ORDER BY c.id_customer ASC", true);
 
         if (ps == null) return new ArrayList<>();  // Nếu không thể tạo PreparedStatement, trả về danh sách trống
 
@@ -86,7 +86,7 @@ public class CustomerDao {
                 "ORDER BY c.id_customer ASC " +
                 "LIMIT ?, ?";  // Phân trang ở đây
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setInt(1, (page - 1) * recordsPerPage);  // Tính offset
             ps.setInt(2, recordsPerPage);  // Giới hạn số bản ghi mỗi trang
 
@@ -113,7 +113,7 @@ public class CustomerDao {
     public int getTotalRecords() {
         String query = "SELECT COUNT(*) FROM customers";
         int totalRecords = 0;
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) { // Sử dụng getPreparedStatement
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) { // Sử dụng getPreparedStatement
             ResultSet rs = ps.executeQuery();  // Thực thi câu lệnh SQL
             if (rs.next()) {
                 totalRecords = rs.getInt(1);  // Lấy giá trị COUNT(*) từ kết quả
@@ -129,7 +129,7 @@ public class CustomerDao {
                 "FROM customers c " +
                 "JOIN accounts a ON c.id_customer = a.id_customer " +
                 "WHERE c.id_customer = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setInt(1, customerId); // Gán ID khách hàng vào câu truy vấn
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -153,7 +153,7 @@ public class CustomerDao {
 
     public boolean updateCustomerDetails(int customerId, String customerName, String customerPhone, String address) {
         String query = "UPDATE customers SET customer_name = ?, customer_phone = ?, address = ? WHERE id_customer = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, customerName);
             ps.setString(2, customerPhone);
             ps.setString(3, address);
@@ -173,7 +173,7 @@ public class CustomerDao {
                 "JOIN accounts a ON c.id_customer = a.id_customer " +
                 "ORDER BY a.create_date DESC LIMIT 10";  // Lấy 10 khách hàng mới nhất
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query);
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -208,7 +208,7 @@ public class CustomerDao {
                 "JOIN accounts a ON c.id_customer = a.id_customer " +
                 "WHERE a.role IN (" + placeholders + ")";
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             // Gán các giá trị role vào các tham số của câu lệnh SQL
             for (int i = 0; i < roles.size(); i++) {
                 ps.setString(i + 1, roles.get(i)); // Gán giá trị role tương ứng

@@ -22,7 +22,7 @@ public class SupplierDao {
 
         List<Supplier> suppliers = new ArrayList<>();
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query);
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -58,7 +58,7 @@ public class SupplierDao {
         List<Supplier> suppliers = new ArrayList<>();
         int offset = (page - 1) * recordsPerPage;
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setInt(1, offset);
             ps.setInt(2, recordsPerPage);
 
@@ -89,7 +89,7 @@ public class SupplierDao {
         String query = "SELECT COUNT(*) AS total FROM suppliers";
         int totalRecords = 0;
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query);
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true);
              ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
@@ -107,7 +107,7 @@ public class SupplierDao {
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """;
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(query)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, supplier.getName());
             ps.setString(2, supplier.getAddress());
             ps.setString(3, supplier.getEmail());
@@ -125,7 +125,7 @@ public class SupplierDao {
     }
     public boolean deleteSupplierById(int id) {
         String sql = "DELETE FROM suppliers WHERE id_supplier = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -135,7 +135,7 @@ public class SupplierDao {
     }
     public Supplier getSupplierById(int id) {
         String sql = "SELECT * FROM suppliers WHERE id_supplier = ?";
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -163,7 +163,7 @@ public class SupplierDao {
         WHERE id_supplier = ?
     """;
 
-        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql)) {
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
             ps.setString(1, s.getName());
             ps.setString(2, s.getAddress());
             ps.setString(3, s.getEmail());

@@ -11,7 +11,6 @@ import java.io.IOException;
 
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
-
     private final UserService userService = new UserService();
 
     @Override
@@ -21,12 +20,36 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
+        // Gán lại để hiển thị lại form nếu lỗi
+        request.setAttribute("oldFullName", fullName);
+        request.setAttribute("oldEmail", email);
+
+        // Xử lý lỗi từng bước
+        if (userService.getUserByEmail(email) != null) {
+            request.setAttribute("errorMessage", "Email đã tồn tại.");
+            request.getRequestDispatcher("/user/register.jsp").forward(request, response);
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            request.setAttribute("errorMessage", "Mật khẩu xác nhận không khớp.");
+            request.getRequestDispatcher("/user/register.jsp").forward(request, response);
+            return;
+        }
+
+        if (!userService.isStrongPassword(password)) {
+            request.setAttribute("errorMessage", "Mật khẩu phải có ít nhất 8 ký tự, chứa cả chữ và số.");
+            request.getRequestDispatcher("/user/register.jsp").forward(request, response);
+            return;
+        }
+
+        // Nếu không có lỗi, tiến hành đăng ký
         boolean isRegistered = userService.registerUser(email, password, confirmPassword, fullName);
 
         if (isRegistered) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/user/login.jsp");
         } else {
-            request.setAttribute("errorMessage", "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.");
+            request.setAttribute("errorMessage", "Đăng ký thất bại do lỗi hệ thống. Vui lòng thử lại.");
             request.getRequestDispatcher("/user/register.jsp").forward(request, response);
         }
     }

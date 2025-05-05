@@ -3,53 +3,68 @@ package vn.edu.hcmuaf.fit.project_fruit.dao.model;
 import java.util.Date;
 
 public class Invoice {
-    private String orderCode;          // Mã đơn hàng
-    private String customerName;       // Tên khách hàng
-    private String address;            // Địa chỉ
-    private Date orderDate;            // Ngày đặt hàng
-    private String invoiceDetails;     // Chi tiết hóa đơn
-    private String paymentMethod;      // Phương thức thanh toán
-    private String status;             // Tình trạng đơn hàng
+    private int idInvoice;
+    private int accountId;
+    private String receiverName;
+    private String phone;
+    private String email;
+    private String addressFull;
+    private String paymentMethod;
+    private double totalPrice;
+    private double shippingFee;
+    private String status;
+    private Date createDate;
+    private String shippingMethod;// Tình trạng đơn hàng
 
-    // Getters và Setters cho tất cả các thuộc tính
-    public String getOrderCode() {
-        return orderCode;
+    public Invoice() {
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public int getIdInvoice() {
+        return idInvoice;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public void setIdInvoice(int idInvoice) {
+        this.idInvoice = idInvoice;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public String getAddress() {
-        return address;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public String getReceiverName() {
+        return receiverName;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public String getPhone() {
+        return phone;
     }
 
-    public String getInvoiceDetails() {
-        return invoiceDetails;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public void setInvoiceDetails(String invoiceDetails) {
-        this.invoiceDetails = invoiceDetails;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddressFull() {
+        return addressFull;
+    }
+
+    public void setAddressFull(String addressFull) {
+        this.addressFull = addressFull;
     }
 
     public String getPaymentMethod() {
@@ -60,11 +75,43 @@ public class Invoice {
         this.paymentMethod = paymentMethod;
     }
 
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public double getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getShippingMethod() {
+        return shippingMethod;
+    }
+
+    public void setShippingMethod(String shippingMethod) {
+        this.shippingMethod = shippingMethod;
     }
 }

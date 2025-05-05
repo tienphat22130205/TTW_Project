@@ -76,13 +76,21 @@
                 font-size: 16px;
                 margin-top: 15px;
             }
-            .cod {
+            button.cod {
                 background: green;
-                color: white;
+                border: 2px solid transparent;
             }
-            .transfer {
+
+            button.transfer {
                 background: blue;
-                color: white;
+                border: 2px solid transparent;
+            }
+
+            /* Khi được chọn (active) sẽ có viền đậm */
+            button.cod.active,
+            button.transfer.active {
+                border: 2px solid #222;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
             }
             .cart-item {
                 display: flex;
@@ -312,9 +320,21 @@
             .apply-btn:hover {
                 background-color: #0056b3;
             }
-
-
         </style>
+        <script>
+            function setPaymentMethod(method) {
+                document.getElementById("payment_method").value = method;
+
+                const codBtn = document.getElementById("btn-cod");
+                const transferBtn = document.getElementById("btn-transfer");
+
+                codBtn.classList.remove("active");
+                transferBtn.classList.remove("active");
+
+                if (method === "COD") codBtn.classList.add("active");
+                else transferBtn.classList.add("active");
+            }
+        </script>
         <script>
             // load xử lý
             document.addEventListener("DOMContentLoaded", function () {
@@ -338,6 +358,10 @@
                 const provinceSelect = document.getElementById("province");
                 const districtSelect = document.getElementById("district");
                 const wardSelect = document.getElementById("ward");
+
+                const provinceNameInput = document.getElementById("province_name");
+                const districtNameInput = document.getElementById("district_name");
+                const wardNameInput = document.getElementById("ward_name");
 
                 const hcmData = {
                     code: 79,
@@ -542,20 +566,25 @@
                 provinceSelect.appendChild(option);
 
                 provinceSelect.addEventListener("change", function () {
-                    if (this.value == hcmData.code) {
-                        districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
-                        wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
-                        hcmData.districts.forEach(district => {
-                            let opt = document.createElement("option");
-                            opt.value = district.code;
-                            opt.textContent = district.name;
-                            districtSelect.appendChild(opt);
-                        });
-                    }
+                    provinceNameInput.value = this.options[this.selectedIndex].textContent;
+
+                    districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
+                    wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
+                    hcmData.districts.forEach(district => {
+                        let opt = document.createElement("option");
+                        opt.value = district.code;
+                        opt.textContent = district.name;
+                        districtSelect.appendChild(opt);
+                    });
+
+                    districtNameInput.value = "";
+                    wardNameInput.value = "";
                 });
 
                 districtSelect.addEventListener("change", function () {
                     const selectedDistrict = hcmData.districts.find(d => d.code == this.value);
+                    districtNameInput.value = selectedDistrict?.name || "";
+
                     wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
                     if (selectedDistrict) {
                         selectedDistrict.wards.forEach(ward => {
@@ -565,7 +594,13 @@
                             wardSelect.appendChild(opt);
                         });
                     }
+
+                    wardNameInput.value = "";
                 });
+                wardSelect.addEventListener("change", function () {
+                    wardNameInput.value = this.options[this.selectedIndex]?.textContent || "";
+                });
+
 
                 // Auto chọn TP.HCM luôn
                 provinceSelect.value = hcmData.code;
@@ -580,7 +615,33 @@
                         const selectedId = this.value;
                         const url = new URL(window.location.href);
                         url.searchParams.set("shipping_method", selectedId);
-                        window.location.href = url.toString(); // reload lại servlet với param mới
+                    });
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const radios = document.querySelectorAll('input[name="shipping_method"]');
+                const shippingFeeEl = document.querySelector("#shipping_fee_value");
+                const finalTotalEl = document.querySelector("#final_total_value");
+
+                radios.forEach(radio => {
+                    radio.addEventListener("change", function () {
+                        const selectedId = this.value;
+
+                        fetch("${pageContext.request.contextPath}/update-shipping", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: "shipping_method_id=" + selectedId
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Cập nhật phí ship và tổng tiền
+                                shippingFeeEl.textContent = data.shippingFee.toLocaleString('vi-VN') + " ₫";
+                                finalTotalEl.textContent = data.finalTotal.toLocaleString('vi-VN') + " ₫";
+                            });
                     });
                 });
             });
@@ -608,6 +669,11 @@
                 });
             });
         </script>
+        <script>
+            function setPaymentMethod(method) {
+                document.getElementById("payment_method").value = method;
+            }
+        </script>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
@@ -631,39 +697,44 @@
                     <i class="fas fa-arrow-left"></i> Tiếp tục mua hàng
                 </a>
                 <h2>Thông tin thanh toán</h2>
-                <form>
+                <form method="post" action="${pageContext.request.contextPath}/checkout">
+                    <input type="hidden" name="confirm" value="1" />
+
                     <label>Họ và Tên:</label>
-                    <input type="text" required>
+                    <input type="text" name="receiver_name" required>
 
                     <label>Số điện thoại:</label>
-                    <input type="tel" required>
+                    <input type="tel" name="phone" required>
 
                     <label>Email:</label>
-                    <input type="email" required>
+                    <input type="email" name="email" required>
 
                     <label>Tỉnh/Thành phố:</label>
-                    <select id="province">
+                    <select type="hidden" id="province" name="province">
                         <option value="">Chọn Tỉnh/Thành phố</option>
                         <!-- Chỉ TP.HCM sẽ được thêm vào đây -->
                     </select>
+                    <input type="hidden" id="province_name" name="province_name" />
 
                     <label>Quận/Huyện:</label>
-                    <select id="district">
+                    <select type="hidden" id="district" name="district">
                         <option value="">Chọn Quận/Huyện</option>
                         <!-- Các quận, huyện của TP.HCM sẽ được thêm vào đây -->
                     </select>
+                    <input type="hidden" id="district_name" name="district_name" />
 
                     <label>Phường/Xã:</label>
-                    <select id="ward">
+                    <select type="hidden" id="ward" name="ward">
                         <option value="">Chọn Phường/Xã</option>
                         <!-- Các phường/xã của quận/huyện sẽ được thêm vào đây -->
                     </select>
+                    <input type="hidden" id="ward_name" name="ward_name" />
 
-                    <label>Số nhà, địa chỉ cụ thể:</label>
-                    <input type="text" required>
+                    <label>Địa chỉ cụ thể:</label>
+                    <input type="text" name="address" required>
 
                     <label for="shipping_method">Phương thức vận chuyển:</label>
-                    <table id="shipping_method" style="width: 100%; border-collapse: collapse;">
+                    <table id="shipping_method" style=" width: 100%; border-collapse: collapse;">
                         <thead>
                         <tr>
                             <th style="text-align: left;">Phương thức vận chuyển</th>
@@ -693,11 +764,12 @@
                         </c:forEach>
                         </tbody>
                     </table>
+                    <input type="hidden" id="payment_method" name="payment_method" value="COD" />
 
                     <h3>Phương thức thanh toán</h3>
                     <div class="btn-container">
-                        <button type="button" class="cod">Nhận hàng rồi trả tiền (COD)</button>
-                        <button type="button" class="transfer">Chuyển khoản</button>
+                        <button type="button" id="btn-cod" class="cod" onclick="setPaymentMethod('COD')">COD</button>
+                        <button type="button" id="btn-transfer" class="transfer" onclick="setPaymentMethod('Bank Transfer')">Chuyển khoản</button>
                     </div>
 
                     <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
@@ -809,6 +881,20 @@
         <%
             session.removeAttribute("discountError");
         %>
+    </c:if>
+    <c:if test="${orderSuccess}">
+        <script>
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đặt hàng thành công!',
+                    text: 'Mã hóa đơn của bạn là: ${invoiceId}',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = '${pageContext.request.contextPath}/home';
+                });
+            }); // delay 2 giây
+        </script>
     </c:if>
 
     <div id="voucherOverlay" class="voucher-overlay" style="display: none;">
