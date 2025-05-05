@@ -10,27 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af7fb542-29e9-4d2e-8ca9-352998f6cb77" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/catalina.2025-04-18.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/catalina.2025-04-18.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/localhost_access_log.2025-04-18.txt" beforeDir="false" afterPath="$PROJECT_DIR$/logs/localhost_access_log.2025-04-18.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/db.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/card/card_jsp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/card/card_jsp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/index_jsp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/index_jsp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/user/login_jsp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/user/login_jsp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/user/payment_jsp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/Catalina/localhost/project_fruit/org/apache/jsp/user/payment_jsp.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +33,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -134,7 +125,7 @@
     &quot;Tomcat Server.Tomcat .executor&quot;: &quot;Run&quot;,
     &quot;Tomcat Server.Tomcat 10.1.31.executor&quot;: &quot;Run&quot;,
     &quot;Tomcat Server.Tomcat 10.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#50 on tienphat&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;tienphat&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/TTW_Project/project_fruit&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -226,7 +217,8 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Tomcat 10.1.31" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.31" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="Tomcat 10.1.31" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.31" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17" nameIsGenerated="true">
+      <option name="BROWSER_ID" value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="Gradle : vn.edu.hcmuaf.fit : project_fruit-1.0-SNAPSHOT.war">
@@ -237,6 +229,8 @@
       </deployment>
       <server-settings>
         <option name="BASE_DIRECTORY_NAME" value="8689712f-980f-49ab-b814-597e0260e4c6" />
+        <option name="HTTP_PORT" value="8090" />
+        <option name="JNDI_PORT" value="1090" />
       </server-settings>
       <predefined_log_file enabled="true" id="Tomcat" />
       <predefined_log_file enabled="true" id="Tomcat Catalina" />
@@ -313,6 +307,12 @@
         </option>
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Gradle.project_fruit [docker_app_start]" />
+      <item itemvalue="Gradle.project_fruit [docker_deploy]" />
+      <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
+      <item itemvalue="Tomcat Server.Tomcat 10.1.31" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.project_fruit [docker_deploy]" />
