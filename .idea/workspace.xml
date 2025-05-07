@@ -9,7 +9,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af7fb542-29e9-4d2e-8ca9-352998f6cb77" name="Changes" comment="" />
+    <list default="true" id="af7fb542-29e9-4d2e-8ca9-352998f6cb77" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,12 +43,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="project_fruit" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -93,44 +103,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ApplyVoucherServlet.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DbProperties.executor&quot;: &quot;Run&quot;,
-    &quot;Application.InvoiceDao.executor&quot;: &quot;Run&quot;,
-    &quot;Application.InvoiceDetailDao.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ProductDao.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ProductService.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PromotionService.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PromotionsDao.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ShippingMethodService.executor&quot;: &quot;Run&quot;,
-    &quot;Application.UserDao.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build TTW_Project.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build project_fruit.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.project_fruit [docker_app_start].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.project_fruit [docker_deploy].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.project_fruit [docker_upload_file_to_server].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Smart Tomcat.Tomcat: project_fruit.executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Tomcat .executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Tomcat 10.1.31.executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Tomcat 10.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/TTW_Project/project_fruit&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.applicationServers&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ApplyVoucherServlet.executor": "Run",
+    "Application.DbProperties.executor": "Run",
+    "Application.InvoiceDao.executor": "Run",
+    "Application.InvoiceDetailDao.executor": "Run",
+    "Application.ProductDao.executor": "Run",
+    "Application.ProductService.executor": "Run",
+    "Application.PromotionService.executor": "Run",
+    "Application.PromotionsDao.executor": "Run",
+    "Application.ShippingMethodService.executor": "Run",
+    "Application.UserDao.executor": "Run",
+    "Gradle.Build TTW_Project-QuangNhat.executor": "Run",
+    "Gradle.Build TTW_Project.executor": "Run",
+    "Gradle.Build project_fruit.executor": "Run",
+    "Gradle.project_fruit [docker_app_start].executor": "Run",
+    "Gradle.project_fruit [docker_deploy].executor": "Run",
+    "Gradle.project_fruit [docker_upload_file_to_server].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Smart Tomcat.Tomcat: project_fruit.executor": "Run",
+    "Tomcat Server.Tomcat .executor": "Run",
+    "Tomcat Server.Tomcat 10.1.31.executor": "Run",
+    "Tomcat Server.Tomcat 10.1.39.executor": "Run",
+    "Tomcat Server.Tomcat 10.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/TTW_Project/project_fruit",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="vn.edu.hcmuaf.fit.project_fruit.utils" />
@@ -141,7 +153,7 @@
       <recent name="D:\TTW_Project\project_fruit\src\main\java\vn\edu\hcmuaf\fit\project_fruit" />
     </key>
   </component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.31">
+  <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.39">
     <configuration name="project_fruit [docker_app_start]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -208,7 +220,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Tomcat 10.1.31" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 11.0.5" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17" nameIsGenerated="true">
+    <configuration name="Tomcat 10.1.39" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.39" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17" nameIsGenerated="true">
       <option name="BROWSER_ID" value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
@@ -302,13 +314,15 @@
       <item itemvalue="Gradle.project_fruit [docker_app_start]" />
       <item itemvalue="Gradle.project_fruit [docker_deploy]" />
       <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
-      <item itemvalue="Tomcat Server.Tomcat 10.1.31" />
+      <item itemvalue="Tomcat Server.Tomcat 10.1.39" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
+        <item itemvalue="Gradle.project_fruit [docker_deploy]" />
+        <item itemvalue="Gradle.project_fruit [docker_app_start]" />
         <item itemvalue="Gradle.project_fruit [docker_deploy]" />
         <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
-        <item itemvalue="Gradle.project_fruit [docker_app_start]" />
       </list>
     </recent_temporary>
   </component>
