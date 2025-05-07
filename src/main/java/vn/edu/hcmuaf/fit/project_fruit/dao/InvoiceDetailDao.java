@@ -2,9 +2,13 @@ package vn.edu.hcmuaf.fit.project_fruit.dao;
 
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 import vn.edu.hcmuaf.fit.project_fruit.dao.cart.CartProduct;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Invoice;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InvoiceDetailDao {
     public void addInvoiceDetail(int invoiceId, CartProduct item) {
@@ -25,18 +29,53 @@ public class InvoiceDetailDao {
             e.printStackTrace();
         }
     }
+    public static List<CartProduct> getInvoiceDetails(int invoiceId) {
+        List<CartProduct> details = new ArrayList<>();
+        String sql = """
+    SELECT p.product_name, d.price, d.quantity, d.item_discount
+    FROM invoices_details d
+    JOIN products p ON d.id_product = p.id_product
+    WHERE d.id_invoice = ?
+""";
+
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ps.setInt(1, invoiceId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CartProduct item = new CartProduct();
+                item.setName(rs.getString("product_name")); // tên đúng theo cột
+                item.setPrice(rs.getDouble("price"));
+                item.setQuantity(rs.getInt("quantity"));
+                item.setDiscount(rs.getDouble("item_discount"));
+                details.add(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return details;
+    }
+
+
 
     // Main test
     public static void main(String[] args) {
-        InvoiceDetailDao detailDao = new InvoiceDetailDao();
+        int invoiceId = 1; // 👈 Thay bằng ID đơn hàng thực tế bạn muốn kiểm tra
+        List<CartProduct> details = InvoiceDetailDao.getInvoiceDetails(invoiceId);
 
-        CartProduct item = new CartProduct();
-        item.setId_product(10); // id_product phải tồn tại
-        item.setPrice(250000);
-        item.setQuantity(2);
-        item.setDiscount(50000); // mỗi sản phẩm giảm 50k (nếu áp dụng)
-
-        detailDao.addInvoiceDetail(1, item); // ID đơn hàng giả định đã tồn tại
-        System.out.println("✅ Đã thêm chi tiết đơn hàng cho invoiceId = 1");
+        if (details.isEmpty()) {
+            System.out.println("❌ Không có sản phẩm nào trong chi tiết hóa đơn ID: " + invoiceId);
+        } else {
+            System.out.println("📦 Danh sách sản phẩm trong đơn hàng ID = " + invoiceId);
+            for (CartProduct item : details) {
+                System.out.println("---------------");
+                System.out.println("🛒 Tên sản phẩm: " + item.getName());
+                System.out.println("💵 Giá: " + item.getPrice());
+                System.out.println("🔢 Số lượng: " + item.getQuantity());
+                System.out.println("🔻 Giảm giá: " + item.getDiscount());
+            }
+        }
     }
+
 }

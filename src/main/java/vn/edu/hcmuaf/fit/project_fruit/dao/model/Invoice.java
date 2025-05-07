@@ -14,7 +14,8 @@ public class Invoice {
     private double shippingFee;
     private String status;
     private Date createDate;
-    private String shippingMethod;// Tình trạng đơn hàng
+    private String shippingMethod;
+    private String accountName;// Tình trạng đơn hàng
 
     public Invoice() {
     }
@@ -113,5 +114,12 @@ public class Invoice {
 
     public void setShippingMethod(String shippingMethod) {
         this.shippingMethod = shippingMethod;
+    }
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 }
