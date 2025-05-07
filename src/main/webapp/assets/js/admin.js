@@ -639,6 +639,16 @@ function openModal(data, modalType) {
 
         // Gán ID khuyến mãi vào nút "Xóa"
         document.getElementById("confirmDeleteButton").setAttribute("data-id", data.promoId);
+        document.getElementById("confirmDeleteButton").onclick = function () {
+            const promoId = this.getAttribute("data-id");
+            if (!promoId) {
+                alert("Không tìm thấy ID khuyến mãi!");
+                return;
+            }
+
+            window.location.href = contextPath + "/remove-promotion?pid=" + promoId;
+
+        };
 
         console.log("Đã mở modal xóa cho ID:", data.promoId); // Debug kiểm tra ID
 
@@ -652,8 +662,19 @@ function openModal(data, modalType) {
 
         const deleteBtn = document.getElementById("FeedbackDeleteButton");
         deleteBtn.setAttribute("data-feedback-id", data.feedbackId);
-    }
 
+        // Gán sự kiện onclick để thực hiện xoá (không cần confirm)
+        deleteBtn.onclick = function () {
+            const feedbackId = this.getAttribute("data-feedback-id");
+            if (!feedbackId) {
+                alert("Không tìm thấy ID feedback!");
+                return;
+            }
+
+            // Gửi request xóa ngay lập tức
+            window.location.href = contextPath + "/remove-feedback?fid=" + feedbackId;
+        };
+    }
 
 
 }
@@ -682,6 +703,8 @@ function closeModal(modalType) {
         document.getElementById("activityLogModal").style.display = "none";
     } else if (modalType === "promotion") {
         document.getElementById("promotionModal1").style.display = "none";
+    } else if (modalType === "editSupplierModal") {
+        document.getElementById("editSupplierModal").style.display = "none";
     }
 }
 
@@ -1333,9 +1356,7 @@ function editSupplier(id) {
             document.getElementById("editSupplierModal").style.display = "flex";
         });
 }
-function closeModal() {
-    document.getElementById("editSupplierModal").style.display = "none";
-}
+
 function saveSupplier() {
     const data = {
         id_supplier: parseInt(document.getElementById("editSupplierId").value),
@@ -1350,7 +1371,7 @@ function saveSupplier() {
 
     fetch("update-supplier", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
     })
         .then(res => res.text())
