@@ -13,22 +13,20 @@ public class AdminFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession(false); // không tạo mới nếu chưa có
 
-        // Chưa đăng nhập
-        if (session == null || session.getAttribute("user") == null) {
-            res.sendRedirect(req.getContextPath() + "/user/login.jsp"); // Về trang login
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
+
+        // Chưa đăng nhập hoặc không phải admin → chuyển về trang login
+        if (user == null || !"admin".equals(user.getRole())) {
+            res.sendRedirect(req.getContextPath() + "/user/login.jsp");
             return;
         }
 
-        // Đã đăng nhập nhưng không phải admin
-        User user = (User) session.getAttribute("user");
-        if (!"admin".equals(user.getRole())) {
-            res.sendRedirect(req.getContextPath() + "/user/login.jsp?error=unauthorized");
-            return;
-        }
-
-        // Đúng quyền -> cho đi tiếp
+        // ✅ Có quyền → cho đi tiếp
         chain.doFilter(request, response);
     }
 }
+
+
+
