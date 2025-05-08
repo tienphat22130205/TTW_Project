@@ -20,7 +20,6 @@ public class ListAdmin extends HttpServlet {
         FeedbackDao feedbackDao = new FeedbackDao();
         CustomerService customerService = new CustomerService();
         ProductService productService = new ProductService();
-//        InvoiceService invoiceService = new InvoiceService();
         SupplierService supplierService = new SupplierService();
 
         // Lấy số trang từ request, mặc định là trang 1 nếu không có
@@ -160,22 +159,16 @@ public class ListAdmin extends HttpServlet {
         int pageInvoices = 1; // Trang hiện tại của danh sách hóa đơn
         int recordsPerPageInvoices = 20; // Số lượng hóa đơn hiển thị trên mỗi trang
 
-// Lấy số trang từ tham số request (nếu có)
+        // Lấy số trang từ tham số request (nếu có)
         if (request.getParameter("InvoicesPage") != null) {
             pageInvoices = Integer.parseInt(request.getParameter("InvoicesPage"));
         }
+        // -------------------------------------
+        // Lấy danh sách đơn hàng (Invoices)
+        InvoiceService invoiceService = new InvoiceService();
+        List<Invoice> invoices = invoiceService.getAllInvoices();
+        request.setAttribute("invoices", invoices);
 
-//// Lấy danh sách hóa đơn theo trang
-//        List<Invoice> invoices = invoiceService.getInvoicesByPage(pageInvoices, recordsPerPageInvoices);
-//
-//// Tính tổng số hóa đơn và số trang
-//        int totalRecordsInvoices = invoiceService.getTotalRecords(); // Tổng số hóa đơn
-//        int totalPagesInvoices = (int) Math.ceil(totalRecordsInvoices * 1.0 / recordsPerPageInvoices);
-//
-//// Đưa danh sách hóa đơn và thông tin phân trang vào request
-//        request.setAttribute("invoices", invoices);
-//        request.setAttribute("currentInvoicesPage", pageInvoices);
-//        request.setAttribute("totalInvoicesPages", totalPagesInvoices);
 
         // Chuyển tiếp tới JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin.jsp");

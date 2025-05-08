@@ -7,6 +7,8 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.cart.CartProduct;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Invoice;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 
+import java.util.List;
+
 public class InvoiceService {
     private final InvoiceDao invoiceDao = new InvoiceDao();
     private final InvoiceDetailDao detailDao = new InvoiceDetailDao();
@@ -37,4 +39,15 @@ public class InvoiceService {
 
         return invoiceId;
     }
+    public List<Invoice> getAllInvoices() {
+        return invoiceDao.getAllInvoices();
+    }
+    public Invoice getInvoiceById(int id) {
+        return InvoiceDao.getInvoiceById(id);
+    }
+
+    public List<CartProduct> getInvoiceDetails(int invoiceId) {
+        return InvoiceDetailDao.getInvoiceDetails(invoiceId);
+    }
+
 }

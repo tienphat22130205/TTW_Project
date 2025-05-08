@@ -15,6 +15,120 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/custom-datatable.css">
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .invoice-modal {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            width: 680px;
+            max-width: 95%;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            font-family: "Segoe UI", sans-serif;
+            color: #333;
+        }
+
+        .modal-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #222;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .invoice-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .section-title {
+            margin: 20px 0 10px;
+            font-size: 17px;
+            color: #444;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .invoice-table th,
+        .invoice-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .invoice-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .total-section {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .total-section .money {
+            color: #2c7;
+            font-weight: bold;
+        }
+
+        .total-section .large {
+            font-size: 18px;
+        }
+
+        .badge.green {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.2s;
+        }
+
+        .close-button:hover {
+            color: red;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 <body>
 <input type="checkbox" name="" id="nav-toggle">
 <div class="sidebar">
@@ -534,37 +648,50 @@
                             <table id="orderTable" class="display" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>ID </th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Ngày đặt hàng</th>
+                                    <th>Họ tên</th>
+                                    <th>SĐT</th>
+                                    <th>Email</th>
                                     <th>Chi tiết hóa đơn</th>
                                     <th>Phương thức thanh toán</th>
                                     <th>Tình trạng</th>
+                                    <th>Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="invoice" items="${invoices}">
                                     <tr>
-                                        <td>${invoice.orderCode}</td>
-                                        <td>${invoice.customerName}</td>
-                                        <td>${invoice.address}</td>
-                                        <td>${invoice.orderDate}</td>
-                                        <td><button class="detail-button">Xem chi tiết</button></td>
-                                        <td>${invoice.paymentMethod}</td>
-                                        <td class="<c:choose>
-                                                 <c:when test="${invoice.status == 'Hoàn thành'}">status-completed</c:when>
-                                                 <c:when test="${invoice.status == 'Chưa thanh toán'}">status-pending</c:when>
-                                                 <c:when test="${invoice.status == 'Hủy'}">status-cancelled</c:when>
-                                                 <c:otherwise>status-unknown</c:otherwise>
-                                                 </c:choose>">
-                                                ${invoice.status}
+                                        <td>${invoice.receiverName}</td>
+                                        <td>${invoice.phone}</td>
+                                        <td>${invoice.email}</td>
+                                        <td>
+                                            <button class="detail-button"
+                                                    onclick='openInvoiceDetail({
+                                                            id: "${invoice.idInvoice}",
+                                                            name: "${invoice.receiverName}",
+                                                            phone: "${invoice.phone}",
+                                                            email: "${invoice.email}",
+                                                            address: "${invoice.addressFull}",
+                                                            paymentMethod: "${invoice.paymentMethod}",
+                                                            status: "${invoice.status}",
+                                                            createdAt: "${invoice.createDate}",
+                                                            accountName: "${invoice.accountName}",
+                                                            shippingFee: ${invoice.shippingFee},
+                                                            totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
+                                                            })'>
+                                                Xem chi tiết
+                                            </button>
                                         </td>
-
+                                        <td>${invoice.paymentMethod}</td>
+                                        <td>${invoice.status}</td>
+                                        <td>
+                                            <button class="btn-approve">Duyệt</button>
+                                            <button class="btn-cancel">Hủy</button>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -870,417 +997,43 @@
         <button id="cancelDeleteBtn">Không</button>
     </div>
 </div>
+<div id="invoiceOverlay" class="modal-overlay">
+    <div class="modal-content invoice-modal">
+        <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
+        <h2 class="modal-title">🧾 Chi tiết đơn hàng</h2>
 
-<div id="overlay" class="overlay">
-    <!-- Modal chi tiết hóa đơn -->
-    <div id="invoiceModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal('invoice')">&times;</span>
-            <h2>CHI TIẾT HÓA ĐƠN</h2>
-            <div class="customer-info">
-                <p><strong>Tên:</strong> <span id="customerName"></span></p>
-                <p><strong>Địa chỉ:</strong> <span id="customerAddress"></span></p>
-                <p><strong>Số điện thoại:</strong> <span id="customerPhone"></span></p>
-                <p><strong>Ngày mua</strong> <span id="customerDateSell"></span></p>
-            </div>
-            <table id="invoiceTable" class="invoice-table" style="display: none;">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên SP</th>
-                    <th>Số lượng</th>
-                    <th>Đơn Giá</th>
-                    <th>Thành Tiền</th>
-                </tr>
-                </thead>
-                <tbody id="productList">
-                <!-- Dữ liệu sản phẩm sẽ được thêm ở đây bằng JavaScript -->
-                </tbody>
-            </table>
-            <div class="total">
-                <strong>TỔNG TIỀN:</strong> <span id="totalAmount"></span> VND
-            </div>
+        <div class="invoice-info">
+            <div><strong>Mã đơn hàng:</strong> <span id="invoiceIdDisplay"></span></div>
+            <div><strong>Tên người nhận:</strong> <span id="customerName"></span></div>
+            <div><strong>Ngày tạo:</strong> <span id="createdAt"></span></div>
+            <div><strong>Địa chỉ nhận hàng:</strong> <span id="address"></span></div>
+            <div><strong>Phí vận chuyển:</strong> <span id="shippingFee" class="badge green"></span></div>
         </div>
-    </div>
-    <!-- Modal chi tiết sản phẩm đã mua -->
-    <div id="productDetailModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal('productDetail')">&times;</span>
-            <h2>Chi Tiết Sản Phẩm Đã Mua</h2>
-            <div class="customer-info">
-                <p><strong>ID Khách hàng:</strong> <span id="customerID"></span></p>
-                <p><strong>Họ và Tên:</strong> <span id="customerName1"></span></p>
-                <p><strong>Tổng chi tiêu:</strong> <span id="totalSpent"></span></p>
-                <p><strong>Ngày đăng ký:</strong> <span id="registrationDate"></span></p>
-            </div>
-            <table id="productTable" class="product-table" style="display: none;">
-                <thead>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                </tr>
-                </thead>
-                <tbody id="purchasedProductList">
-                <!-- Dữ liệu sản phẩm sẽ được thêm ở đây bằng JavaScript -->
-                </tbody>
-            </table>
-            <div class="total">
-                <strong>Tổng cộng:</strong> <span id="grandTotal"></span> VND
-            </div>
-        </div>
-    </div>
-    <!-- Modal Mô Tả Sản Phẩm -->
-    <div id="productDescriptionModal" class="modal">
-        <div class="modal-content" id="product-description-modal-content">
-            <button class="close-button" id="close-product-description-modal"
-                    onclick="closeModal('productDescription')">&times;</button>
-            <h2 id="product-description-title">Mô Tả Sản Phẩm</h2>
-            <div class="product-detail-container" id="product-detail-container">
-                <!-- Phần hình ảnh sản phẩm -->
-                <div class="product-image" id="product-description-image-container">
-                    <img src="" id="product-description-image" alt="Tên sản phẩm" />
-                </div>
-                <!-- Phần thông tin sản phẩm -->
-                <div class="product-info" id="product-description-info">
-                    <!-- Tên sản phẩm -->
-                    <div class="form-group" id="product-name-group">
-                        <strong>Tên sản phẩm:</strong>
-                        <span id="product-description-name">Tên sản phẩm</span>
-                        <input type="text" id="edit-product-name" value="Tên sản phẩm" style="display: none;">
-                    </div>
 
-                    <!-- Mã sản phẩm -->
-                    <div class="form-group" id="product-code-group">
-                        <strong>Mã sản phẩm:</strong>
-                        <span id="product-description-code">12345</span>
-                        <input type="text" id="edit-product-code" value="12345" style="display: none;" readonly>
-                    </div>
+        <h4 class="section-title">🛒 Danh sách sản phẩm</h4>
+        <table class="invoice-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+            </thead>
+            <tbody id="invoiceProductBody">
+            </tbody>
+        </table>
 
-                    <!-- Giá sản phẩm -->
-                    <div class="form-group" id="product-price-group">
-                        <strong>Giá:</strong>
-                        <span id="product-description-price">500,000 VND</span>
-                        <input type="text" id="edit-product-price" value="500,000 VND" style="display: none;">
-                    </div>
-
-                    <!-- Loại sản phẩm -->
-                    <div class="form-group" id="product-category-group">
-                        <strong>Loại sản phẩm:</strong>
-                        <span id="product-description-category">Điện Tử</span>
-                        <input type="text" id="edit-product-category" value="Điện Tử" style="display: none;">
-                    </div>
-
-                    <!-- Xuất xứ -->
-                    <div class="form-group" id="product-origin-group">
-                        <strong>Xuất xứ:</strong>
-                        <span id="product-description-origin">Việt Nam</span>
-                        <input type="text" id="edit-product-origin" value="Việt Nam" style="display: none;">
-                    </div>
-
-                    <!-- Mô tả sản phẩm -->
-                    <div class="form-group" id="product-description-group">
-                        <strong>Mô tả:</strong>
-                        <span id="product-description-description">Mô tả chi tiết sản phẩm.</span>
-                        <textarea id="edit-product-description"
-                                  style="display: none;">Mô tả chi tiết sản phẩm.</textarea>
-                    </div>
-
-                    <!-- Nút chỉnh sửa và lưu -->
-                    <div class="admin-actions" id="admin-actions">
-                        <button class="edit-product" id="edit-product-button" onclick="editProduct()">Chỉnh sửa sản
-                            phẩm</button>
-                        <button class="save-product" id="save-product-button" onclick="saveProduct()"
-                                style="display: none;">Lưu thay đổi</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Chi tiết hóa đơn -->
-    <div id="newInvoiceModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal('newInvoice')">&times;</span>
-            <h2>Chi Tiết Hóa Đơn</h2>
-            <div class="customer-info">
-                <p><strong>Mã khách hàng:</strong> <span id="newCustomerID"></span></p>
-                <p><strong>Tên khách hàng:</strong> <span id="newCustomerName"></span></p>
-                <p><strong>Địa chỉ:</strong> <span id="newCustomerAddress"></span></p>
-                <p><strong>Số điện thoại:</strong> <span id="newCustomerPhone"></span></p>
-                <p><strong>Ngày đặt hàng:</strong> <span id="newCustomerDateSell"></span></p>
-            </div>
-            <table id="newInvoiceTable" class="invoice-table" style="display: none;">
-                <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Tên Sản Phẩm</th>
-                    <th>Số Lượng</th>
-                    <th>Đơn Giá</th>
-                    <th>Thành Tiền</th>
-                </tr>
-                </thead>
-                <tbody id="newProductList">
-                <!-- Dữ liệu sản phẩm sẽ được thêm ở đây bằng JavaScript -->
-                </tbody>
-            </table>
-            <div class="total">
-                <strong>Tổng Tiền:</strong> <span id="newTotalAmount"></span> VND
-            </div>
-        </div>
-    </div>
-    <!-- Quản Lý người dùng -->
-    <div id="userManagementModal" class="modal system-user">
-        <div class="modal-content">
-            <div class="header">
-                <span class="close-button" onclick="closeModal('userManagement')">&times;</span>
-                <h2>
-                    <i class="fa-solid fa-user-gear"></i> Quản Lý Người Dùng
-                </h2>
-            </div>
-            <!-- Danh sách tài khoản -->
-            <div class="form-section">
-                <h3>Danh sách tài khoản</h3>
-                <div class="table-scroll-container">
-                    <table class="user-table">
-                        <thead>
-                        <tr>
-                            <th>Tên tài khoản</th>
-                            <th>Quyền</th>
-                            <th>Hành động</th>
-                        </tr>
-                        </thead>
-                        <tbody id="userTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- Thêm tài khoản -->
-            <div class="form-section addInfo">
-                <h3>Thêm tài khoản</h3>
-                <label for="usernameInput">Tên tài khoản:</label>
-                <input type="text" id="usernameInput" placeholder="Nhập tên tài khoản" />
-                <label for="userRoleInput">Quyền:</label>
-                <select id="userRoleInput">
-                    <option value="admin">Admin</option>
-                    <option value="staff">Nhân viên</option>
-                </select>
-                <button class="btn-add" onclick="addUser()">Thêm tài khoản mới</button>
-            </div>
-
-            <!-- Nút Lưu thay đổi -->
-            <button class="btn-save" onclick="saveChanges()"><i class="fa-solid fa-floppy-disk"></i> Lưu thay
-                đổi</button>
-        </div>
-    </div>
-    <!-- Modal Cấu Hình Hệ Thống -->
-    <div id="systemConfigModal" class="modal system-config-modal">
-        <div class="modal-content">
-            <div class="header">
-                <span class="close-button" onclick="closeModal('systemConfig')">&times;</span>
-                <h2>
-                    <i class="fa fa-cogs"></i> Cấu Hình Hệ Thống
-                </h2>
-            </div>
-
-            <form id="systemConfigForm" class="form-section">
-                <div class="form-group">
-                    <label for="systemName"><i class="fa fa-desktop"></i> Tên Hệ Thống:</label>
-                    <input type="text" id="systemName" placeholder="Nhập tên hệ thống" />
-                </div>
-
-                <div class="form-group">
-                    <label for="adminEmail"><i class="fa fa-envelope"></i> Email Quản Trị:</label>
-                    <input type="email" id="adminEmail" placeholder="Nhập email quản trị" />
-                </div>
-
-                <div class="form-group">
-                    <label for="language"><i class="fa fa-language"></i> Ngôn Ngữ:</label>
-                    <select id="language">
-                        <option value="vi">Tiếng Việt</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="timeZone"><i class="fa fa-clock"></i> Múi Giờ:</label>
-                    <select id="timeZone">
-                        <option value="UTC+7">UTC+7 (Vietnam)</option>
-                        <option value="UTC+8">UTC+8 (England)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="maintenanceMode"><i class="fa fa-wrench"></i> Chế Độ Bảo Trì:</label>
-                    <select id="maintenanceMode">
-                        <option value="off">Tắt</option>
-                        <option value="on">Bật</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="maxUsers"><i class="fa fa-users"></i> Số Lượng Người Dùng Tối Đa:</label>
-                    <input type="number" id="maxUsers" placeholder="Nhập số lượng người dùng tối đa" />
-                </div>
-            </form>
-            <div class="form-buttons">
-                <button type="button" class="btn-save" onclick="saveSystemConfig()"><i
-                        class="fa-solid fa-floppy-disk"></i> Lưu Cấu Hình</button>
-            </div>
-        </div>
-    </div>
-    <div id="activityLogModal" class="modal system-activity">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal('activityLog')">&times;</span>
-            <h2>Nhật Ký Hoạt Động</h2>
-
-            <!-- Bộ lọc -->
-            <div class="filters">
-                <!-- Phần Tìm kiếm -->
-                <div class="filter-item">
-                    <label for="searchInput">
-                        <i class="fas fa-search"></i> Tìm kiếm:
-                    </label>
-                    <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên, hoạt động..." />
-                </div>
-
-                <!-- Phần Từ ngày -->
-                <div class="filter-item">
-                    <label for="fromDate">
-                        <i class="fas fa-calendar-alt"></i> Từ ngày:
-                    </label>
-                    <input type="date" id="fromDate" />
-                </div>
-
-                <!-- Phần Đến ngày -->
-                <div class="filter-item">
-                    <label for="toDate">
-                        <i class="fas fa-calendar-alt"></i> Đến ngày:
-                    </label>
-                    <input type="date" id="toDate" />
-                </div>
-
-                <!-- Nút Lọc -->
-                <div class="filter-button">
-                    <button class="btn-filter" onclick="filterLogs()">Lọc</button>
-                </div>
-            </div>
-
-            <!-- Bảng nhật ký -->
-            <table class="activity-log">
-                <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Thời gian</th>
-                    <th>Người thực hiện</th>
-                    <th>Hành động</th>
-                    <th>Kết quả</th>
-                    <th>Ghi chú</th>
-                </tr>
-                </thead>
-                <tbody id="activityLogBody">
-                <!-- Nhật ký sẽ được thêm bằng JS -->
-                </tbody>
-            </table>
-
-            <!-- Nút hành động -->
-            <div class="action-buttons">
-                <button class="btn-clear" onclick="clearLogs()">Xóa toàn bộ nhật ký</button>
-                <button class="btn-export" onclick="exportLogs()">Xuất File</button>
-            </div>
-        </div>
-    </div>
-    <!-- Quản lý khuyến mãi -->
-    <div id="promotionModal1" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="custom-close-button" onclick="closeModal('promotion')">&times;</span>
-            <h2>Thêm Khuyến Mãi</h2>
-            <form id="promotionForm">
-                <div class="form-group">
-                    <label for="promotionName">Tên Khuyến Mãi:</label>
-                    <input type="text" id="promotionName" placeholder="Nhập tên khuyến mãi" required>
-                </div>
-                <div class="form-group">
-                    <label for="discount">Giảm Giá (%):</label>
-                    <input type="text" id="discount" min="1" max="100" placeholder="Nhập giảm giá" required>
-                </div>
-                <div class="form-group">
-                    <label for="startDate">Ngày Bắt Đầu:</label>
-                    <input type="date" id="startDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="endDate">Ngày Kết Thúc:</label>
-                    <input type="date" id="endDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="productTypeSelect">Loại Sản Phẩm Áp Dụng</label>
-                    <select id="productTypeSelect">
-                        <option value="all">Tất cả sản phẩm</option>
-                        <option value="domestic">Sản phẩm trong nước</option>
-                        <option value="imported">Sản phẩm nhập khẩu</option>
-                        <option value="today_fruits">Trái Ngon Hôm Nay</option>
-                        <option value="vietnam_fruits">Trái Cây Việt Nam</option>
-                        <option value="imported_fruits">Trái Cây Nhập Khẩu</option>
-                        <option value="precut_fruits">Trái Cây Cắt Sẵn</option>
-                        <option value="fruit_gifts">Quà Tặng Trái Cây</option>
-                        <option value="mooncake_gifts">Hộp Quà Nguyệt Cát</option>
-                        <option value="dried_fruits">Trái Cây Sấy Khô</option>
-                        <option value="fruit_jam">Mứt Trái Cây</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" id="savePromotionBtn" class="btn-save">Lưu</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Modal Sửa Khuyến Mãi -->
-    <div id="editPromotionModal" class="modal">
-        <div class="editPromotionModal-content">
-            <h3>Chỉnh Sửa Chương Trình Khuyến Mãi</h3>
-            <form id="editPromotionForm" class="editPromotion">
-                <label for="promoTitle">Tên Chương Trình</label>
-                <input type="text" id="promoTitle" placeholder="Nhập tên chương trình">
-                <label for="promoDiscount">Phần Trăm Giảm Giá</label>
-                <input type="number" id="promoDiscount" placeholder="Nhập % giảm giá">
-                <label for="promoStart">Thời Gian Bắt Đầu</label>
-                <input type="date" id="promoStart">
-                <label for="promoEnd">Thời Gian Kết Thúc</label>
-                <input type="date" id="promoEnd">
-                <label for="productTypeSelect">Loại Sản Phẩm Áp Dụng</label>
-                <select id="productTypeSelect">
-                    <option value="all">Tất cả sản phẩm</option>
-                    <option value="domestic">Sản phẩm trong nước</option>
-                    <option value="imported">Sản phẩm nhập khẩu</option>
-                    <option value="today_fruits">Trái Ngon Hôm Nay</option>
-                    <option value="vietnam_fruits">Trái Cây Việt Nam</option>
-                    <option value="imported_fruits">Trái Cây Nhập Khẩu</option>
-                    <option value="precut_fruits">Trái Cây Cắt Sẵn</option>
-                    <option value="fruit_gifts">Quà Tặng Trái Cây</option>
-                    <option value="mooncake_gifts">Hộp Quà Nguyệt Cát</option>
-                    <option value="dried_fruits">Trái Cây Sấy Khô</option>
-                    <option value="fruit_jam">Mứt Trái Cây</option>
-                </select>
-            </form>
-            <div class="save-close" style="padding-top: 30px">
-                <button type="submit">Lưu</button>
-                <button type="button" onclick="closeModal()">Hủy</button>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Xóa Khuyến Mãi -->
-    <div id="deletePromotionModal" class="modal">
-        <div class="deletePromotionModal-content">
-            <h3>Xác Nhận Xóa Chương Trình</h3>
-            <div class="delete-cancel">
-                <button id="confirmDeleteButton">Xóa</button>
-                <button type="button" onclick="closeModal('deletePromotion')">Hủy</button>
-            </div>
+        <div class="total-section">
+            <p><strong>Tổng thanh toán:</strong> <span id="totalPrice" class="money large"></span></p>
         </div>
     </div>
 </div>
+
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/logicAdmin.js"></script>
+<%--<script src="${pageContext.request.contextPath}/assets/js/logicAdmin.js"></script>--%>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
@@ -1339,7 +1092,37 @@
         });
     });
 </script>
+<script>
+    function openInvoiceDetail(invoice) {
+        document.getElementById('invoiceOverlay').style.display = 'flex';
 
+        document.getElementById('invoiceIdDisplay').innerText = invoice.id;
+        document.getElementById('customerName').innerText = invoice.name;
+        document.getElementById('createdAt').innerText = invoice.createdAt;
+        document.getElementById('address').innerText = invoice.address;
+        document.getElementById('shippingFee').innerText = invoice.shippingFee.toLocaleString() + ' đ';
+
+        const body = document.getElementById('invoiceProductBody');
+        body.innerHTML = '';
+
+        let totalProduct = 0;
+        invoice.products.forEach((p, index) => {
+            const subtotal = p.quantity * p.price;
+            totalProduct += subtotal;
+            body.innerHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${p.name}</td>
+                <td>${p.quantity}</td>
+                <td>${p.price.toLocaleString()} đ</td>
+                <td>${subtotal.toLocaleString()} đ</td>
+            </tr>
+        `;
+        });
+
+        document.getElementById('totalPrice').innerText = Number(invoice.totalPrice).toLocaleString() + ' đ';
+    }
+</script>
 </body>
 
 </html>
