@@ -1030,6 +1030,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <%--<script src="${pageContext.request.contextPath}/assets/js/logicAdmin.js"></script>--%>

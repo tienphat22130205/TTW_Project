@@ -99,6 +99,7 @@
 <script src="${pageContext.request.contextPath}/assets/js/formlogin.js"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Google Sign-In
     function signInWithGoogle() {
@@ -140,5 +141,15 @@
         }, {scope: 'email'});
     }
 </script>
+<c:if test="${param.error == 'unauthorized'}">
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cảnh báo',
+            text: 'Bạn cần đăng nhập với quyền quản trị để vào trang admin!',
+            confirmButtonText: 'OK'
+        });
+    </script>
+</c:if>
 </body>
 </html>

@@ -20,7 +20,6 @@ public class ListAdmin extends HttpServlet {
         FeedbackDao feedbackDao = new FeedbackDao();
         CustomerService customerService = new CustomerService();
         ProductService productService = new ProductService();
-//        InvoiceService invoiceService = new InvoiceService();
         SupplierService supplierService = new SupplierService();
 
         // Lấy số trang từ request, mặc định là trang 1 nếu không có
