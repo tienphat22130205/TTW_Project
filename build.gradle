@@ -47,9 +47,9 @@ java {
 }
 remotes {
     host {
-        host = '192.168.40.131'
+        host = '192.168.154.131'
         user = 'root'
-        password = 'tphat'
+        password = '123456'
     }
 }
 ssh.settings {
@@ -103,6 +103,7 @@ publishing {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
 tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
 }

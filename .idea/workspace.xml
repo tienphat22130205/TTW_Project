@@ -10,6 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af7fb542-29e9-4d2e-8ca9-352998f6cb77" name="Changes" comment="">
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_5_2025_10_01_PM_[Changes]/fileHashes.bin" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_5_2025_10_01_PM_[Changes]/fileHashes.lock" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_5_2025_10_01_PM_[Changes]/shelved.patch" afterDir="false" />
@@ -20,12 +21,18 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/filter/AdminFilter.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/webapp/user/unauthorized.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" afterDir="false" />
+>>>>>>> 7a05230dac88ed49e900136fa0b4df687f9a3da5
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" afterDir="false" />
@@ -38,6 +45,13 @@
       <change beforePath="$PROJECT_DIR$/src/main/webapp/assets/css/admin.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/admin.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/assets/js/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/assets/js/admin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/user/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/user/login.jsp" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmuaf/fit/project_fruit/controller/admin/ListAdmin.java" afterDir="false" />
+>>>>>>> 7a05230dac88ed49e900136fa0b4df687f9a3da5
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,12 +71,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="project_fruit" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -135,6 +144,8 @@
     "Application.PromotionsDao.executor": "Run",
     "Application.ShippingMethodService.executor": "Run",
     "Application.UserDao.executor": "Run",
+    "Gradle.Build TTW_Project-QuangNhat.executor": "Run",
+    "Gradle.Build TTW_Project.executor": "Run",
     "Gradle.Build project_fruit.executor": "Run",
     "Gradle.project_fruit [:vn.edu.hcmuaf.fit.project_fruit.dao.InvoiceDao.main()].executor": "Run",
     "Gradle.project_fruit [:vn.edu.hcmuaf.fit.project_fruit.dao.InvoiceDetailDao.main()].executor": "Run",
@@ -146,6 +157,7 @@
     "Smart Tomcat.Tomcat: project_fruit.executor": "Run",
     "Tomcat Server.Tomcat .executor": "Run",
     "Tomcat Server.Tomcat 10.1.31.executor": "Run",
+    "Tomcat Server.Tomcat 10.1.39.executor": "Run",
     "Tomcat Server.Tomcat 10.executor": "Run",
     "git-widget-placeholder": "Merging main",
     "kotlin-language-version-configured": "true",
@@ -158,7 +170,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.applicationServers",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -177,6 +189,7 @@
       <recent name="D:\TTW_Project\project_fruit\src\main\webapp" />
     </key>
   </component>
+<<<<<<< HEAD
   <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.31">
     <configuration name="InvoiceDao" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="vn.edu.hcmuaf.fit.project_fruit.dao.InvoiceDao" />
@@ -204,6 +217,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+=======
+  <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.39">
+>>>>>>> 7a05230dac88ed49e900136fa0b4df687f9a3da5
     <configuration name="project_fruit [docker_app_start]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -270,7 +286,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Tomcat 10.1.31" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.31" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17" nameIsGenerated="true">
+    <configuration name="Tomcat 10.1.39" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.39" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17" nameIsGenerated="true">
       <option name="BROWSER_ID" value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
       <option name="UPDATING_POLICY" value="redeploy-artifacts" />
       <deployment>
@@ -365,15 +381,23 @@
       <item itemvalue="Gradle.project_fruit [docker_app_start]" />
       <item itemvalue="Gradle.project_fruit [docker_deploy]" />
       <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
-      <item itemvalue="Tomcat Server.Tomcat 10.1.31" />
+      <item itemvalue="Tomcat Server.Tomcat 10.1.39" />
     </list>
     <recent_temporary>
       <list>
+<<<<<<< HEAD
         <item itemvalue="Application.InvoiceDetailDao" />
         <item itemvalue="Application.InvoiceDao" />
         <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
         <item itemvalue="Gradle.project_fruit [docker_deploy]" />
         <item itemvalue="Gradle.project_fruit [docker_app_start]" />
+=======
+        <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
+        <item itemvalue="Gradle.project_fruit [docker_deploy]" />
+        <item itemvalue="Gradle.project_fruit [docker_app_start]" />
+        <item itemvalue="Gradle.project_fruit [docker_deploy]" />
+        <item itemvalue="Gradle.project_fruit [docker_upload_file_to_server]" />
+>>>>>>> 7a05230dac88ed49e900136fa0b4df687f9a3da5
       </list>
     </recent_temporary>
   </component>

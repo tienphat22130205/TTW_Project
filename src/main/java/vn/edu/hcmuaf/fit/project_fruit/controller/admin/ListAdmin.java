@@ -130,7 +130,7 @@ public class ListAdmin extends HttpServlet {
             request.setAttribute("productMessage", "Không có sản phẩm nào.");
         }
 //----------------------------------------------------------------------------------------------
-        
+
         PromotionsDao promotionDao = new PromotionsDao();  // Tạo đối tượng PromotionDao để lấy dữ liệu khuyến mãi
         int promotionPage = 1;
         if (request.getParameter("promotionPage") != null) {
@@ -165,9 +165,13 @@ public class ListAdmin extends HttpServlet {
         }
         // -------------------------------------
         // Lấy danh sách đơn hàng (Invoices)
+<<<<<<< HEAD
         InvoiceService invoiceService = new InvoiceService();
         List<Invoice> invoices = invoiceService.getAllInvoices();
         request.setAttribute("invoices", invoices);
+=======
+
+>>>>>>> 7a05230dac88ed49e900136fa0b4df687f9a3da5
 
 
         // Chuyển tiếp tới JSP
