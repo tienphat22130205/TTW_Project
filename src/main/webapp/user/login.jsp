@@ -77,7 +77,11 @@
             <div class="form__social">
                 <span class="form__social-text">Đăng nhập bằng</span>
 
-                <a href="#" class="form__social-icon" onclick="signInWithFacebook();"><i class='bx bxl-facebook' ></i></a>
+                <a href="https://www.facebook.com/v19.0/dialog/oauth?client_id=695103062919463
+&redirect_uri=http://localhost:8091/project_fruit/login-facebook
+&scope=email,public_profile" class="form__social-icon">
+                    <i class='bx bxl-facebook'></i>
+                </a>
                 <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid
 &redirect_uri=http://localhost:8091/project_fruit/google-login
 &response_type=code
