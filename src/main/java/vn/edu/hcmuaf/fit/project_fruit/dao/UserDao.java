@@ -51,7 +51,7 @@ public class UserDao {
     // Đăng ký người dùng vào bảng customers và accounts
     public boolean registerUser(User user, String fullName) {
         String insertCustomerQuery = "INSERT INTO customers (customer_name, customer_phone, address) VALUES (?, ?, ?)";
-        String insertAccountQuery = "INSERT INTO accounts (email, password, role, create_date, id_customer) VALUES (?, ?, ?, ?, ?)";
+        String insertAccountQuery = "INSERT INTO accounts (email, password, role, create_date, id_customer, google_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         Connection connection = null;
         PreparedStatement psCustomer = null;
@@ -84,13 +84,15 @@ public class UserDao {
                 return false;
             }
 
-            // Thêm vào bảng accounts
+            // Thêm vào bảng accounts, có google_id
             psAccount = connection.prepareStatement(insertAccountQuery);
             psAccount.setString(1, user.getEmail());
             psAccount.setString(2, user.getPassword());
             psAccount.setString(3, user.getRole());
             psAccount.setDate(4, Date.valueOf(java.time.LocalDate.now()));
             psAccount.setInt(5, idCustomer);
+            psAccount.setString(6, user.getGoogleId()); // ✅ Thêm google_id ở đây
+
             int accountRows = psAccount.executeUpdate();
 
             if (accountRows == 0) {
@@ -125,6 +127,7 @@ public class UserDao {
         System.out.println("❌ Đăng ký thất bại hoàn toàn.");
         return false;
     }
+
     // Cập nhật mật khẩu theo email
     public boolean updatePasswordByEmail(String email, String hashedPassword) {
         String query = "UPDATE accounts SET password = ? WHERE email = ?";

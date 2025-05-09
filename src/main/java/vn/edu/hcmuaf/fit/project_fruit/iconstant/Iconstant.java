@@ -5,7 +5,7 @@ public class Iconstant {
 
     public static final String GOOGLE_CLIENT_SECRET = "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";
 
-    public static final String GOOGLE_REDIRECT_URI = "http://localhost:9090/project_fruit/user/login.jsp";
+    public static final String GOOGLE_REDIRECT_URI = "http://localhost:8091/project_fruit/google-login";
 
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
 
