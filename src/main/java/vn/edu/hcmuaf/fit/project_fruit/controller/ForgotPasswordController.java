@@ -2,32 +2,36 @@ package vn.edu.hcmuaf.fit.project_fruit.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import vn.edu.hcmuaf.fit.project_fruit.service.UserService;
+import vn.edu.hcmuaf.fit.project_fruit.utils.EmailUtils;
 
 import java.io.IOException;
 
-@WebServlet(name = "ForgotPasswordController", value = "/forgot-password")
+@WebServlet("/forgot-password")
 public class ForgotPasswordController extends HttpServlet {
     private final UserService userService = new UserService();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
-
-        // Xử lý khôi phục mật khẩu
         String newPassword = userService.recoverPassword(email);
 
+        HttpSession session = request.getSession();
+
         if (newPassword != null) {
-            // Hiển thị mật khẩu mới trên giao diện
-            request.setAttribute("successMessage", "Mật khẩu mới của bạn là: " + newPassword);
+            String html = "<p>Bạn đã yêu cầu khôi phục mật khẩu tại VitaminFruit.</p>"
+                    + "<p>Mật khẩu mới của bạn là: <b>" + newPassword + "</b></p>"
+                    + "<p>Hãy đăng nhập và đổi lại mật khẩu.</p>";
+
+            EmailUtils.sendEmail(email, "Khôi phục mật khẩu - VitaminFruit", html);
+
+            session.setAttribute("successMessage", "Mật khẩu mới đã được gửi tới email của bạn.");
         } else {
-            request.setAttribute("errorMessage", "Không thể khôi phục mật khẩu. Email không tồn tại hoặc có lỗi.");
+            session.setAttribute("errorMessage", "Email không tồn tại hoặc lỗi khi gửi.");
         }
 
-        // Chuyển về trang khôi phục mật khẩu
-        request.getRequestDispatcher("/user/forgotPassword.jsp").forward(request, response);
+        // Dùng redirect để tránh lặp lại khi reload
+        response.sendRedirect(request.getContextPath() + "/user/forgotPassword.jsp");
     }
 }

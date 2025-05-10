@@ -9,6 +9,8 @@ public class User implements Serializable {
     private String role;
     private int idCustomer;
     private String googleId;
+    private String verifyToken;
+    private boolean isVerified;
 
     public User() {
     }
@@ -19,6 +21,8 @@ public class User implements Serializable {
         this.role = role;
         this.idCustomer = idCustomer;
         this.googleId = googleId;
+//        this.token = token;
+//        this.isVerified = false;
     }
 
     public int getIdCustomer() {
@@ -66,5 +70,21 @@ public class User implements Serializable {
 
     public void setGoogleId(String googleId) {
         this.googleId = googleId;
+    }
+
+    public String getVerifyToken() {
+        return verifyToken;
+    }
+
+    public void setVerifyToken(String verifyToken) {
+        this.verifyToken = verifyToken;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 }

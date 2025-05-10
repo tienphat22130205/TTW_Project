@@ -40,15 +40,6 @@
       <!-- Nút Khôi Phục -->
       <input type="submit" class="form__button" value="Khôi phục mật khẩu">
 
-      <!-- Thông báo lỗi -->
-      <c:if test="${not empty errorMessage}">
-        <p style="color: red; text-align: center;">${errorMessage}</p>
-      </c:if>
-
-      <!-- Thông báo thành công -->
-      <c:if test="${not empty successMessage}">
-        <p style="color: green; text-align: center;">${successMessage}</p>
-      </c:if>
 
       <div class="register">
         <p>Đã nhớ mật khẩu?</p>
@@ -60,6 +51,25 @@
 
 <script src="${pageContext.request.contextPath}/assets/js/formlogin.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<c:if test="${not empty errorMessage}">
+  <script>
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi!',
+      text: '${errorMessage}'
+    });
+  </script>
+</c:if>
+
+<c:if test="${not empty successMessage}">
+  <script>
+    Swal.fire({
+      icon: 'success',
+      title: 'Thành công!',
+      text: '${successMessage}'
+    });
+  </script>
+</c:if>
 </body>
 
 </html>

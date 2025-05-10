@@ -3,6 +3,7 @@ package vn.edu.hcmuaf.fit.project_fruit.service;
 import org.mindrot.jbcrypt.BCrypt;
 import vn.edu.hcmuaf.fit.project_fruit.dao.UserDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
+import vn.edu.hcmuaf.fit.project_fruit.utils.EmailUtils;
 
 import java.util.UUID;
 
@@ -35,34 +36,34 @@ public class UserService {
 
 
     public boolean registerUser(String email, String password, String confirmPassword, String fullName) {
-        // 1. Kiểm tra email đã tồn tại
         if (userDao.isEmailExists(email)) {
             System.out.println("❌ Email đã tồn tại: " + email);
             return false;
         }
 
-        // 2. Kiểm tra mật khẩu xác nhận
         if (!password.equals(confirmPassword)) {
             System.out.println("❌ Mật khẩu xác nhận không khớp");
             return false;
         }
 
-        // 3. Kiểm tra độ mạnh của mật khẩu
         if (!isStrongPassword(password)) {
             System.out.println("❌ Mật khẩu phải dài ít nhất 8 ký tự, chứa cả chữ và số");
             return false;
         }
 
-        // 4. Hash mật khẩu
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        String token = UUID.randomUUID().toString();
 
-        // 5. Tạo đối tượng User
+        // ✅ Khai báo đối tượng User trước khi sử dụng
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setPassword(hashedPassword);
-        newUser.setRole("user"); // Mặc định là user
+        newUser.setRole("user");
+        newUser.setVerifyToken(token);
+        newUser.setVerified(false);
 
-        // 6. Gọi DAO để lưu vào database
+        EmailUtils.sendVerificationEmail(email, token);
+
         boolean result = userDao.registerUser(newUser, fullName);
 
         if (result) {
@@ -73,6 +74,7 @@ public class UserService {
 
         return result;
     }
+
     // ✅ Hàm kiểm tra mật khẩu mạnh
     public boolean isStrongPassword(String password) {
         return password.length() >= 8 &&
@@ -86,24 +88,12 @@ public class UserService {
 
     // Phục hồi mật khẩu
     public String recoverPassword(String email) {
-        // Kiểm tra email có tồn tại hay không
-        if (!userDao.isEmailExists(email)) {
-            return null; // Email không tồn tại
-        }
+        if (!userDao.isEmailExists(email)) return null;
 
-        // Tạo mật khẩu mới
         String newPassword = generateRandomPassword();
+        String hashed = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
-        // Mã hóa mật khẩu mới
-        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-
-        // Cập nhật mật khẩu vào cơ sở dữ liệu
-        boolean isUpdated = userDao.updatePasswordByEmail(email, hashedPassword);
-
-        if (isUpdated) {
-            return newPassword; // Trả về mật khẩu gốc để gửi qua email
-        }
-        return null; // Cập nhật thất bại
+        return userDao.updatePasswordByEmail(email, hashed) ? newPassword : null;
     }
     public User getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
@@ -111,8 +101,12 @@ public class UserService {
     public boolean linkGoogleAccount(String email, String googleId) {
         return userDao.linkGoogleAccount(email, googleId);
     }
-
+    public boolean verifyEmailByToken(String token) {
+        return userDao.verifyEmailByToken(token);
+    }
+    public boolean updateVerifyToken(String email, String token) {
+        return userDao.updateVerifyToken(email, token);
+    }
 }
 
 
-    

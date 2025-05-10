@@ -35,7 +35,7 @@
                 </div>
                 <div class="form__div-input">
                     <label for="fullName" class="form__label">Tên đầy đủ</label>
-                    <input type="text" id="fullName" name="fullName" class="form__input" required>
+                    <input type="text" id="fullName" name="fullName" class="form__input" required value="${oldFullName}">
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
                 </div>
                 <div class="form__div-input">
                     <label for="email" class="form__label">Email</label>
-                    <input type="email" id="email" name="email" class="form__input" required>
+                    <input type="email" id="email" name="email" class="form__input" required value="${oldEmail}">
                 </div>
             </div>
 

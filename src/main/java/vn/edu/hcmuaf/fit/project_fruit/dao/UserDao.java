@@ -24,6 +24,7 @@ public class UserDao {
                         rs.getInt("id_customer"),
                         rs.getString("google_id") // Thêm Google ID
                 );
+                user.setVerified(rs.getInt("is_verified") == 1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,7 +52,7 @@ public class UserDao {
     // Đăng ký người dùng vào bảng customers và accounts
     public boolean registerUser(User user, String fullName) {
         String insertCustomerQuery = "INSERT INTO customers (customer_name, customer_phone, address) VALUES (?, ?, ?)";
-        String insertAccountQuery = "INSERT INTO accounts (email, password, role, create_date, id_customer, google_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertAccountQuery = "INSERT INTO accounts (email, password, role, create_date, id_customer, verify_token, is_verified) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Connection connection = null;
         PreparedStatement psCustomer = null;
@@ -84,15 +85,15 @@ public class UserDao {
                 return false;
             }
 
-            // Thêm vào bảng accounts, có google_id
+            // Thêm vào bảng accounts
             psAccount = connection.prepareStatement(insertAccountQuery);
             psAccount.setString(1, user.getEmail());
             psAccount.setString(2, user.getPassword());
             psAccount.setString(3, user.getRole());
             psAccount.setDate(4, Date.valueOf(java.time.LocalDate.now()));
             psAccount.setInt(5, idCustomer);
-            psAccount.setString(6, user.getGoogleId()); // ✅ Thêm google_id ở đây
-
+            psAccount.setString(6, user.getVerifyToken());
+            psAccount.setBoolean(7, false);
             int accountRows = psAccount.executeUpdate();
 
             if (accountRows == 0) {
@@ -127,7 +128,6 @@ public class UserDao {
         System.out.println("❌ Đăng ký thất bại hoàn toàn.");
         return false;
     }
-
     // Cập nhật mật khẩu theo email
     public boolean updatePasswordByEmail(String email, String hashedPassword) {
         String query = "UPDATE accounts SET password = ? WHERE email = ?";
@@ -177,7 +177,28 @@ public class UserDao {
         }
         return false;
     }
-
+    public boolean verifyEmailByToken(String token) {
+        String sql = "UPDATE accounts SET is_verified = TRUE, verify_token = NULL WHERE verify_token = ?";
+        try (Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, token);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateVerifyToken(String email, String token) {
+        String query = "UPDATE accounts SET verify_token = ? WHERE email = ?";
+        try (Connection conn = DbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, token);
+            ps.setString(2, email);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static void main(String[] args) {
         // Tạo đối tượng User
         String email = "newuser1" + System.currentTimeMillis() + "@gmail.com"; // random để tránh trùng

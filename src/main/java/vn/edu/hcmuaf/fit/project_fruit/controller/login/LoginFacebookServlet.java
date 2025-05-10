@@ -62,6 +62,7 @@ public class LoginFacebookServlet extends HttpServlet {
                 user.setPassword(""); // không có mật khẩu
                 user.setRole("user");
 
+
                 userDao.registerUser(user, name);
                 user = userDao.getUserByEmail(email);
             }
