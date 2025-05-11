@@ -51,8 +51,10 @@ public class RegisterController extends HttpServlet {
         boolean isRegistered = userService.registerUser(email, password, confirmPassword, fullName);
 
         if (isRegistered) {
-            response.sendRedirect(request.getContextPath() + "/user/login.jsp");
-        } else {
+            request.setAttribute("email", email); // Truyền email để hiển thị trong form OTP
+            request.getRequestDispatcher("/user/verify-otp.jsp").forward(request, response);
+        }
+        else {
             request.setAttribute("errorMessage", "Đăng ký thất bại do lỗi hệ thống. Vui lòng thử lại.");
             request.getRequestDispatcher("/user/register.jsp").forward(request, response);
         }

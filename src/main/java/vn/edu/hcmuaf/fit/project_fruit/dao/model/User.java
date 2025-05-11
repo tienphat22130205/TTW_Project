@@ -1,6 +1,8 @@
 package vn.edu.hcmuaf.fit.project_fruit.dao.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 
 public class User implements Serializable {
     private int id_account;
@@ -11,6 +13,8 @@ public class User implements Serializable {
     private String googleId;
     private String verifyToken;
     private boolean isVerified;
+    private String otpCode;
+    private Timestamp otpExpiry;
 
     public User() {
     }
@@ -87,4 +91,9 @@ public class User implements Serializable {
     public void setVerified(boolean verified) {
         isVerified = verified;
     }
+    public String getOtpCode() { return otpCode; }
+    public void setOtpCode(String otpCode) { this.otpCode = otpCode; }
+
+    public java.sql.Timestamp getOtpExpiry() { return otpExpiry; }
+    public void setOtpExpiry(Timestamp otpExpiry) { this.otpExpiry = otpExpiry; }
 }

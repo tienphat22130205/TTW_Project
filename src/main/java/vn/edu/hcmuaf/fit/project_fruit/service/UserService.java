@@ -5,6 +5,7 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.UserDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 import vn.edu.hcmuaf.fit.project_fruit.utils.EmailUtils;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class UserService {
@@ -52,17 +53,20 @@ public class UserService {
         }
 
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        String token = UUID.randomUUID().toString();
+        String otpCode = String.valueOf((int)(Math.random() * 900000) + 100000); // Mã OTP 6 chữ số
+        Timestamp expiry = new Timestamp(System.currentTimeMillis() + 5 * 60 * 1000); // Hết hạn sau 5 phút
 
         // ✅ Khai báo đối tượng User trước khi sử dụng
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setPassword(hashedPassword);
         newUser.setRole("user");
-        newUser.setVerifyToken(token);
+        newUser.setOtpCode(otpCode);
+        newUser.setOtpExpiry(expiry);
+        newUser.setVerifyToken(null);
         newUser.setVerified(false);
 
-        EmailUtils.sendVerificationEmail(email, token);
+        EmailUtils.sendOtpEmail(email, otpCode); // ✅ Gửi mã OTP
 
         boolean result = userDao.registerUser(newUser, fullName);
 
@@ -107,6 +111,10 @@ public class UserService {
     public boolean updateVerifyToken(String email, String token) {
         return userDao.updateVerifyToken(email, token);
     }
+    public boolean verifyOtp(String email, String otp) {
+        return userDao.verifyOtpCode(email, otp);
+    }
+
 }
 
 

@@ -52,4 +52,11 @@ public class EmailUtils {
             System.err.println("❌ Lỗi khi gửi email: " + e.getMessage());
         }
     }
+    public static void sendOtpEmail(String toEmail, String otpCode) {
+        String subject = "Mã xác thực OTP - VitaminFruit";
+        String content = "<p>Mã OTP của bạn là: <strong>" + otpCode + "</strong></p>" +
+                "<p>Mã sẽ hết hạn sau 5 phút.</p>";
+        sendEmail(toEmail, subject, content);
+    }
+
 }
