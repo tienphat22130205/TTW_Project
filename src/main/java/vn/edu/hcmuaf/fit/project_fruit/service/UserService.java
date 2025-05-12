@@ -53,8 +53,8 @@ public class UserService {
         }
 
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        String otpCode = String.valueOf((int)(Math.random() * 900000) + 100000); // Mã OTP 6 chữ số
-        Timestamp expiry = new Timestamp(System.currentTimeMillis() + 5 * 60 * 1000); // Hết hạn sau 5 phút
+        String otpCode = String.valueOf((int)(Math.random() * 900000) + 100000);
+        Timestamp expiry = new Timestamp(System.currentTimeMillis() + 5 * 60 * 1000);
 
         // ✅ Khai báo đối tượng User trước khi sử dụng
         User newUser = new User();

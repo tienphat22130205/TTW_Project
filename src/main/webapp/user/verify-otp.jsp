@@ -48,16 +48,36 @@
       <!-- Nút xác thực -->
       <input type="submit" class="form__button" value="Xác thực">
 
-      <!-- Hiển thị thông báo -->
-      <c:if test="${not empty message}">
-        <p style="color: red; text-align: center;">${message}</p>
-      </c:if>
     </form>
   </div>
 </div>
 
 <script src="${pageContext.request.contextPath}/assets/js/formlogin.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  // Thông báo xác thực thành công
+  <c:if test="${message eq 'success'}">
+  Swal.fire({
+    icon: 'success',
+    title: 'Xác thực thành công!',
+    text: 'Bạn có thể đăng nhập ngay bây giờ.',
+    showConfirmButton: false,
+    timer: 3000
+  }).then(() => {
+    window.location.href = '${pageContext.request.contextPath}/user/login.jsp';
+  });
+  </c:if>
+
+  // Thông báo lỗi nếu OTP sai hoặc hết hạn
+  <c:if test="${message eq 'error'}">
+  Swal.fire({
+    icon: 'error',
+    title: 'Xác thực thất bại!',
+    text: '${errorText}',
+    confirmButtonText: 'Thử lại'
+  });
+  </c:if>
+</script>
 </body>
 
 </html>

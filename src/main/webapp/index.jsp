@@ -917,6 +917,20 @@
         window.location.href = `${pageContext.request.contextPath}/add-cart?addToCartPid=` + productId + "&quantity=" + quantity;
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("message") === "google-success") {
+        Swal.fire({
+            icon: 'success',
+            title: 'Đăng nhập Google thành công!',
+            text: 'Chào mừng bạn đến với VitaminFruit!',
+            timer: 2500,
+            showConfirmButton: false
+        });
+    }
+</script>
+
 </body>
 
 </html>

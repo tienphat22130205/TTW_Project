@@ -61,7 +61,7 @@ public class InvoiceDetailDao {
 
     // Main test
     public static void main(String[] args) {
-        int invoiceId = 1; // 👈 Thay bằng ID đơn hàng thực tế bạn muốn kiểm tra
+        int invoiceId = 24; // 👈 Thay bằng ID đơn hàng thực tế bạn muốn kiểm tra
         List<CartProduct> details = InvoiceDetailDao.getInvoiceDetails(invoiceId);
 
         if (details.isEmpty()) {

@@ -50,12 +50,12 @@ public class GoogleLoginServlet extends HttpServlet {
                 userDao.linkGoogleAccount(email, googleId);
             }
             request.getSession().setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/home");
 
             // ✅ Thêm đoạn này để lấy tên hiển thị
             CustomerDao customerDao = new CustomerDao();
             Customer customer = customerDao.getCustomerById(user.getIdCustomer());
             request.getSession().setAttribute("customer", customer);
+            response.sendRedirect(request.getContextPath() + "/home?message=google-success");
 
         } catch (Exception e) {
             e.printStackTrace();

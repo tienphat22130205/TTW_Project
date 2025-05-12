@@ -19,13 +19,14 @@ public class VerifyOtpServlet extends HttpServlet {
         String otp = request.getParameter("otp");
 
         if (userService.verifyOtp(email, otp)) {
-            request.setAttribute("message", "✅ Xác thực OTP thành công!");
+            request.setAttribute("message", "success");
+            request.getRequestDispatcher("/user/verify-otp.jsp").forward(request, response);
         } else {
-            request.setAttribute("message", "❌ Mã OTP không chính xác hoặc đã hết hạn.");
+            request.setAttribute("message", "error");
+            request.setAttribute("errorText", "OTP không đúng hoặc đã hết hạn.");
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("/user/verify-otp.jsp").forward(request, response);
         }
-
-        request.setAttribute("message", "Xác thực thành công. Bạn có thể đăng nhập.");
-        request.getRequestDispatcher("/user/login.jsp").forward(request, response);
     }
 }
 
