@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller.login;
 
 import com.google.gson.JsonObject;
 import jakarta.servlet.ServletException;
@@ -8,15 +8,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
-import vn.edu.hcmuaf.fit.project_fruit.controller.login.GoogleLogin;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 import vn.edu.hcmuaf.fit.project_fruit.service.UserService;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
 
-@WebServlet(name = "GoogleLoginServlet", value = "/google-login")
+@WebServlet("/google-login")
 public class GoogleController extends HttpServlet {
     private final UserService userService = new UserService();
 

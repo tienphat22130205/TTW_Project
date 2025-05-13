@@ -165,13 +165,10 @@ public class ListAdmin extends HttpServlet {
         }
         // -------------------------------------
         // Lấy danh sách đơn hàng (Invoices)
-<<<<<<< HEAD
         InvoiceService invoiceService = new InvoiceService();
         List<Invoice> invoices = invoiceService.getAllInvoices();
         request.setAttribute("invoices", invoices);
-=======
 
->>>>>>> 7a05230dac88ed49e900136fa0b4df687f9a3da5
 
 
         // Chuyển tiếp tới JSP
