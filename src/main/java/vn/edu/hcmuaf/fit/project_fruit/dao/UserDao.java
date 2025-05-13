@@ -24,6 +24,7 @@ public class UserDao {
                         rs.getInt("id_customer"),
                         rs.getString("google_id") // Thêm Google ID
                 );
+                user.setVerified(rs.getInt("is_verified") == 1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,7 +52,7 @@ public class UserDao {
     // Đăng ký người dùng vào bảng customers và accounts
     public boolean registerUser(User user, String fullName) {
         String insertCustomerQuery = "INSERT INTO customers (customer_name, customer_phone, address) VALUES (?, ?, ?)";
-        String insertAccountQuery = "INSERT INTO accounts (email, password, role, create_date, id_customer) VALUES (?, ?, ?, ?, ?)";
+        String insertAccountQuery = "INSERT INTO accounts (email, password, role, create_date, id_customer, verify_token, otp_code, otp_expiry, is_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection connection = null;
         PreparedStatement psCustomer = null;
@@ -91,6 +92,10 @@ public class UserDao {
             psAccount.setString(3, user.getRole());
             psAccount.setDate(4, Date.valueOf(java.time.LocalDate.now()));
             psAccount.setInt(5, idCustomer);
+            psAccount.setString(6, user.getVerifyToken());         // Giữ lại verify_token
+            psAccount.setString(7, user.getOtpCode());             // Mã OTP
+            psAccount.setTimestamp(8, user.getOtpExpiry());        // Thời hạn OTP
+            psAccount.setBoolean(9, false);                        // is_verified
             int accountRows = psAccount.executeUpdate();
 
             if (accountRows == 0) {
@@ -169,6 +174,51 @@ public class UserDao {
             ps.setString(1, googleId);
             ps.setString(2, email);
             return ps.executeUpdate() > 0; // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean verifyEmailByToken(String token) {
+        String sql = "UPDATE accounts SET is_verified = TRUE, verify_token = NULL WHERE verify_token = ?";
+        try (Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, token);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateVerifyToken(String email, String token) {
+        String query = "UPDATE accounts SET verify_token = ? WHERE email = ?";
+        try (Connection conn = DbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, token);
+            ps.setString(2, email);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean verifyOtpCode(String email, String otp) {
+        String sql = "SELECT otp_expiry FROM accounts WHERE email = ? AND otp_code = ?";
+        try (Connection conn = DbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, otp);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Timestamp expiry = rs.getTimestamp("otp_expiry");
+                if (expiry != null && expiry.after(new Timestamp(System.currentTimeMillis()))) {
+                    // Đúng OTP và chưa hết hạn → xác thực
+                    String updateSql = "UPDATE accounts SET is_verified = TRUE, otp_code = NULL, otp_expiry = NULL WHERE email = ?";
+                    try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
+                        updatePs.setString(1, email);
+                        return updatePs.executeUpdate() > 0;
+                    }
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -5,9 +5,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 import vn.edu.hcmuaf.fit.project_fruit.service.UserService;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
@@ -19,6 +21,8 @@ public class RegisterController extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
+        String token = UUID.randomUUID().toString();
+        User user = new User();
 
         // Gán lại để hiển thị lại form nếu lỗi
         request.setAttribute("oldFullName", fullName);
@@ -47,8 +51,10 @@ public class RegisterController extends HttpServlet {
         boolean isRegistered = userService.registerUser(email, password, confirmPassword, fullName);
 
         if (isRegistered) {
-            response.sendRedirect(request.getContextPath() + "/user/login.jsp");
-        } else {
+            request.setAttribute("email", email); // Truyền email để hiển thị trong form OTP
+            request.getRequestDispatcher("/user/verify-otp.jsp").forward(request, response);
+        }
+        else {
             request.setAttribute("errorMessage", "Đăng ký thất bại do lỗi hệ thống. Vui lòng thử lại.");
             request.getRequestDispatcher("/user/register.jsp").forward(request, response);
         }

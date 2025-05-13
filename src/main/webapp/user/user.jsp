@@ -73,6 +73,71 @@
             font-style: italic;
             margin-top: 30px;
         }
+        /* Overlay nền mờ */
+        #logoutOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* Hộp xác nhận */
+        .logout-confirm-box {
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            animation: slideDown 0.3s ease-out;
+        }
+        .logout-confirm-box p{
+            font-size: 14px;
+        }
+
+        /* Hiệu ứng xuất hiện */
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Nút */
+        .logout-confirm-box button {
+            padding: 8px 16px;
+            margin: 10px 5px 0 5px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        /* Nút "Đăng xuất" */
+        .logout-confirm-box .confirm-btn {
+            background-color: #ff6700; /* cam chủ đạo */
+            color: white;
+        }
+
+        .logout-confirm-box .confirm-btn:hover {
+            background-color: #e55c00;
+        }
+
+        /* Nút "Hủy" */
+        .logout-confirm-box .cancel-btn {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .logout-confirm-box .cancel-btn:hover {
+            background-color: #aaa;
+        }
+
     </style>
 </head>
 
@@ -231,7 +296,11 @@
             <li><a href="#" onclick="showSection('order-management', this)"><i class="fas fa-box"></i> Quản lý đơn hàng</a></li>
             <li><a href="#" onclick="showSection('recent-viewed', this)"><i class="fas fa-clock"></i> Sản phẩm đã xem</a></li>
             <li><a href="#" onclick="showSection('change-password', this)"><i class="fas fa-key"></i> Đổi Mật Khẩu</a></li>
-            <li><a href="${pageContext.request.contextPath}/logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+            <li>
+                <a href="#" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -420,6 +489,13 @@
     </div>
     <div class="credit">Copyright © 2024 <span>Nhom 55 - Trái Cây Chất Lượng Cao</span></div>
 </section>
+<div id="logoutOverlay">
+    <div class="logout-confirm-box">
+        <p>Bạn chắc chắn muốn đăng xuất tài khoản?</p>
+        <button class="confirm-btn" onclick="window.location.href='${pageContext.request.contextPath}/logout'">Đăng Xuất</button>
+        <button class="cancel-btn" onclick="document.getElementById('logoutOverlay').style.display='none'">Hủy</button>
+    </div>
+</div>
 <script src="${pageContext.request.contextPath}/assets/js/user.js" defer></script>
 <script src="${pageContext.request.contextPath}/assets/js/fruit.js" defer></script>
 <script>
@@ -430,6 +506,12 @@
         document.querySelectorAll('.sidebar ul li a').forEach(link => link.classList.remove('active'));
         element.classList.add('active');
     }
+</script>
+<script>
+    document.getElementById("logoutBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("logoutOverlay").style.display = "flex";
+    });
 </script>
 </body>
 

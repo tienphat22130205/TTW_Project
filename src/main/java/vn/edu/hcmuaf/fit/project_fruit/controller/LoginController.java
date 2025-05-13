@@ -20,12 +20,21 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Đăng nhập bằng tài khoản thông thường
         String email = request.getParameter("useremail");
         String password = request.getParameter("pass");
 
         User user = userService.validateUser(email, password);
+
         if (user != null) {
+            // ✅ Kiểm tra nếu tài khoản chưa xác thực
+            if (!user.isVerified()) {
+                request.setAttribute("errorMessage", "Tài khoản chưa được xác thực qua email. Vui lòng kiểm tra hộp thư.");
+                request.setAttribute("resendVerificationEmail", email);
+                request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+                return;
+            }
+
+            // ✅ Nếu đã xác thực → cho đăng nhập
             loginUser(request, response, user);
         } else {
             request.setAttribute("errorMessage", "Email hoặc mật khẩu không chính xác.");
