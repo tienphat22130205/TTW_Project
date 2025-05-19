@@ -55,7 +55,7 @@ public class GoogleLoginServlet extends HttpServlet {
             CustomerDao customerDao = new CustomerDao();
             Customer customer = customerDao.getCustomerById(user.getIdCustomer());
             request.getSession().setAttribute("customer", customer);
-            response.sendRedirect(request.getContextPath() + "/home?message=google-success");
+            response.sendRedirect(request.getContextPath() + "/home");
 
         } catch (Exception e) {
             e.printStackTrace();

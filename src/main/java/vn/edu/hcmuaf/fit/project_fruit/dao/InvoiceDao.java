@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.project_fruit.dao;
 
+import vn.edu.hcmuaf.fit.project_fruit.dao.cart.CartProduct;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Invoice;
 
@@ -13,8 +14,8 @@ public class InvoiceDao {
     public int addInvoice(Invoice invoice) {
         String sql = """
             INSERT INTO invoices (id_account, receiver_name, phone, email, address_full,
-                                  payment_method, shipping_method, total_price, shipping_fee, status, create_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                                  payment_method, shipping_method, total_price, shipping_fee, status,order_status, create_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
         """;
         int generatedId = -1;
 
@@ -29,6 +30,7 @@ public class InvoiceDao {
             ps.setDouble(8, invoice.getTotalPrice());
             ps.setDouble(9, invoice.getShippingFee());
             ps.setString(10, invoice.getStatus());
+            ps.setString(11, invoice.getOrderStatus());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
@@ -57,6 +59,7 @@ public class InvoiceDao {
                 i.email,
                 i.payment_method,
                 i.status,
+                i.order_status,
                 i.address_full,
                 i.total_price,
                 i.shipping_fee,
@@ -78,6 +81,7 @@ public class InvoiceDao {
                 invoice.setEmail(rs.getString("email"));
                 invoice.setPaymentMethod(rs.getString("payment_method"));
                 invoice.setStatus(rs.getString("status"));
+                invoice.setOrderStatus(rs.getString("order_status"));
                 invoice.setShippingFee(rs.getDouble("shipping_fee"));
                 invoice.setAddressFull(rs.getString("address_full"));
                 invoice.setTotalPrice(rs.getDouble("total_price"));
@@ -95,7 +99,7 @@ public class InvoiceDao {
         String sql = """
         SELECT 
             i.id_invoice, c.customer_name, i.receiver_name, i.phone, i.email,
-            i.address_full, i.total_price,i.shipping_fee, i.payment_method, i.status, i.create_date
+            i.address_full, i.total_price,i.shipping_fee, i.payment_method, i.status,i.order_status, i.create_date
         FROM invoices i
         JOIN accounts a ON i.id_account = a.id_account
         JOIN customers c ON a.id_customer = c.id_customer
@@ -117,6 +121,7 @@ public class InvoiceDao {
                 invoice.setShippingFee(rs.getDouble("shipping_fee"));
                 invoice.setPaymentMethod(rs.getString("payment_method"));
                 invoice.setStatus(rs.getString("status"));
+                invoice.setOrderStatus(rs.getString("order_status"));
                 invoice.setCreateDate(rs.getTimestamp("create_date"));
                 return invoice;
             }
@@ -126,49 +131,59 @@ public class InvoiceDao {
 
         return null;
     }
-
-    public static void main(String[] args) {
-        InvoiceDao dao = new InvoiceDao();
-
-        // 1️⃣ Lấy toàn bộ đơn hàng
-        List<Invoice> invoices = dao.getAllInvoices();
-        System.out.println("📋 Danh sách đơn hàng:");
-        for (Invoice invoice : invoices) {
-            System.out.println("---------------");
-            System.out.println("🆔 Mã đơn hàng: " + invoice.getIdInvoice());
-            System.out.println("👤 Tài khoản đặt hàng: " + invoice.getAccountName());
-            System.out.println("📞 SĐT người nhận: " + invoice.getPhone());
-            System.out.println("📧 Email: " + invoice.getEmail());
-            System.out.println("📦 Thanh toán: " + invoice.getPaymentMethod());
-            System.out.println("📍 Địa chỉ: " + invoice.getAddressFull());
-            System.out.println("💰 Tổng tiền: " + invoice.getTotalPrice());
-            System.out.println("📅 Ngày tạo: " + invoice.getCreateDate());
-            System.out.println("🪧 Trạng thái: " + invoice.getStatus());
-        }
-
-        // 2️⃣ Lấy thông tin chi tiết đơn hàng đầu tiên (nếu có)
-        if (!invoices.isEmpty()) {
-            int invoiceId = invoices.get(0).getIdInvoice();
-            System.out.println("\n🔍 Kiểm tra chi tiết đơn hàng với ID = " + invoiceId);
-            Invoice invoiceDetail = InvoiceDao.getInvoiceById(invoiceId);
-
-            if (invoiceDetail != null) {
-                System.out.println("✅ Đã tìm thấy chi tiết đơn:");
-                System.out.println("🆔 Mã đơn hàng: " + invoiceDetail.getIdInvoice());
-                System.out.println("👤 Người đặt: " + invoiceDetail.getAccountName());
-                System.out.println("📞 SĐT: " + invoiceDetail.getPhone());
-                System.out.println("📧 Email: " + invoiceDetail.getEmail());
-                System.out.println("📦 Thanh toán: " + invoiceDetail.getPaymentMethod());
-                System.out.println("📍 Địa chỉ: " + invoiceDetail.getAddressFull());
-                System.out.println("💰 Tổng tiền: " + invoiceDetail.getTotalPrice());
-                System.out.println("📅 Ngày tạo: " + invoiceDetail.getCreateDate());
-                System.out.println("🪧 Trạng thái: " + invoiceDetail.getStatus());
-            } else {
-                System.out.println("❌ Không tìm thấy đơn hàng có ID = " + invoiceId);
-            }
-        } else {
-            System.out.println("❌ Không có đơn hàng nào để kiểm tra chi tiết.");
+    public boolean updateInvoiceStatus(int invoiceId, String status) {
+        String sql = "UPDATE invoices SET status = ? WHERE id_invoice = ?";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, false)) {
+            ps.setString(1, status);
+            ps.setInt(2, invoiceId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi cập nhật trạng thái đơn hàng #" + invoiceId);
+            e.printStackTrace();
+            return false;
         }
     }
+    public boolean updateOrderStatus(int invoiceId, String orderStatus) {
+        String sql = "UPDATE invoices SET order_status = ? WHERE id_invoice = ?";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, false)) {
+            ps.setString(1, orderStatus);
+            ps.setInt(2, invoiceId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi cập nhật order_status đơn hàng #" + invoiceId);
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static void main(String[] args) {
+        InvoiceDao invoiceDao = new InvoiceDao();
+        List<Invoice> invoices = invoiceDao.getAllInvoices();
+
+        if (invoices.isEmpty()) {
+            System.out.println("⚠️ Không có đơn hàng nào trong hệ thống.");
+            return;
+        }
+
+        System.out.println("📋 DANH SÁCH TẤT CẢ ĐƠN HÀNG:\n");
+
+        int index = 1;
+        for (Invoice invoice : invoices) {
+            System.out.println("========= Đơn hàng #" + invoice.getIdInvoice() + " =========");
+            System.out.println("🔢 STT: " + index++);
+            System.out.println("👤 Người đặt: " + invoice.getAccountName());
+            System.out.println("📞 SĐT: " + invoice.getPhone());
+            System.out.println("📧 Email: " + invoice.getEmail());
+            System.out.println("📍 Địa chỉ nhận hàng: " + invoice.getAddressFull());
+            System.out.println("💳 Phương thức thanh toán: " + invoice.getPaymentMethod());
+            System.out.println("🚛 Phí vận chuyển: " + invoice.getShippingFee() + " đ");
+            System.out.println("💰 Tổng thanh toán: " + invoice.getTotalPrice() + " đ");
+            System.out.println("📦 Trạng thái thanh toán: " + invoice.getStatus());
+            System.out.println("🔄 Trạng thái đơn hàng: " + invoice.getOrderStatus());
+            System.out.println("📅 Ngày tạo: " + invoice.getCreateDate());
+            System.out.println("--------------------------------------------\n");
+        }
+    }
+
+
 
 }

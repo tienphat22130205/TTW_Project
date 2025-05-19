@@ -1,6 +1,0 @@
-0:0:0:0:0:0:0:1 - - [17/Apr/2025:23:42:18 +0700] "GET /project_fruit HTTP/1.1" 302 -
-0:0:0:0:0:0:0:1 - - [17/Apr/2025:23:42:20 +0700] "GET /project_fruit/ HTTP/1.1" 200 188338
-0:0:0:0:0:0:0:1 - - [17/Apr/2025:23:42:23 +0700] "GET /project_fruit/user/login.jsp HTTP/1.1" 200 5036
-0:0:0:0:0:0:0:1 - - [17/Apr/2025:23:42:24 +0700] "GET /favicon.ico HTTP/1.1" 404 683
-0:0:0:0:0:0:0:1 - - [17/Apr/2025:23:42:32 +0700] "GET /project_fruit/admin HTTP/1.1" 200 256499
-0:0:0:0:0:0:0:1 - - [17/Apr/2025:23:42:32 +0700] "GET /project_fruit/assets/js/admin.js HTTP/1.1" 200 50781

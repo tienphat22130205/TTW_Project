@@ -128,6 +128,107 @@
                 transform: translateY(0);
             }
         }
+         .btn-circle {
+             width: 36px;
+             height: 36px;
+             border-radius: 50%;
+             border: none;
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             cursor: pointer;
+             transition: 0.3s ease;
+             font-size: 16px;
+             margin: 0 3px;
+         }
+
+        .btn-approve {
+            background-color: #d4f5e9;
+            color: #2ecc71;
+        }
+
+        .btn-approve:hover {
+            background-color: #a8eecf;
+        }
+
+        .btn-cancel {
+            background-color: #ffe6e6;
+            color: #e74c3c;
+        }
+
+        .btn-cancel:hover {
+            background-color: #f5bfbf;
+        }
+
+        .btn-icon {
+            pointer-events: none;
+        }
+        /* Trạng thái thanh toán */
+        .status-paid {
+            background-color: #d4f8d4; /* xanh nhạt */
+            color: #2e7d32;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-unpaid {
+            background-color: #ffe0b2; /* cam nhạt */
+            color: #ef6c00;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-canceled {
+            background-color: #ffcdd2; /* đỏ nhạt */
+            color: #c62828;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Trạng thái đơn hàng */
+        .order-processing {
+            background-color: #fff3cd; /* vàng nhạt */
+            color: #856404;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .order-shipped {
+            background-color: #e1f5fe; /* xanh dương nhạt */
+            color: #0277bd;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .order-delivered {
+            background-color: #d4edda; /* xanh lá nhạt */
+            color: #155724;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .swal2-smaller-popup {
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+        .swal2-sm-btn {
+            font-size: 14px !important;
+            padding: 6px 16px !important;
+            border-radius: 4px !important;
+        }
+
     </style>
 <body>
 <input type="checkbox" name="" id="nav-toggle">
@@ -650,45 +751,84 @@
                                 <tr>
                                     <th>Họ tên</th>
                                     <th>SĐT</th>
-                                    <th>Email</th>
                                     <th>Chi tiết hóa đơn</th>
                                     <th>Phương thức thanh toán</th>
-                                    <th>Tình trạng</th>
+                                    <th>Tình trạng thanh toán</th>
+                                    <th>Tình trạng đơn hàng</th>
                                     <th>Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="invoice" items="${invoices}">
-                                    <tr>
-                                        <td>${invoice.receiverName}</td>
-                                        <td>${invoice.phone}</td>
-                                        <td>${invoice.email}</td>
-                                        <td>
-                                            <button class="detail-button"
-                                                    onclick='openInvoiceDetail({
-                                                            id: "${invoice.idInvoice}",
-                                                            name: "${invoice.receiverName}",
-                                                            phone: "${invoice.phone}",
-                                                            email: "${invoice.email}",
-                                                            address: "${invoice.addressFull}",
-                                                            paymentMethod: "${invoice.paymentMethod}",
-                                                            status: "${invoice.status}",
-                                                            createdAt: "${invoice.createDate}",
-                                                            accountName: "${invoice.accountName}",
-                                                            shippingFee: ${invoice.shippingFee},
-                                                            totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
-                                                            })'>
-                                                Xem chi tiết
-                                            </button>
-                                        </td>
-                                        <td>${invoice.paymentMethod}</td>
-                                        <td>${invoice.status}</td>
-                                        <td>
-                                            <button class="btn-approve">Duyệt</button>
-                                            <button class="btn-cancel">Hủy</button>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
+                                        <tr>
+                                            <td>${invoice.accountName}</td>
+                                            <td>${invoice.phone}</td>
+                                            <td>
+                                                <button onclick='openInvoiceDetail({
+                                                        id: "${invoice.idInvoice}",
+                                                        name: "${invoice.receiverName}",
+                                                        phone: "${invoice.phone}",
+                                                        email: "${invoice.email}",
+                                                        address: "${invoice.addressFull}",
+                                                        paymentMethod: "${invoice.paymentMethod}",
+                                                        status: "${invoice.status}",
+                                                        createdAt: "${invoice.createDate}",
+                                                        accountName: "${invoice.accountName}",
+                                                        shippingFee: ${invoice.shippingFee},
+                                                        totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
+                                                        })'>
+                                                    Xem chi tiết
+                                                </button>
+                                            </td>
+                                            <td>${invoice.paymentMethod}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${invoice.status == 'Đã thanh toán'}">
+                                                        <span class="badge status-paid">Đã thanh toán</span>
+                                                    </c:when>
+                                                    <c:when test="${invoice.status == 'Đã hủy'}">
+                                                        <span class="badge status-canceled">Đã hủy</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge status-unpaid">Chưa thanh toán</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+
+                                            <!-- Tình trạng đơn hàng -->
+                                            <td class="order-status">
+                                                <c:choose>
+                                                    <c:when test="${invoice.orderStatus == 'Đang xử lý'}">
+                                                        <span class="badge order-processing">Đang xử lý</span>
+                                                    </c:when>
+                                                    <c:when test="${invoice.orderStatus == 'Đã giao'}">
+                                                        <span class="badge order-shipped">Đã giao</span>
+                                                    </c:when>
+                                                    <c:when test="${invoice.orderStatus == 'Đã hủy'}">
+                                                        <span class="badge order-canceled">Đã hủy</span>
+                                                    </c:when>
+                                                    <c:when test="${invoice.orderStatus == 'Đang chuẩn bị đơn hàng'}">
+                                                        <span class="badge order-processing">Đang chuẩn bị đơn hàng</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge order-delivered">${invoice.orderStatus}</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <c:if test="${invoice.status == 'Chưa thanh toán'}">
+                                                    <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
+                                                        <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
+                                                            <i class="fas fa-check btn-icon"></i>
+                                                        </button>
+                                                        <button class="btn-circle btn-cancel" onclick="handleAction(${invoice.idInvoice}, 'cancel')">
+                                                            <i class="fas fa-times btn-icon"></i>
+                                                        </button>
+                                                    </div>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
 
@@ -998,42 +1138,41 @@
     </div>
 </div>
 <div id="invoiceOverlay" class="modal-overlay">
-    <div class="modal-content invoice-modal">
-        <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
-        <h2 class="modal-title">🧾 Chi tiết đơn hàng</h2>
+        <div class="modal-content invoice-modal">
+            <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
+            <h2 class="modal-title">🧾 Chi tiết đơn hàng</h2>
 
-        <div class="invoice-info">
-            <div><strong>Mã đơn hàng:</strong> <span id="invoiceIdDisplay"></span></div>
-            <div><strong>Tên người nhận:</strong> <span id="customerName"></span></div>
-            <div><strong>Ngày tạo:</strong> <span id="createdAt"></span></div>
-            <div><strong>Địa chỉ nhận hàng:</strong> <span id="address"></span></div>
-            <div><strong>Phí vận chuyển:</strong> <span id="shippingFee" class="badge green"></span></div>
-        </div>
+            <div class="invoice-info">
+                <div><strong>Mã đơn hàng:</strong> <span id="invoiceIdDisplay"></span></div>
+                <div><strong>Tên người nhận:</strong> <span id="customerName"></span></div>
+                <div><strong>Ngày tạo:</strong> <span id="createdAt"></span></div>
+                <div><strong>Địa chỉ nhận hàng:</strong> <span id="address"></span></div>
+                <div><strong>Phí vận chuyển:</strong> <span id="shippingFee" class="badge green"></span></div>
+            </div>
 
-        <h4 class="section-title">🛒 Danh sách sản phẩm</h4>
-        <table class="invoice-table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Sản phẩm</th>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-            </tr>
-            </thead>
-            <tbody id="invoiceProductBody">
-            </tbody>
-        </table>
+            <h4 class="section-title">🛒 Danh sách sản phẩm</h4>
+            <table class="invoice-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody id="invoiceProductBody">
+                </tbody>
+            </table>
 
-        <div class="total-section">
-            <p><strong>Tổng thanh toán:</strong> <span id="totalPrice" class="money large"></span></p>
+            <div class="total-section">
+                <p><strong>Tổng thanh toán:</strong> <span id="totalPrice" class="money large"></span></p>
+            </div>
         </div>
     </div>
-</div>
 
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<%--<script src="${pageContext.request.contextPath}/assets/js/logicAdmin.js"></script>--%>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
@@ -1100,29 +1239,124 @@
         document.getElementById('customerName').innerText = invoice.name;
         document.getElementById('createdAt').innerText = invoice.createdAt;
         document.getElementById('address').innerText = invoice.address;
-        document.getElementById('shippingFee').innerText = invoice.shippingFee.toLocaleString() + ' đ';
+        document.getElementById('shippingFee').innerText = invoice.shippingFee.toLocaleString('vi-VN') + ' đ';
+        document.getElementById('totalPrice').innerText = invoice.totalPrice.toLocaleString('vi-VN') + ' đ';
 
-        const body = document.getElementById('invoiceProductBody');
-        body.innerHTML = '';
+        const body = document.getElementById("invoiceProductBody");
+        body.innerHTML = "";
 
-        let totalProduct = 0;
-        invoice.products.forEach((p, index) => {
-            const subtotal = p.quantity * p.price;
-            totalProduct += subtotal;
-            body.innerHTML += `
+        // ✅ Sửa tại đây
+        const contextPath = "/" + window.location.pathname.split("/")[1];
+        const fullUrl = `${contextPath}/admin/invoice-detail?id=${invoice.id}`;
+        console.log("📤 Fetch URL:", fullUrl);
+
+        fetch(fullUrl)
+            .then(res => {
+                if (!res.ok) throw new Error("Lỗi khi gọi API chi tiết hóa đơn");
+                return res.json();
+            })
+            .then(products => {
+                console.log("📦 Sản phẩm nhận được:", products);
+
+                if (!products || products.length === 0) {
+                    body.innerHTML = `<tr><td colspan="5" style="color:red;">Không có sản phẩm nào.</td></tr>`;
+                    return;
+                }
+
+                products.forEach((p, index) => {
+                    console.log(`🧾 [${index}]`, p);
+                    const subtotal = p.quantity * p.price * (1 - p.discount / 100);
+                    const row = `
             <tr>
                 <td>${index + 1}</td>
                 <td>${p.name}</td>
                 <td>${p.quantity}</td>
-                <td>${p.price.toLocaleString()} đ</td>
-                <td>${subtotal.toLocaleString()} đ</td>
-            </tr>
-        `;
-        });
-
-        document.getElementById('totalPrice').innerText = Number(invoice.totalPrice).toLocaleString() + ' đ';
+                <td>${p.price.toLocaleString("vi-VN")} đ</td>
+                <td>${subtotal.toLocaleString("vi-VN")} đ</td>
+            </tr>`;
+                    console.log("📋 Dòng HTML tạo ra:", row);
+                    body.innerHTML += row;
+                });
+            })
+                .catch(err => {
+                console.error("❌ Lỗi khi fetch chi tiết sản phẩm:", err);
+                body.innerHTML = `<tr><td colspan="5" style="color:red;">Không thể tải danh sách sản phẩm.</td></tr>`;
+            });
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function handleAction(id, action) {
+        const actionText = action === 'approve' ? 'duyệt đơn hàng' : 'hủy đơn hàng';
+        const actionLabel = action === 'approve' ? 'Duyệt' : 'Hủy';
+
+        Swal.fire({
+            text: `Bạn có chắc chắn muốn ${actionText} #${id}?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            width: 320,
+            padding: '1em',
+            backdrop: true,
+            customClass: {
+                popup: 'swal2-smaller-popup',
+                confirmButton: 'swal2-sm-btn',
+                cancelButton: 'swal2-sm-btn'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('${pageContext.request.contextPath}/admin/approve-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'id=' + id + '&action=' + action
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            const actionWrapper = document.querySelector('[data-id="' + id + '"]');
+                            if (actionWrapper) {
+                                actionWrapper.innerHTML = '';
+
+                                const statusCell = actionWrapper.closest('tr').querySelector('td:nth-child(5)');
+                                if (statusCell) {
+                                    statusCell.innerHTML = (action === 'approve')
+                                        ? '<span class="badge status-paid">Đã thanh toán</span>'
+                                        : '<span class="badge status-canceled">Đã hủy</span>';
+                                }
+
+                                const orderStatusCell = actionWrapper.closest('tr').querySelector('.order-status');
+                                if (orderStatusCell) {
+                                    orderStatusCell.innerHTML = (action === 'approve')
+                                        ? '<span class="badge order-processing">Đang chuẩn bị đơn hàng</span>'
+                                        : '<span class="badge order-canceled">Đã hủy</span>';
+                                }
+                            }
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công!',
+                                text: `${actionLabel} đơn hàng #${id} thành công`,
+                                timer: 1500,
+                                showConfirmButton: false,
+                                width: 320
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: data.message,
+                                width: 320
+                            });
+                        }
+                    });
+            }
+        });
+    }
+</script>
+
 </body>
 
 </html>

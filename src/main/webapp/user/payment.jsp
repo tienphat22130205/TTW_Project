@@ -68,7 +68,7 @@
             button {
                 width: 100%;
                 padding: 12px;
-                background-color: #ff6600;
+                /*background-color: #ff6600;*/
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -80,17 +80,24 @@
                 background: green;
                 border: 2px solid transparent;
             }
-
             button.transfer {
                 background: blue;
                 border: 2px solid transparent;
             }
+            button.cod:hover,
+            button.transfer:hover {
+                opacity: 0.85;
+                transform: scale(1.02);
+                transition: all 0.2s ease;
+            }
 
-            /* Khi được chọn (active) sẽ có viền đậm */
+            /* Khi được chọn */
             button.cod.active,
             button.transfer.active {
-                border: 2px solid #222;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+                border: 3px solid #222;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                transform: scale(1.05);
+                transition: all 0.2s ease;
             }
             .cart-item {
                 display: flex;
@@ -319,6 +326,11 @@
 
             .apply-btn:hover {
                 background-color: #0056b3;
+            }
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                pointer-events: none;
             }
         </style>
         <script>
@@ -672,6 +684,21 @@
         <script>
             function setPaymentMethod(method) {
                 document.getElementById("payment_method").value = method;
+
+                const codBtn = document.getElementById("btn-cod");
+                const transferBtn = document.getElementById("btn-transfer");
+
+                codBtn.classList.remove("active");
+                transferBtn.classList.remove("active");
+
+                if (method === "COD") {
+                    codBtn.classList.add("active");
+                } else {
+                    transferBtn.classList.add("active");
+                }
+                document.addEventListener("DOMContentLoaded", function () {
+                    setPaymentMethod("COD");
+                });
             }
         </script>
 
@@ -768,8 +795,8 @@
 
                     <h3>Phương thức thanh toán</h3>
                     <div class="btn-container">
-                        <button type="button" id="btn-cod" class="cod" onclick="setPaymentMethod('COD')">COD</button>
-                        <button type="button" id="btn-transfer" class="transfer" onclick="setPaymentMethod('Bank Transfer')">Chuyển khoản</button>
+                        <button value="COD" type="button" id="btn-cod" class="cod" onclick="setPaymentMethod('COD')">COD</button>
+                        <button value="MOMO" type="button" id="btn-transfer" class="transfer" onclick="showMomoQR()">Chuyển khoản</button>
                     </div>
 
                     <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
@@ -793,6 +820,7 @@
                     </div>
                 </c:forEach>
 
+                <!-- Mã giảm giá -->
                 <div class="voucher">
                     <form action="apply-voucher" method="post" style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <label for="voucher" style="width: 100%;">Mã giảm giá:</label>
@@ -813,43 +841,32 @@
                     </c:choose>
                 </div>
 
-                <c:choose>
-                    <c:when test="${not empty newTotalPrice}">
-                        <!-- Nếu đã áp dụng mã giảm giá -->
-                        <p><strong>Tạm tính:</strong>
-                            <fmt:formatNumber value="${tempTotal}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <p><strong>Mã giảm giá:</strong>
+                <!-- Tóm tắt hóa đơn -->
+                <p><strong>Tạm tính:</strong>
+                    <fmt:formatNumber value="${tempTotal != null ? tempTotal : cart.getTotalPrice()}" type="number" groupingUsed="true" /> đ
+                </p>
+                <p><strong>Mã giảm giá:</strong>
+                    <c:choose>
+                        <c:when test="${discount != null}">
                             - <fmt:formatNumber value="${discount}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <p><strong>Phí vận chuyển:</strong>
-                            <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <hr />
-                        <h3><strong>Tổng cộng:</strong>
-                            <span style="color: red;">
-                    <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" /> đ
-                </span>
-                        </h3>
-                        <p>(Đã áp dụng mã: <strong>${appliedPromotion.code}</strong>)</p>
-                    </c:when>
-                    <c:otherwise>
-                        <!-- Trường hợp chưa áp mã, hiển thị mặc định -->
-                        <p><strong>Tạm tính:</strong>
-                            <fmt:formatNumber value="${cart.getTotalPrice()}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <p><strong>Mã giảm giá:</strong> 0 ₫</p>
-                        <p><strong>Phí vận chuyển:</strong>
-                            <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <hr />
-                        <h3><strong>Tổng cộng:</strong>
-                            <span style="color: red;">
-                    <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" /> đ
-                </span>
-                        </h3>
-                    </c:otherwise>
-                </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            0 ₫
+                        </c:otherwise>
+                    </c:choose>
+                </p>
+                <p><strong>Phí vận chuyển:</strong>
+                    <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
+                </p>
+                <hr />
+                <h3><strong>Tổng cộng:</strong>
+                    <span style="color: red;" id="final_total_value">
+            <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" />
+        </span> đ
+                </h3>
+                <c:if test="${not empty appliedPromotion}">
+                    <p>(Đã áp dụng mã: <strong>${appliedPromotion.code}</strong>)</p>
+                </c:if>
             </div>
 
         </div>
@@ -936,5 +953,54 @@
             </div>
         </div>
     </div>
+    <div id="momoQrModal" class="voucher-overlay" style="display:none;">
+            <div class="voucher-popup" style="max-width: 500px;">
+                <div class="popup-header">
+                    <h3 class="voucher-title">Thanh toán Momo</h3>
+                    <button onclick="closeMomoQR()" class="close-btn">&times;</button>
+                </div>
+                <div style="text-align: center;">
+                    <img src="${pageContext.request.contextPath}/assets/img/logoBank/momo.png" alt="QR Momo" style="width: 250px; margin-bottom: 10px;">
+                    <p><strong>Số tiền:</strong> <span id="momoAmount">0</span> ₫</p>
+                    <p><strong>Nội dung chuyển khoản:</strong><br> <code id="momoNote"></code></p>
+                    <button class="submit-btn" onclick="confirmMomoPayment()">Tôi đã chuyển khoản</button>
+                </div>
+            </div>
+        </div>
+    <script>
+        function showMomoQR() {
+            document.getElementById("payment_method").value = "MOMO";
+
+            const totalText = document.getElementById("final_total_value")?.textContent || "0 đ";
+            const rawAmount = totalText.replace(/\./g, '').replace(/[^\d]/g, '');
+            const amount = parseInt(rawAmount || "0");
+
+            const invoiceId = Math.floor(Math.random() * 100000); // sinh tạm ID
+            const note = "DH" + invoiceId + "VitaminFruit";
+
+            document.getElementById("momoAmount").innerText = amount.toLocaleString('vi-VN');
+            document.getElementById("momoNote").innerText = note;
+
+            document.getElementById("momoQrModal").style.display = "flex";
+
+            document.getElementById("btn-cod").classList.remove("active");
+            document.getElementById("btn-transfer").classList.add("active");
+        }
+
+        function closeMomoQR() {
+            document.getElementById("momoQrModal").style.display = "none";
+        }
+
+        function confirmMomoPayment() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Xác nhận thành công',
+                text: 'Cảm ơn bạn đã thanh toán. Vui lòng nhấn "Xác nhận thanh toán" để hoàn tất.',
+                confirmButtonText: 'Đã hiểu'
+            });
+            closeMomoQR();
+        }
+    </script>
+
     </body>
     </html>
