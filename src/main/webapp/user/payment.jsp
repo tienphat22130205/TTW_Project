@@ -60,44 +60,49 @@
                 width: 100%;
                 margin-bottom: 15px;
             }
+            /* ==== RADIO THANH TOÁN PHONG CÁCH CHUYÊN NGHIỆP ==== */
             .btn-container {
                 display: flex;
-                justify-content: space-between;
                 gap: 10px;
-            }
-            button {
-                width: 100%;
-                padding: 12px;
-                /*background-color: #ff6600;*/
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
+                flex-direction: column;
                 margin-top: 15px;
             }
-            button.cod {
-                background: green;
-                border: 2px solid transparent;
-            }
-            button.transfer {
-                background: blue;
-                border: 2px solid transparent;
-            }
-            button.cod:hover,
-            button.transfer:hover {
-                opacity: 0.85;
-                transform: scale(1.02);
-                transition: all 0.2s ease;
+
+            .btn-container input[type="radio"] {
+                display: none; /* Ẩn radio mặc định */
             }
 
-            /* Khi được chọn */
-            button.cod.active,
-            button.transfer.active {
-                border: 3px solid #222;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-                transform: scale(1.05);
-                transition: all 0.2s ease;
+            .btn-container label {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                border: 2px solid #ccc;
+                border-radius: 8px;
+                background-color: #fafafa;
+                cursor: pointer;
+                font-weight: 500;
+                transition: all 0.25s ease;
+                font-size: 16px;
+                color: #333;
+            }
+
+            .btn-container label:hover {
+                background-color: #f0f8ff;
+                border-color: #1e90ff;
+            }
+
+            .btn-container input[type="radio"]:checked + label {
+                border-color: #1e90ff;
+                background-color: #e6f3ff;
+                box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
+                font-weight: bold;
+                color: #1e90ff;
+            }
+
+            .btn-container label i {
+                font-size: 20px;
+                color: #1e90ff;
             }
             .cart-item {
                 display: flex;
@@ -115,7 +120,7 @@
             .submit-btn {
                 width: 100%;
                 padding: 12px;
-                background: #ff6600;
+                background: #1e90ff;
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -136,13 +141,14 @@
             }
             .loader {
                 border: 3px solid #f3f3f3;
-                border-top: 3px solid #009688;
+                border-top: 3px solid white;
                 border-radius: 50%;
-                width: 20px;
-                height: 20px;
+                width: 16px;
+                height: 16px;
                 animation: spin 0.8s linear infinite;
                 display: inline-block;
-                margin-left: 10px;
+                vertical-align: middle;
+                margin-left: 6px;
             }
 
             @keyframes spin {
@@ -701,6 +707,69 @@
                 });
             }
         </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const emailInput = document.getElementById("emailInput");
+                const sendBtn = document.getElementById("sendOtpBtn");
+
+                if (emailInput && sendBtn) {
+                    emailInput.addEventListener("input", function () {
+                        const isValid = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailInput.value);
+                        sendBtn.disabled = !isValid;
+                    });
+                }
+            });
+
+            function sendOrderOtp() {
+                const email = document.getElementById("emailInput").value;
+                const btn = document.getElementById("sendOtpBtn");
+                btn.disabled = true;
+                btn.innerHTML = 'Đang gửi <span class="loader"></span>';
+
+                fetch("send-order-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "email=" + encodeURIComponent(email)
+                })
+                    .then(res => res.text())
+                    .then(msg => {
+                        Swal.fire("Thông báo", msg, "info");
+                    })
+                    .finally(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = "Gửi mã xác minh";
+                    });
+            }
+
+            function verifyOtp() {
+                const otp = document.getElementById("otpInput").value;
+                const btn = document.getElementById("verifyOtpBtn");
+                btn.disabled = true;
+                btn.innerHTML = 'Đang kiểm tra <span class="loader"></span>';
+
+                fetch("verify-order-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "otp=" + encodeURIComponent(otp)
+                })
+                    .then(res => res.text())
+                    .then(msg => {
+                        setTimeout(() => {
+                            const statusEl = document.getElementById("otpStatus");
+                            if (msg === "success") {
+                                statusEl.innerText = "✅ Mã xác minh hợp lệ!";
+                                statusEl.style.color = "green";
+                            } else {
+                                statusEl.innerText = "❌ " + msg;
+                                statusEl.style.color = "red";
+                            }
+
+                            btn.disabled = false;
+                            btn.innerHTML = "Xác minh mã";
+                        }, 800); // ⏱ delay 800ms tạo cảm giác đang kiểm tra
+                    });
+            }
+        </script>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
@@ -733,8 +802,31 @@
                     <label>Số điện thoại:</label>
                     <input type="tel" name="phone" required>
 
-                    <label>Email:</label>
-                    <input type="email" name="email" required>
+                    <div style="margin-bottom: 15px;">
+                        <label>Email:</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="email" name="email" id="emailInput" required style="flex: 2; padding: 10px;height: 42px; border-radius: 5px; border: 1px solid #ccc;">
+                            <button type="button" id="sendOtpBtn" onclick="sendOrderOtp()" disabled
+                                    style="flex: 1; padding: 10px 14px; height: 42px; background-color: #007bff;
+               color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                Gửi mã xác minh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label>Nhập mã OTP:</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" id="otpInput" name="otp" placeholder="Nhập mã OTP" required
+                                   style="flex: 2; padding: 10px;height: 42px; border-radius: 5px; border: 1px solid #ccc;">
+                            <button type="button" id="verifyOtpBtn" onclick="verifyOtp()"
+                                    style="flex: 1; padding: 10px 14px; height: 42px; background-color: #28a745;
+               color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                Xác minh mã
+                            </button>
+                        </div>
+                    </div>
+                    <p id="otpStatus" style="font-weight: bold;"></p>
 
                     <label>Tỉnh/Thành phố:</label>
                     <select type="hidden" id="province" name="province">
@@ -795,10 +887,16 @@
 
                     <h3>Phương thức thanh toán</h3>
                     <div class="btn-container">
-                        <button value="COD" type="button" id="btn-cod" class="cod" onclick="setPaymentMethod('COD')">COD</button>
-                        <button value="MOMO" type="button" id="btn-transfer" class="transfer" onclick="showMomoQR()">Chuyển khoản</button>
-                    </div>
+                        <input type="radio" name="payment_method_choice" id="pay_cod" value="COD" checked hidden>
+                        <label for="pay_cod" onclick="setPaymentMethod('COD')">
+                            <i class="fas fa-box"></i> Thanh toán khi nhận hàng (COD)
+                        </label>
 
+                        <input type="radio" name="payment_method_choice" id="pay_momo" value="MOMO" hidden>
+                        <label for="pay_momo" onclick="showMomoQR()">
+                            <i class="fas fa-money-check-alt"></i> Chuyển khoản qua ngân hàng
+                        </label>
+                    </div>
                     <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
                 </form>
             </div>
@@ -826,7 +924,7 @@
                         <label for="voucher" style="width: 100%;">Mã giảm giá:</label>
                         <input type="text" name="voucherCode" id="voucher" placeholder="Nhập mã giảm giá" style="flex: 2;">
                         <input type="hidden" name="shipping_method" value="${selectedShippingId}" />
-                        <button type="submit" class="submit-btn" style="flex: 1; background: #009688;">Áp dụng</button>
+                        <button type="submit" class="submit-btn" style="flex: 1; background: #1e90ff;">Áp dụng</button>
                     </form>
                     <a href="#" class="show-voucher-link">
                         <i class="fas fa-ticket-alt"></i> Xem thêm mã giảm giá
@@ -1001,6 +1099,17 @@
             closeMomoQR();
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const momoOverlay = document.getElementById("momoQrModal");
+            const popup = momoOverlay.querySelector(".voucher-popup");
 
+            window.addEventListener("click", function (e) {
+                if (e.target === momoOverlay) {
+                    momoOverlay.style.display = "none";
+                }
+            });
+        });
+    </script>
     </body>
     </html>

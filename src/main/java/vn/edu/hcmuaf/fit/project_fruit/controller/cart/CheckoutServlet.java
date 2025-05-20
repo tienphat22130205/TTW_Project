@@ -91,7 +91,12 @@
                 response.sendRedirect("show-cart");
                 return;
             }
-
+            Boolean otpVerified = (Boolean) session.getAttribute("otp_verified");
+            if (otpVerified == null || !otpVerified) {
+                request.setAttribute("otpError", "Bạn cần xác minh email trước khi đặt hàng.");
+                doGet(request, response); // Hiển thị lại trang payment.jsp kèm lỗi
+                return;
+            }
             String receiverName = request.getParameter("receiver_name");
             String phone = request.getParameter("phone");
             String email = request.getParameter("email");
@@ -142,7 +147,19 @@
             );
 
             if (invoiceId > 0) {
+                String emailBody = "<h3>Chào " + receiverName + ",</h3>" +
+                        "<p>Cảm ơn bạn đã đặt hàng tại VitaminFruit.</p>" +
+                        "<p>Mã hóa đơn của bạn là: <strong>#" + invoiceId + "</strong></p>" +
+                        "<p>Phương thức thanh toán: " + paymentMethod + "</p>" +
+                        "<p>Tổng tiền: " + finalTotal + " đ</p>" +
+                        "<p>Đơn hàng của bạn sẽ được xử lý trong thời gian sớm nhất.</p>";
+
+                vn.edu.hcmuaf.fit.project_fruit.utils.EmailUtils.sendEmail(
+                        email, "Xác nhận đơn hàng #" + invoiceId, emailBody);
                 session.removeAttribute("cart");
+                session.removeAttribute("otp_verified");
+                session.removeAttribute("order_otp");
+                session.removeAttribute("order_email");
                 session.removeAttribute("discount");
                 request.setAttribute("orderSuccess", true);
                 request.setAttribute("invoiceId", invoiceId);
@@ -152,5 +169,4 @@
                 doGet(request, response);
             }
         }
-
     }
