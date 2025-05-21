@@ -530,7 +530,66 @@ public class ProductDao {
             return false;
         }
     }
+    // Lấy tổng số sản phẩm
+    public int getTotalProducts() {
+        String sql = "SELECT COUNT(*) FROM products";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public int getProductsInStock() {
+        String sql = "SELECT COUNT(*) FROM products WHERE status = 1";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public int getTotalSoldProducts() {
+        String sql = """
+        SELECT SUM(id.quantity) AS total_sold
+        FROM invoices_details id
+        JOIN invoices i ON id.id_invoice = i.id_invoice
+        WHERE i.status = 'Đã thanh toán'
+          AND i.order_status IN ('Đang chuẩn bị đơn hàng', 'Đã giao', 'Hoàn tất')
+        """;
 
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int totalSold = rs.getInt("total_sold");
+                if (rs.wasNull()) {
+                    return 0;
+                }
+                return totalSold;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public double getAverageRating() {
+        String sql = "SELECT AVG(CAST(rating AS DECIMAL(3,2))) FROM products WHERE rating IS NOT NULL AND rating != ''";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
 // ========================== MAIN TEST ==========================
 
     public static void main(String[] args) {
@@ -565,38 +624,10 @@ public class ProductDao {
 //        }
             ProductDao productDao = new ProductDao();
 
-            int testProductId = 10; // Thay bằng ID sản phẩm bạn muốn test
+            int totalSold = productDao.getTotalSoldProducts();
 
-            Product product = productDao.getById(testProductId);
-
-            if (product != null) {
-                System.out.println("=== Thông tin sản phẩm ===");
-                System.out.println("ID: " + product.getId_product());
-                System.out.println("Tên: " + product.getName());
-                System.out.println("Giá: " + product.getPrice());
-                System.out.println("Đánh giá: " + product.getRating());
-                System.out.println("Trạng thái: " + (product.isStatus() ? "Còn hàng" : "Hết hàng"));
-                System.out.println("Mô tả: " + product.getDescribe_1());
-                System.out.println("Số lượng: " + product.getQuantity());
-                System.out.println("Xuất xứ: " + product.getOrigin());
-                System.out.println("Ngày nhập: " + product.getEntry_date());
-                System.out.println("Hạn sử dụng: " + product.getShelf_life());
-                System.out.println("Thời gian bảo hành: " + product.getWarranty_period());
-                System.out.println("Đặc điểm: " + product.getCharacteristic());
-                System.out.println("Cách bảo quản: " + product.getPreserve_product());
-                System.out.println("Cách sử dụng: " + product.getUse_prodcut());
-                System.out.println("Lợi ích: " + product.getBenefit());
-
-
-                System.out.println("Danh sách ảnh sản phẩm:");
-                if (product.getListimg() != null) {
-                    product.getListimg().forEach(img -> System.out.println("- " + img.getUrl()));
-                } else {
-                    System.out.println("Không có ảnh.");
-                }
-            } else {
-                System.out.println("Không tìm thấy sản phẩm với ID: " + testProductId);
-            }
+            System.out.println("Tổng số sản phẩm đã bán: " + totalSold);
         }
+
 
 }

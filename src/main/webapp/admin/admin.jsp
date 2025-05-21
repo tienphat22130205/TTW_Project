@@ -690,27 +690,26 @@
                 <!-- Tổng quan sản phẩm -->
                 <div class="overview-grid">
                     <div class="overview-item">
-                        <h3>200</h3>
+                        <h3>${totalProductsAdmin}</h3>
                         <p>Tổng sản phẩm</p>
                         <i class="fa-solid fa-box"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>80</h3>
+                        <h3>${productsInStock}</h3>
                         <p>Sản phẩm còn hàng</p>
                         <i class="fa-solid fa-check"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>120</h3>
+                        <h3>${totalSoldProducts}</h3>
                         <p>Sản phẩm đã bán</p>
                         <i class="fa-solid fa-cart-arrow-down"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>4.5/5</h3>
+                        <h3>${averageRating}/5</h3>
                         <p>Đánh giá trung bình</p>
                         <i class="fa-solid fa-star"></i>
                     </div>
                 </div>
-
             </div>
             <div class="recent-grid">
                 <div class="customers">
@@ -853,22 +852,22 @@
             <div class="orders">
                 <div class="overview-grid">
                     <div class="overview-item">
-                        <h3>39</h3>
+                        <h3>${totalOrders}</h3>
                         <p>Tổng đơn hàng</p>
                         <i class="fa-solid fa-boxes-stacked"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>6</h3>
+                        <h3>${processingOrders}</h3>
                         <p>Đơn hàng đang xử lý</p>
                         <i class="fa-solid fa-hourglass-start"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>31</h3>
+                        <h3>${paidOrders}</h3>
                         <p>Đơn hàng đã thanh toán</p>
                         <i class="fa-regular fa-handshake"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>2</h3>
+                        <h3>${cancelledOrders}</h3>
                         <p>Đơn hàng đã hủy</p>
                         <i class="fa-regular fa-circle-xmark"></i>
                     </div>

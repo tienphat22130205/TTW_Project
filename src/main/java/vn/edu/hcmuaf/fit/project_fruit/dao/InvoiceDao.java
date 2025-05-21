@@ -155,6 +155,50 @@ public class InvoiceDao {
             return false;
         }
     }
+    public int getTotalOrders() {
+        String sql = "SELECT COUNT(*) FROM invoices";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public int getProcessingOrders() {
+        String sql = "SELECT COUNT(*) FROM invoices WHERE order_status = 'Đang xử lý'";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Lấy số đơn hàng đã thanh toán
+    public int getPaidOrders() {
+        String sql = "SELECT COUNT(*) FROM invoices WHERE status = 'Đã thanh toán'";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Lấy số đơn hàng đã hủy
+    public int getCancelledOrders() {
+        String sql = "SELECT COUNT(*) FROM invoices WHERE order_status = 'Đã hủy'";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     public static void main(String[] args) {
         InvoiceDao invoiceDao = new InvoiceDao();
         List<Invoice> invoices = invoiceDao.getAllInvoices();

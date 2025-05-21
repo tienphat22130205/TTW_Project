@@ -22,6 +22,7 @@ public class ListAdmin extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         FeedbackDao feedbackDao = new FeedbackDao();
+        InvoiceDao invoiceDao = new InvoiceDao();
         CustomerService customerService = new CustomerService();
         ProductService productService = new ProductService();
         SupplierService supplierService = new SupplierService();
@@ -112,7 +113,8 @@ public class ListAdmin extends HttpServlet {
             productPage = Integer.parseInt(request.getParameter("productPage"));
         }
 
-        int recordsPerPageProducts = 150;  // Số lượng sản phẩm hiển thị mỗi trang
+        int recordsPerPageProducts = 150;
+        // Số lượng sản phẩm hiển thị mỗi trang
         List<ProductList> products = productDao.getProductsByPage(productPage, recordsPerPageProducts);
 
         List<Product> productDetails = productDao.getProductDetailsByPage(productPage, recordsPerPageProducts);
@@ -122,6 +124,12 @@ public class ListAdmin extends HttpServlet {
 
         // Tính số trang cần thiết để hiển thị
         int productPages = (int) Math.ceil(totalProducts * 1.0 / recordsPerPageProducts);
+
+        int totalProductsAdmin = productDao.getTotalProducts();
+        int productsInStock = productDao.getProductsInStock();
+        int totalSoldProducts = productDao.getTotalSoldProducts();
+        double averageRating = productDao.getAverageRating();
+
 
         Gson gson = new Gson();
         Map<Integer, String> productJsonMap = productDetails.stream()
@@ -136,6 +144,10 @@ public class ListAdmin extends HttpServlet {
         request.setAttribute("productPages", productPages);
         request.setAttribute("currentProductPage", productPage);
         request.setAttribute("productJsonMap", productJsonMap);
+        request.setAttribute("totalProductsAdmin", totalProductsAdmin);
+        request.setAttribute("productsInStock", productsInStock);
+        request.setAttribute("totalSoldProducts", totalSoldProducts);
+        request.setAttribute("averageRating", String.format("%.1f", averageRating));
 
         // Kiểm tra nếu không có sản phẩm nào
         if (products.isEmpty()) {
@@ -179,7 +191,17 @@ public class ListAdmin extends HttpServlet {
         // Lấy danh sách đơn hàng (Invoices)
         InvoiceService invoiceService = new InvoiceService();
         List<Invoice> invoices = invoiceService.getAllInvoices();
+        int totalOrders = invoiceDao.getTotalOrders();
+        int processingOrders = invoiceDao.getProcessingOrders();
+        int paidOrders = invoiceDao.getPaidOrders();
+        int cancelledOrders = invoiceDao.getCancelledOrders();
+
+        request.setAttribute("totalOrders", totalOrders);
+        request.setAttribute("processingOrders", processingOrders);
+        request.setAttribute("paidOrders", paidOrders);
+        request.setAttribute("cancelledOrders", cancelledOrders);
         request.setAttribute("invoices", invoices);
+
 
 
         // Chuyển tiếp tới JSP
