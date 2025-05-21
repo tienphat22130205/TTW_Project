@@ -329,7 +329,54 @@ public class ProductDao {
 
         return productList;
     }
+    public List<Product> getProductDetailsByPage(int page, int recordsPerPage) {
+        List<Product> productDetails = new ArrayList<>();
+        String query = """
+        SELECT p.*, pr.promotion_name, pr.percent_discount
+        FROM products p
+        LEFT JOIN promotions pr ON p.id_promotion = pr.id_promotion
+        ORDER BY p.id_product ASC
+        LIMIT ? OFFSET ?
+    """;
 
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
+            ps.setInt(1, recordsPerPage);
+            ps.setInt(2, (page - 1) * recordsPerPage);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                List<ProductImg> listImg = getImagesByProductId(rs.getInt("id_product"));
+
+                Product product = new Product(
+                        rs.getInt("id_product"),
+                        rs.getString("product_name"),
+                        listImg,
+                        rs.getDouble("price"),
+                        rs.getString("rating"),
+                        rs.getBoolean("status"),
+                        rs.getString("describe_1"),
+                        rs.getInt("quantity"),
+                        rs.getString("origin"),
+                        rs.getString("entry_date"),
+                        rs.getString("shelf_life"),
+                        rs.getString("warranty_period"),
+                        rs.getString("characteristic"),
+                        rs.getString("preserve_product"),
+                        rs.getString("use_prodcut"),
+                        rs.getString("benefit"),
+                        rs.getString("promotion_name"),
+                        rs.getDouble("percent_discount")
+                );
+
+                product.calculateDiscountedPrice();
+                productDetails.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productDetails;
+    }
     // Lấy tổng số sản phẩm để tính số trang
     public int getTotalRecords() {
         String query = "SELECT COUNT(*) FROM products";
@@ -425,28 +472,131 @@ public class ProductDao {
         }
         return relatedProducts;
     }
+    public boolean reduceProductStock(int productId, int quantity) {
+        String sql = "UPDATE products SET quantity = quantity - ? WHERE id_product = ? AND quantity >= ?";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, false)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, productId);
+            ps.setInt(3, quantity);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi trừ kho sản phẩm #" + productId);
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updateProduct(Product product) {
+        String sql = """
+        UPDATE products SET
+            product_name = ?,
+            price = ?,
+            origin = ?,
+            quantity = ?,
+            warranty_period = ?,
+            entry_date = ?,         -- Nếu cần cập nhật ngày nhập (nếu không thì bỏ)
+            shelf_life = ?,
+            describe_1 = ?,
+            rating = ?,
+            characteristic = ?,
+            preserve_product = ?,
+            use_prodcut = ?,
+            benefit = ?,
+            status = ?
+        WHERE id_product = ?
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, false)) {
+            ps.setString(1, product.getName());           // product_name
+            ps.setDouble(2, product.getPrice());           // price
+            ps.setString(3, product.getOrigin());         // origin
+            ps.setInt(4, product.getQuantity());          // quantity
+            ps.setString(5, product.getWarranty_period()); // warranty_period
+            ps.setString(6, product.getEntry_date());     // entry_date (nếu muốn cập nhật)
+            ps.setString(7, product.getShelf_life());     // shelf_life
+            ps.setString(8, product.getDescribe_1());     // describe_1
+            ps.setString(9, product.getRating());         // rating
+            ps.setString(10, product.getCharacteristic());// characteristic
+            ps.setString(11, product.getPreserve_product());// preserve_product
+            ps.setString(12, product.getUse_prodcut());    // use_prodcut
+            ps.setString(13, product.getBenefit());       // benefit
+            ps.setBoolean(14, product.isStatus());        // status
+            ps.setInt(15, product.getId_product());       // WHERE id_product = ?
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 // ========================== MAIN TEST ==========================
 
     public static void main(String[] args) {
-        ProductDao productDao = new ProductDao();
+//        ProductDao productDao = new ProductDao();
+//
+//        // Tạo đối tượng Product mẫu để test cập nhật
+//        Product product = new Product();
+//
+//        // Giả sử bạn có setter trong class Product, set đầy đủ thông tin cần cập nhật:
+//        product.setId_product(10);                // ID sản phẩm cần update (phải có trong DB)
+//        product.setName("Quà tết 2025");
+//        product.setPrice(1500000);
+//        product.setOrigin("Việt Nam");
+//        product.setQuantity(50);
+//        product.setWarranty_period("12 tháng");
+//        product.setEntry_date("2025-05-21");    // định dạng yyyy-MM-dd hoặc phù hợp DB
+//        product.setShelf_life("6 tháng");
+//        product.setDescribe_1("Mô tả cập nhật cho sản phẩm");
+//        product.setRating("4.5");
+//        product.setCharacteristic("Đặc điểm cập nhật");
+//        product.setPreserve_product("Bảo quản nơi khô ráo");
+//        product.setUse_prodcut("Sử dụng theo hướng dẫn");
+//        product.setBenefit("Lợi ích khi dùng sản phẩm");
+//        product.setStatus(true);                 // trạng thái sản phẩm
+//
+//        boolean updated = productDao.updateProduct(product);
+//
+//        if (updated) {
+//            System.out.println("Cập nhật sản phẩm thành công!");
+//        } else {
+//            System.out.println("Cập nhật sản phẩm thất bại.");
+//        }
+            ProductDao productDao = new ProductDao();
 
-        // Kiểm tra phương thức lấy sản phẩm liên quan
-        int sampleCategoryId = 1; // Giả sử danh mục 1
-        int sampleProductId = 5;  // Giả sử sản phẩm có ID 5
+            int testProductId = 10; // Thay bằng ID sản phẩm bạn muốn test
 
-        List<Product> relatedProducts = productDao.getRelatedProducts(sampleCategoryId, sampleProductId);
-        System.out.println("Related Products:");
+            Product product = productDao.getById(testProductId);
 
-        for (Product product : relatedProducts) {
-            System.out.println("Product ID: " + product.getId_product());
-            System.out.println("Product Name: " + product.getName());
-            System.out.println("Price: " + product.getPrice());
-            System.out.println("Discounted Price: " + product.getDiscountedPrice());
-            System.out.println("Rating: " + product.getRating());
-            System.out.println("Images: " + product.getListimg().size() + " images available");
-            System.out.println("--------------------------------------------");
+            if (product != null) {
+                System.out.println("=== Thông tin sản phẩm ===");
+                System.out.println("ID: " + product.getId_product());
+                System.out.println("Tên: " + product.getName());
+                System.out.println("Giá: " + product.getPrice());
+                System.out.println("Đánh giá: " + product.getRating());
+                System.out.println("Trạng thái: " + (product.isStatus() ? "Còn hàng" : "Hết hàng"));
+                System.out.println("Mô tả: " + product.getDescribe_1());
+                System.out.println("Số lượng: " + product.getQuantity());
+                System.out.println("Xuất xứ: " + product.getOrigin());
+                System.out.println("Ngày nhập: " + product.getEntry_date());
+                System.out.println("Hạn sử dụng: " + product.getShelf_life());
+                System.out.println("Thời gian bảo hành: " + product.getWarranty_period());
+                System.out.println("Đặc điểm: " + product.getCharacteristic());
+                System.out.println("Cách bảo quản: " + product.getPreserve_product());
+                System.out.println("Cách sử dụng: " + product.getUse_prodcut());
+                System.out.println("Lợi ích: " + product.getBenefit());
+
+
+                System.out.println("Danh sách ảnh sản phẩm:");
+                if (product.getListimg() != null) {
+                    product.getListimg().forEach(img -> System.out.println("- " + img.getUrl()));
+                } else {
+                    System.out.println("Không có ảnh.");
+                }
+            } else {
+                System.out.println("Không tìm thấy sản phẩm với ID: " + testProductId);
+            }
         }
-    }
 
 }

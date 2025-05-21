@@ -148,6 +148,25 @@ public class FeedbackDao {
         }
         return feedbackList;
     }
+    public boolean hasUserPurchasedProduct(int accountId, int productId) {
+        String sql = """
+        SELECT 1
+        FROM invoices i
+        JOIN invoices_details d ON i.id_invoice = d.id_invoice
+        WHERE i.id_account = ? AND d.id_product = ? AND i.status = 'Đã thanh toán'
+        LIMIT 1
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ps.setInt(1, accountId);
+            ps.setInt(2, productId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // Có kết quả tức là đã mua
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     // Main để kiểm tra và in ra dữ liệu
     public static void main(String[] args) {

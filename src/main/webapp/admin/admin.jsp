@@ -128,7 +128,139 @@
                 transform: translateY(0);
             }
         }
-         .btn-circle {
+        #productOverlay.modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #productModalContent.modal-content {
+            background: #fff;
+            border-radius: 12px;
+            width: 1400px;
+            max-width: 95%;
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #222;
+            position: relative;
+            height: 100%; /* cao full container overlay */
+            display: flex;
+            flex-direction: column;
+        }
+
+        #productCloseBtn.close-button {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        #productCloseBtn.close-button:hover {
+            color: #e74c3c;
+        }
+
+        #productModalTitle.modal-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 12px;
+            color: #111;
+        }
+
+        .product-detail-container {
+            display: flex;
+            gap: 30px;
+            flex: 1; /* chiếm hết chiều cao */
+            overflow: hidden;
+        }
+
+        /* Ảnh sản phẩm */
+        .product-image-wrapper {
+            flex: 0 0 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image-wrapper img#mainProductImage {
+            width: 320px;
+            height: 320px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Bảng thông tin */
+        .product-info-wrapper {
+            flex: 1;
+            overflow-x: auto;
+            padding-right: 10px;
+        }
+
+        .product-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .product-info-table th,
+        .product-info-table td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .product-info-table th {
+            background-color: #f5f5f5;
+            width: 160px;
+            font-weight: 600;
+            color: #222;
+            user-select: none;
+        }
+
+        .product-info-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .product-info-table tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Responsive cho màn hình nhỏ */
+        @media (max-width: 900px) {
+            #productModalContent.modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            .product-detail-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .product-image-wrapper {
+                margin-bottom: 20px;
+            }
+            .product-info-wrapper {
+                width: 100%;
+            }
+            .product-info-table th {
+                width: 140px;
+            }
+        }
+        .btn-circle {
              width: 36px;
              height: 36px;
              border-radius: 50%;
@@ -677,9 +809,9 @@
                                         <th>Mã Sản Phẩm</th>
                                         <th>Tên Sản Phẩm</th>
                                         <th>Loại Sản phẩm</th>
-                                        <th>Xuất xứ</th>
                                         <th>Giá Sản Phẩm</th>
                                         <th>Trạng thái</th>
+                                        <th>Chi tiết</th>
                                         <th>Thao tác</th>
                                     </tr>
                                     </thead>
@@ -690,22 +822,20 @@
                                             <td>${product.id_product}</td> <!-- Mã sản phẩm -->
                                             <td>${product.name}</td> <!-- Tên sản phẩm -->
                                             <td>${product.categoryName}</td> <!-- Loại sản phẩm -->
-                                            <td>${product.origin}</td> <!-- Xuất xứ sản phẩm -->
                                             <td>${product.price}</td> <!-- Xuất xứ sản phẩm -->
                                             <td>
                                                 <span class="status ${product.status ? 'blue' : 'red'}"></span>
                                                     ${product.status ? 'Còn Hàng' : 'Hết Hàng'}
                                             </td>
                                             <td>
-                                                <button class="detail-button" onclick="openModal({
-                                                        id_product: ${product.id_product},
-                                                        name: '${product.name}',
-                                                        categoryName: '${product.categoryName}',
-                                                        origin: '${product.origin}',
-                                                        price: '${product.price}',
-                                                        image: '${product.getProductImgUrl()}',
-                                                        description: '${product.describe_1}'
-                                                        }, 'productDescription')">Xem chi tiết</button>
+                                                <button onclick='openProductOverlayFromButton(this)'
+                                                        data-product='${fn:escapeXml(productJsonMap[product.id_product])}'>
+                                                    Xem chi tiết
+                                                </button>
+                                            </td>
+
+                                            <td>
+                                                <button class="edit-button" onclick="window.location.href='edit-product?pid=${product.id_product}'">Chỉnh sửa</button>
                                                 <button class="delete-button" onclick="window.location.href='remove-product?pid=${product.id_product}'">Xóa</button>
                                             </td>
                                         </tr>
@@ -1137,6 +1267,7 @@
         <button id="cancelDeleteBtn">Không</button>
     </div>
 </div>
+<%--chi tiết hóa đơn--%>
 <div id="invoiceOverlay" class="modal-overlay">
         <div class="modal-content invoice-modal">
             <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
@@ -1170,6 +1301,88 @@
             </div>
         </div>
     </div>
+<!-- Overlay chi tiết sản phẩm -->
+<div id="productOverlay" class="modal-overlay" style="display:none;">
+    <div id="productModalContent" class="modal-content">
+        <span id="productCloseBtn" class="close-button" onclick="closeProductOverlay()">&times;</span>
+        <h2 id="productModalTitle" class="modal-title">📦 Chi tiết sản phẩm</h2>
+
+        <div class="product-detail-container">
+            <!-- Ảnh lớn bên trái -->
+            <div class="product-image-wrapper">
+                <div id="productImagesDisplay" class="product-images"></div>
+            </div>
+
+            <!-- Thông tin chi tiết bên phải dùng bảng -->
+            <div class="product-info-wrapper">
+                <table class="product-info-table">
+                    <tbody>
+                    <tr>
+                        <th>Mã sản phẩm</th>
+                        <td id="productIdDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <td id="productNameDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Xuất xứ</th>
+                        <td id="productOriginDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Giá</th>
+                        <td><span id="productPriceDisplay"></span> đ</td>
+                    </tr>
+                    <tr>
+                        <th>Đánh giá</th>
+                        <td id="productRatingDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Trạng thái</th>
+                        <td id="productStatusDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Mô tả</th>
+                        <td id="productDescribeDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Số lượng</th>
+                        <td id="productQuantityDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Ngày nhập</th>
+                        <td id="productEntryDateDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Hạn sử dụng</th>
+                        <td id="productShelfLifeDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Thời gian bảo hành</th>
+                        <td id="productWarrantyDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Đặc điểm</th>
+                        <td id="productCharacteristicDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Cách bảo quản</th>
+                        <td id="productPreserveDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Cách sử dụng</th>
+                        <td id="productUseDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Lợi ích</th>
+                        <td id="productBenefitDisplay"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1354,6 +1567,56 @@
                     });
             }
         });
+    }
+</script>
+<script>
+    function openProductOverlayFromButton(button) {
+        const jsonStr = button.getAttribute('data-product');
+        try {
+            const product = JSON.parse(jsonStr);
+            openProductOverlay(product);
+        } catch (e) {
+            console.error("Lỗi parse JSON:", e);
+        }
+    }
+    function openProductOverlay(product) {
+        document.getElementById('productIdDisplay').textContent = product.id_product || 'N/A';
+        document.getElementById('productNameDisplay').textContent = product.name || 'N/A';
+        document.getElementById('productOriginDisplay').textContent = product.origin || '';
+        document.getElementById('productPriceDisplay').textContent = product.price !== undefined ? product.price : 'N/A';
+        document.getElementById('productRatingDisplay').textContent = product.rating || '';
+        document.getElementById('productStatusDisplay').textContent = product.status ? 'Còn hàng' : 'Hết hàng';
+        document.getElementById('productDescribeDisplay').textContent = product.describe_1 || '';
+        document.getElementById('productQuantityDisplay').textContent = product.quantity !== undefined ? product.quantity : '';
+        document.getElementById('productEntryDateDisplay').textContent = product.entry_date || '';
+        document.getElementById('productShelfLifeDisplay').textContent = product.shelf_life || '';
+        document.getElementById('productWarrantyDisplay').textContent = product.warranty_period || '';
+        document.getElementById('productCharacteristicDisplay').textContent = product.characteristic || '';
+        document.getElementById('productPreserveDisplay').textContent = product.preserve_product || '';
+        document.getElementById('productUseDisplay').textContent = product.use_prodcut || '';
+        document.getElementById('productBenefitDisplay').textContent = product.benefit || '';
+
+        const imagesDiv = document.getElementById('productImagesDisplay');
+        imagesDiv.innerHTML = ''; // Xóa ảnh cũ nếu có
+
+        if (product.listImg && Array.isArray(product.listImg) && product.listImg.length > 0) {
+            product.listImg.forEach(img => {
+                const imgEl = document.createElement('img');
+                imgEl.src = img.url;  // url ảnh
+                imgEl.alt = product.name || 'Product Image';
+                imgEl.style.width = '320px';
+                imgEl.style.height = 'auto';
+                imgEl.style.borderRadius = '6px';
+                imagesDiv.appendChild(imgEl);
+            });
+        } else {
+            imagesDiv.textContent = 'Không có ảnh sản phẩm.';
+        }
+        document.getElementById('productOverlay').style.display = 'flex';
+    }
+
+    function closeProductOverlay() {
+        document.getElementById('productOverlay').style.display = 'none';
     }
 </script>
 

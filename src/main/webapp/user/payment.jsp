@@ -902,7 +902,7 @@
             </div>
             <!-- Bên phải: Hiển thị sản phẩm và tổng tiền -->
             <div class="right">
-                <h2>Giỏ hàng</h2>
+                <h2>Thông tin giỏ hàng</h2>
                 <c:forEach var="item" items="${cart.getList()}">
                     <div class="cart-item">
                         <c:if test="${not empty item.listImg}">

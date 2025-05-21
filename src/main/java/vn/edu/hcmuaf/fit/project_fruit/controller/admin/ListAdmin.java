@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.project_fruit.controller.admin;
 
+import com.google.gson.Gson;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,6 +14,9 @@ import vn.edu.hcmuaf.fit.project_fruit.service.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @WebServlet(name = "ListAdmin", value = "/admin")
 public class ListAdmin extends HttpServlet {
 
@@ -42,10 +46,7 @@ public class ListAdmin extends HttpServlet {
         // Khách hàng gần đây
         List<Customer> recentCustomers = customerService.getRecentCustomers();
         request.setAttribute("recentCustomers", recentCustomers);
-        // -------------------------------------------------------------------------
-        List<Product> bestSellingProducts = productService.getBestSellingProducts(); // Hàm này trả về các sản phẩm bán chạy nhất
-        request.setAttribute("bestSellingProducts", bestSellingProducts);
-        //--------------------------------------------------------------------------------------
+
         // Kiểm tra xem có nhà cung cấp không
         int currentPage = 1;
         int itemsPerPage = 10; // Số lượng bản ghi hiển thị mỗi trang
@@ -114,16 +115,27 @@ public class ListAdmin extends HttpServlet {
         int recordsPerPageProducts = 150;  // Số lượng sản phẩm hiển thị mỗi trang
         List<ProductList> products = productDao.getProductsByPage(productPage, recordsPerPageProducts);
 
+        List<Product> productDetails = productDao.getProductDetailsByPage(productPage, recordsPerPageProducts);
+
         // Lấy tổng số sản phẩm
         int totalProducts = productDao.getTotalRecords();
 
         // Tính số trang cần thiết để hiển thị
         int productPages = (int) Math.ceil(totalProducts * 1.0 / recordsPerPageProducts);
 
+        Gson gson = new Gson();
+        Map<Integer, String> productJsonMap = productDetails.stream()
+                .collect(Collectors.toMap(
+                        Product::getId_product,
+                        p -> gson.toJson(p)
+                ));
+
+
         // Đưa danh sách sản phẩm vào request để hiển thị trong JSP
         request.setAttribute("products", products);
         request.setAttribute("productPages", productPages);
         request.setAttribute("currentProductPage", productPage);
+        request.setAttribute("productJsonMap", productJsonMap);
 
         // Kiểm tra nếu không có sản phẩm nào
         if (products.isEmpty()) {

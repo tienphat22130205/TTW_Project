@@ -35,6 +35,9 @@ public class ProductService {
     public List<Product> getBestSellingProducts() {
         return productDao.getBestSellingProducts();
     }
+    public boolean updateProduct(Product product) {
+        return productDao.updateProduct(product);
+    }
     public static void main(String[] args) {
         ProductService productService = new ProductService();
         int categoryId = 1;  // ID danh mục cần lấy

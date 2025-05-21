@@ -4,8 +4,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import vn.edu.hcmuaf.fit.project_fruit.dao.InvoiceDao;
+import vn.edu.hcmuaf.fit.project_fruit.dao.InvoiceDetailDao;
+import vn.edu.hcmuaf.fit.project_fruit.dao.ProductDao;
+import vn.edu.hcmuaf.fit.project_fruit.dao.cart.CartProduct;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/admin/approve-order")
 public class ApproveOrderServlet extends HttpServlet {
@@ -32,6 +36,17 @@ public class ApproveOrderServlet extends HttpServlet {
             case "approve" -> {
                 statusUpdated = dao.updateInvoiceStatus(id, "Đã thanh toán");
                 orderStatusUpdated = dao.updateOrderStatus(id, "Đang chuẩn bị đơn hàng");
+
+                // Trừ số lượng tồn kho sản phẩm
+                if (statusUpdated && orderStatusUpdated) {
+                    InvoiceDetailDao detailDao = new InvoiceDetailDao();
+                    List<CartProduct> items = detailDao.getInvoiceDetails(id);
+                    ProductDao productDao = new ProductDao();
+
+                    for (CartProduct item : items) {
+                        productDao.reduceProductStock(item.getId_product(), item.getQuantity());
+                    }
+                }
             }
             case "cancel" -> {
                 statusUpdated = dao.updateInvoiceStatus(id, "Đã hủy");
@@ -50,4 +65,3 @@ public class ApproveOrderServlet extends HttpServlet {
         }
     }
 }
-

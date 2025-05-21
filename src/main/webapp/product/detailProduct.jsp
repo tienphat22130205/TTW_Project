@@ -286,8 +286,17 @@
         String message = request.getParameter("message");
         if (message != null) {
             String alertMessage = "";
+            String alertIcon = "⚠️";
+            String bgColor = "#fff3cd";
+            String borderColor = "#ffecb5";
+            String textColor = "#856404";
+
             if ("success".equals(message)) {
+                alertIcon = "✅";
                 alertMessage = "Bình luận thành công!";
+                bgColor = "#d4edda";
+                borderColor = "#c3e6cb";
+                textColor = "#155724";
             } else if ("insert_failed".equals(message)) {
                 alertMessage = "Thêm bình luận thất bại. Vui lòng thử lại.";
             } else if ("invalid_format".equals(message)) {
@@ -296,37 +305,53 @@
                 alertMessage = "Vui lòng điền đầy đủ thông tin.";
             } else if ("error".equals(message)) {
                 alertMessage = "Có lỗi xảy ra. Vui lòng thử lại sau.";
+                alertIcon = "❌";
             } else if ("not_logged_in".equals(message)) {
                 alertMessage = "Bạn cần đăng nhập để bình luận.";
+                alertIcon = "🔒";
+            } else if ("not_purchased".equals(message)) {
+                alertMessage = "Bạn chỉ có thể bình luận khi đã mua sản phẩm này.";
             }
     %>
-    <div class="alert-message" style="
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #FFFFFF;
-    color: #000000;
-    padding: 30px 50px;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    font-size: 20px; /* Font chữ lớn hơn */
-    font-weight: bold;
-    text-align: center;
-    width: 20%; /* Chiều rộng lớn hơn */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng */
-    z-index: 1000;">
-        <%= alertMessage %>
+
+    <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: <%= bgColor %>;
+            color: <%= textColor %>;
+            border: 2px solid <%= borderColor %>;
+            border-radius: 12px;
+            padding: 24px 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            font-size: 18px;
+            font-weight: 600;
+            z-index: 9999;
+            width: fit-content;
+            max-width: 90%;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+            ">
+        <span style="font-size: 22px; margin-right: 8px;"><%= alertIcon %></span>
+        <span><%= alertMessage %></span>
     </div>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9) translate(-50%, -50%); }
+            to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
+        }
+    </style>
+
     <script>
         setTimeout(() => {
-            const alertBox = document.querySelector('.alert-message');
+            const alertBox = document.querySelector('div[style*="position: fixed"]');
             if (alertBox) alertBox.style.display = 'none';
-        }, 3500); // 5 giây tự động ẩn
+        }, 3500);
     </script>
-    <%
-        }
-    %>
+
+    <% } %>
 
     <!-- Form Gửi Bình Luận -->
     <form action="AddFeedbackServlet" method="POST" class="review-form">
