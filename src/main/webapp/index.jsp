@@ -123,7 +123,25 @@
         </div>
     </div>
 </header>
-<!-- Menu Bar dưới Header -->
+
+<!-- thong bao dang nhap dang xuat-->
+<div id="custom-popup" style="display:none;
+    position: fixed; top: 25%; left: 50%; transform: translate(-50%, -50%);
+    background-color: #ffffff; color: #000000;
+    padding: 30px 40px; text-align: center; font-weight: 600; font-size: 18px;
+    border-radius: 8px; box-shadow: 0 0 10px rgb(0,0,0);
+    user-select: none; z-index: 9999;">
+    <div style="margin-bottom: 10px;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A6CF8E" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" stroke="#A6CF8E" stroke-width="1.5"/>
+            <path d="M7 12l3 3 7-7" stroke="#A6CF8E" stroke-width="2"/>
+        </svg>
+    </div>
+    <p id="popup-message" style="margin: 0;"></p>
+</div>
+<!-- thong bao dang nhap dang xuat-->
+
 <!-- Menu Bar dưới Header -->
 <nav class="menu-bar">
     <ul>
@@ -917,6 +935,34 @@
         window.location.href = `${pageContext.request.contextPath}/add-cart?addToCartPid=` + productId + "&quantity=" + quantity;
     }
 </script>
+
+<!-- thong bao dang nhap dang xuat-->
+<script>
+    function showPopup(message, duration = 2000) {
+        const popup = document.getElementById("custom-popup");
+        const messageBox = document.getElementById("popup-message");
+        messageBox.innerText = message;
+        popup.style.display = "block";
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, duration);
+    }
+</script>
+<c:if test="${not empty sessionScope.loginMessage}">
+    <script>
+        showPopup("${sessionScope.loginMessage}");
+    </script>
+    <c:remove var="loginMessage" scope="session"/>
+</c:if>
+
+<c:if test="${not empty sessionScope.logoutMessage}">
+    <script>
+        showPopup("${sessionScope.logoutMessage}");
+    </script>
+    <c:remove var="logoutMessage" scope="session"/>
+</c:if>
+<!-- thong bao dang nhap dang xuat -->
+
 </body>
 
 </html>
