@@ -3,8 +3,11 @@ package vn.edu.hcmuaf.fit.project_fruit.controller.cart;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.ShippingMethodDAO;
 import vn.edu.hcmuaf.fit.project_fruit.dao.cart.Cart;
+import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Logs;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Promotions;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.ShippingMethod;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
@@ -12,6 +15,8 @@ import vn.edu.hcmuaf.fit.project_fruit.service.InvoiceService;
 import vn.edu.hcmuaf.fit.project_fruit.service.PromotionService;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "CheckoutServlet", value = "/checkout")
@@ -136,6 +141,27 @@ public class CheckoutServlet extends HttpServlet {
         );
 
         if (invoiceId > 0) {
+            try (Connection conn = DbConnect.getConnection()) {
+                LogsDao logsDao = new LogsDao(conn);
+
+                String beforeData = cart.toString(); // hoặc chuỗi JSON của giỏ hàng trước khi thanh toán
+                String afterData = String.format("Invoice ID: %d, Tổng tiền: %.2f, Phương thức thanh toán: %s",
+                        invoiceId, finalTotal, paymentMethod);
+
+                Logs log = new Logs();
+                log.setUserId(user.getIdCustomer());              // ID người dùng thanh toán
+                log.setLevel("INFO");                      // Mức log
+                log.setAction("CREATE_INVOICE");          // Hành động log
+                log.setResource("Invoice");                // Đối tượng liên quan
+                log.setBeforeData(beforeData);             // Dữ liệu trước khi thao tác
+                log.setAfterData(afterData);               // Dữ liệu sau thao tác
+                log.setRole(user.getRole());               // Vai trò người dùng (nếu có)
+
+                logsDao.insertLog(log);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             session.removeAttribute("cart");
             session.removeAttribute("discount");
             request.setAttribute("orderSuccess", true);

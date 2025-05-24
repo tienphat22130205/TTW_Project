@@ -60,6 +60,13 @@
                 <i class="fas fa-phone"></i>
                 <span>Hotline: 0865660775</span>
             </div>
+            <div class="notification-icon" id="notificationBell_Menu">
+                <a href="#" class="notification-link" style="color: #FFFFFF">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-label">Thông báo</span>
+                    <span class="notification-count" id="notificationCount">0</span>
+                </a>
+            </div>
             <div class="cart">
                 <a href="${pageContext.request.contextPath}/show-cart" style="color: white">
                     <i class="fa-solid fa-cart-shopping"></i>
@@ -129,7 +136,7 @@
     position: fixed; top: 25%; left: 50%; transform: translate(-50%, -50%);
     background-color: #ffffff; color: #000000;
     padding: 30px 40px; text-align: center; font-weight: 600; font-size: 18px;
-    border-radius: 8px; box-shadow: 0 0 10px rgb(0,0,0);
+    border-radius: 8px; box-shadow: 0 0 10px rgba(166, 207, 142, 0.5);
     user-select: none; z-index: 9999;">
     <div style="margin-bottom: 10px;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A6CF8E" stroke-width="2"
@@ -954,7 +961,6 @@
     </script>
     <c:remove var="loginMessage" scope="session"/>
 </c:if>
-
 <c:if test="${not empty sessionScope.logoutMessage}">
     <script>
         showPopup("${sessionScope.logoutMessage}");
@@ -962,6 +968,63 @@
     <c:remove var="logoutMessage" scope="session"/>
 </c:if>
 <!-- thong bao dang nhap dang xuat -->
+
+<!-- css chuong thong bao -->
+<style>
+    .notification-icon {
+        display: flex;
+        position: relative;
+        font-size: 25px;
+        user-select: none;
+    }
+
+    .notification-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #FFFFFF;
+        text-decoration: none;
+        gap: 2px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .notification-label {
+        font-size: 14px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+    }
+
+    .notification-count {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .notification-link:hover {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+        0%, 100% {
+            transform: translateX(0);
+        }
+        20%, 60% {
+            transform: translateX(-5px);
+        }
+        40%, 80% {
+            transform: translateX(5px);
+        }
+    }
+</style>
+<!-- css chuong thong bao -->
 
 </body>
 

@@ -22,7 +22,7 @@
     position: fixed; top: 25%; left: 50%; transform: translate(-50%, -50%);
     background-color: #ffffff; color: #000000;
     padding: 30px 40px; text-align: center; font-weight: 600; font-size: 18px;
-    border-radius: 8px; box-shadow: 0 0 10px rgba(166, 207, 142, 0.5);
+    border-radius: 8px; box-shadow: 0 0 10px rgb(0,0,0);
     user-select: none; z-index: 9999;">
     <div style="margin-bottom: 10px;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A6CF8E" stroke-width="2"
