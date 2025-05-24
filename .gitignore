@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+# Bỏ qua cấu hình IntelliJ IDEA
+.idea/
+# Bỏ qua thư mục logs
+logs/
