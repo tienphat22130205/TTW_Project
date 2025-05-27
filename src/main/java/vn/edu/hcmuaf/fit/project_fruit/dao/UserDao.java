@@ -224,7 +224,6 @@ public class UserDao {
         }
         return false;
     }
-
     public static void main(String[] args) {
         // Tạo đối tượng User
         String email = "newuser1" + System.currentTimeMillis() + "@gmail.com"; // random để tránh trùng

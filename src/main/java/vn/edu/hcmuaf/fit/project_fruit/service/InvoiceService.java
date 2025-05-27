@@ -98,6 +98,18 @@ public class InvoiceService {
     public Map<String, Double> getRevenueByPaymentMethod() {
         return invoiceDao.getRevenueByPaymentMethod();
     }
+    public Map<String, Integer> getOrderStatusCountThisMonth() {
+        return invoiceDao.getOrderStatusCountThisMonth();
+    }
+    public Map<String, Object> getDashboardSummaryThisMonth() {
+        return invoiceDao.getDashboardSummaryThisMonth();
+    }
+    public List<Map<String, Object>> getTopSpendingCustomers(int limit) {
+        return invoiceDao.getTopSpendingCustomers(limit);
+    }
+    public Double getRevenueGrowthPercent() {
+        return invoiceDao.getRevenueGrowthPercent();
+    }
     // Test nhanh từ service
     public static void main(String[] args) {
         InvoiceService service = new InvoiceService();

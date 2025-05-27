@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="vn.edu.hcmuaf.fit.project_fruit.dao.PromotionsDao" %>
 <%@ page import="vn.edu.hcmuaf.fit.project_fruit.dao.model.Promotions" %>
 <%@ page import="java.util.List" %>
@@ -640,7 +641,56 @@
             padding: 6px 16px !important;
             border-radius: 4px !important;
         }
+        .dashboard-summary-box {
+            padding: 24px;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            text-align: center;
+        }
 
+        .summary-title {
+            font-size: 20px;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        .summary-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.03);
+        }
+
+        .summary-item .icon {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        .summary-item .label {
+            flex: 1;
+            text-align: left;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .summary-item .value {
+            font-weight: 700;
+            color: #111;
+        }
+
+        .icon.green { color: #2ecc71; }
+        .icon.blue  { color: #3498db; }
+        .icon.red   { color: #e74c3c; }
     </style>
     <script>
         function showCustomToast(message, type = 'success') {
@@ -787,7 +837,7 @@
             <div class="cards">
                 <div class="card-single">
                     <div>
-                        <h1>245</h1>
+                        <h1>${totalCustomers1}</h1>
                         <span>Khách hàng</span>
                     </div>
                     <div>
@@ -796,7 +846,7 @@
                 </div>
                 <div class="card-single">
                     <div>
-                        <h1>500</h1>
+                        <h1>${totalProductsAdmin}</h1>
                         <span>Sản phẩm</span>
                     </div>
                     <div>
@@ -805,7 +855,7 @@
                 </div>
                 <div class="card-single">
                     <div>
-                        <h1>320</h1>
+                        <h1>${totalOrders}</h1>
                         <span>Đặt hàng</span>
                     </div>
                     <div>
@@ -841,9 +891,16 @@
                 </div>
                 <div class="card-single">
                     <div>
-                        <h1>15%
-                            <span style="font-size: 1.5rem; font-weight: normal;"> <i
-                                    class="fa-solid fa-arrow-up"></i></span>
+                        <h1>
+                            <c:choose>
+                                <c:when test="${growthPercent != null}">
+                                    <fmt:formatNumber value="${growthPercent}" maxFractionDigits="1"/>%
+                                    <i class="fa-solid fa-arrow-up" style="color: green;"></i>
+                                </c:when>
+                                <c:otherwise>
+                                    Không có dữ liệu
+                                </c:otherwise>
+                            </c:choose>
                         </h1>
                         <span>Thống kê doanh thu</span>
                     </div>
@@ -902,7 +959,7 @@
                         <div class="product">
                             <div class="card">
                                 <div class="card-header">
-                                    <h2>Sản phẩm được mua nhiều nhất</h2>
+                                    <h2>Top khách hàng chi tiêu cao nhất</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -910,20 +967,22 @@
                                             <thead>
                                             <tr>
                                                 <td>STT</td>
-                                                <td>Tên sản phẩm</td>
-                                                <td>Tổng số lượng mua</td>
-                                                <td>Tổng số tiền</td>
+                                                <td>Họ tên</td>
+                                                <td>SĐT</td>
+                                                <td>Địa chỉ</td>
+                                                <td>Tổng chi tiêu</td>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <!-- Lặp qua danh sách các sản phẩm bán chạy -->
-                                            <c:forEach var="product" items="${bestSellingProducts}" varStatus="status">
+                                            <c:forEach var="customer" items="${topCustomers}" varStatus="loop">
                                                 <tr>
-                                                    <td>${status.index + 1}</td>  <!-- Số thứ tự, bắt đầu từ 1 -->
-                                                    <td>${product.name}</td>  <!-- Tên sản phẩm -->
-                                                    <td>${product.totalQuantity}</td>  <!-- Tổng số lượng mua -->
-                                                    <td>${product.totalAmount} VND</td>  <!-- Tổng số tiền -->
+                                                    <td>${loop.index + 1}</td>
+                                                    <td>${customer.fullname}</td>
+                                                    <td>${customer.phone}</td>
+                                                    <td>${customer.address}</td>
+                                                    <td><fmt:formatNumber value="${customer.totalSpent}" type="currency" currencySymbol="₫"/></td>
                                                 </tr>
+                                                <p>Test topCustomers size: ${fn:length(topCustomers)}</p>
                                             </c:forEach>
                                             </tbody>
                                         </table>
@@ -936,14 +995,30 @@
                 <div class="dashboard">
                     <!-- Doanh thu 6 tháng qua -->
                     <div class="chart-box large-chart">
-                        <h3>Doanh thu 6 tháng qua</h3>
-                        <canvas id="monthlyRevenueChart"></canvas>
+                        <h3>Đơn hàng theo trạng thái trong tháng</h3>
+                        <canvas id="orderStatusChart"></canvas>
                     </div>
 
-                    <!-- Doanh thu tháng vừa qua -->
-                    <div class="chart-box small-chart">
-                        <h3>Doanh thu tháng vừa qua</h3>
-                        <canvas id="weeklyRevenueChart"></canvas>
+                    <!-- Tổng kết tháng này -->
+                    <div class="chart-box small-chart dashboard-summary-box">
+                        <h3 class="summary-title">Tổng kết tháng này</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="icon green">💵</div>
+                                <div class="label">Doanh thu :</div>
+                                <div class="value" id="summary-revenue">0 đ</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="icon blue">🧾</div>
+                                <div class="label">Tổng đơn hàng :</div>
+                                <div class="value" id="summary-orders">0</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="icon red">❌</div>
+                                <div class="label">Đơn bị hủy :</div>
+                                <div class="value" id="summary-canceled">0</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2272,6 +2347,53 @@
                     }
                 }
             });
+        });
+</script>
+<script>
+    fetch("/project_fruit/admin/order-status-month")
+        .then(res => res.json())
+        .then(data => {
+            const ctx = document.getElementById("orderStatusChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: "Số đơn hàng",
+                        data: Object.values(data),
+                        backgroundColor: ["#4CAF50", "#FF9800", "#F44336"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${ctx.raw} đơn`
+                            }
+                        }
+                    }
+                }
+            });
+        });
+</script>
+<script>
+    fetch("/project_fruit/admin/dashboard-summary")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("summary-revenue").textContent =
+                Number(data.totalRevenue || 0).toLocaleString("vi-VN") + " đ";
+            document.getElementById("summary-orders").textContent = data.totalOrders || 0;
+            document.getElementById("summary-canceled").textContent = data.canceledOrders || 0;
         });
 </script>
 

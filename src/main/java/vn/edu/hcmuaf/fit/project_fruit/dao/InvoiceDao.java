@@ -7,10 +7,7 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.model.Invoice;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InvoiceDao {
     public int addInvoice(Invoice invoice) {
@@ -261,18 +258,117 @@ public class InvoiceDao {
         }
         return result;
     }
+    public Map<String, Integer> getOrderStatusCountThisMonth() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String sql = """
+        SELECT status, COUNT(*) AS total
+        FROM invoices
+        WHERE MONTH(create_date) = MONTH(CURRENT_DATE)
+          AND YEAR(create_date) = YEAR(CURRENT_DATE)
+        GROUP BY status
+    """;
 
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                result.put(rs.getString("status"), rs.getInt("total"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    public Map<String, Object> getDashboardSummaryThisMonth() {
+        Map<String, Object> result = new LinkedHashMap<>();
+        String sql = """
+        SELECT
+          SUM(CASE WHEN status = 'Đã thanh toán' THEN total_price ELSE 0 END) AS total_revenue,
+          COUNT(*) AS total_orders,
+          SUM(CASE WHEN status = 'Đã hủy' THEN 1 ELSE 0 END) AS canceled_orders
+        FROM invoices
+        WHERE MONTH(create_date) = MONTH(CURDATE())
+          AND YEAR(create_date) = YEAR(CURDATE())
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                result.put("totalRevenue", rs.getDouble("total_revenue"));
+                result.put("totalOrders", rs.getInt("total_orders"));
+                result.put("canceledOrders", rs.getInt("canceled_orders"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    public List<Map<String, Object>> getTopSpendingCustomers(int limit) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        String sql = """
+        SELECT 
+            c.customer_name AS fullname,
+            c.customer_phone,
+            c.address,
+            SUM(i.total_price) AS total_spent
+        FROM invoices i
+        JOIN accounts a ON i.id_account = a.id_account
+        JOIN customers c ON a.id_customer = c.id_customer
+        WHERE i.status = 'Đã thanh toán'
+        GROUP BY c.id_customer
+        ORDER BY total_spent DESC
+        LIMIT ?
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("fullname", rs.getString("fullname"));
+                row.put("phone", rs.getString("customer_phone"));
+                row.put("address", rs.getString("address"));
+                row.put("totalSpent", rs.getDouble("total_spent"));
+                result.add(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    public Double getRevenueGrowthPercent() {
+        String sql = """
+        SELECT
+            SUM(CASE WHEN MONTH(create_date) = MONTH(CURDATE()) AND YEAR(create_date) = YEAR(CURDATE()) THEN total_price ELSE 0 END) AS current_month,
+            SUM(CASE WHEN MONTH(create_date) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(create_date) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) THEN total_price ELSE 0 END) AS last_month
+        FROM invoices
+        WHERE status = 'Đã thanh toán'
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                double current = rs.getDouble("current_month");
+                double last = rs.getDouble("last_month");
+
+                if (last == 0) return null; // Tránh chia cho 0
+
+                return ((current - last) / last) * 100;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
     public static void main(String[] args) {
         InvoiceDao dao = new InvoiceDao();
-
-        System.out.println("▶ Các sản phẩm đóng góp doanh thu nhiều nhất:");
-        Map<String, Double> topProducts = dao.getTopProductRevenue();
-        if (topProducts.isEmpty()) {
-            System.out.println("Không có dữ liệu.");
-        } else {
-            for (Map.Entry<String, Double> entry : topProducts.entrySet()) {
-                System.out.printf("- %s: %.0f đ\n", entry.getKey(), entry.getValue());
-            }
-        }
+        List<Map<String, Object>> list = dao.getTopSpendingCustomers(5);
+        System.out.println("TEST DAO RESULT:");
+        list.forEach(System.out::println);
     }
 }
