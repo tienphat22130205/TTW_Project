@@ -344,14 +344,19 @@
                 document.getElementById("payment_method").value = method;
 
                 const codBtn = document.getElementById("btn-cod");
-                const transferBtn = document.getElementById("btn-transfer");
+                const vnpayBtn = document.getElementById("btn-vnpay");
 
                 codBtn.classList.remove("active");
-                transferBtn.classList.remove("active");
+                vnpayBtn.classList.remove("active");
 
                 if (method === "COD") codBtn.classList.add("active");
-                else transferBtn.classList.add("active");
+                else if (method === "VNPAY") vnpayBtn.classList.add("active");
             }
+
+            // Auto chọn COD lúc load
+            document.addEventListener("DOMContentLoaded", function () {
+                setPaymentMethod("COD");
+            });
         </script>
         <script>
             // load xử lý
@@ -692,16 +697,13 @@
                 document.getElementById("payment_method").value = method;
 
                 const codBtn = document.getElementById("btn-cod");
-                const transferBtn = document.getElementById("btn-transfer");
+                const vnpayBtn = document.getElementById("btn-vnpay");
 
                 codBtn.classList.remove("active");
-                transferBtn.classList.remove("active");
+                vnpayBtn.classList.remove("active");
 
-                if (method === "COD") {
-                    codBtn.classList.add("active");
-                } else {
-                    transferBtn.classList.add("active");
-                }
+                if (method === "COD") codBtn.classList.add("active");
+                else if (method === "VNPAY") vnpayBtn.classList.add("active");
                 document.addEventListener("DOMContentLoaded", function () {
                     setPaymentMethod("COD");
                 });
@@ -763,7 +765,6 @@
                                 statusEl.innerText = "❌ " + msg;
                                 statusEl.style.color = "red";
                             }
-
                             btn.disabled = false;
                             btn.innerHTML = "Xác minh mã";
                         }, 800); // ⏱ delay 800ms tạo cảm giác đang kiểm tra
@@ -821,7 +822,7 @@
                                    style="flex: 2; padding: 10px;height: 42px; border-radius: 5px; border: 1px solid #ccc;">
                             <button type="button" id="verifyOtpBtn" onclick="verifyOtp()"
                                     style="flex: 1; padding: 10px 14px; height: 42px; background-color: #28a745;
-               color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                    color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
                                 Xác minh mã
                             </button>
                         </div>
@@ -892,9 +893,9 @@
                             <i class="fas fa-box"></i> Thanh toán khi nhận hàng (COD)
                         </label>
 
-                        <input type="radio" name="payment_method_choice" id="pay_momo" value="MOMO" hidden>
-                        <label for="pay_momo" onclick="showMomoQR()">
-                            <i class="fas fa-money-check-alt"></i> Chuyển khoản qua ngân hàng
+                        <input type="radio" name="payment_method_choice" id="pay_vnpay" value="VNPAY" hidden>
+                        <label for="pay_vnpay" onclick="setPaymentMethod('VNPAY')" id="btn-vnpay">
+                            <i class="fas fa-credit-card"></i> Thanh toán qua VNPAY
                         </label>
                     </div>
                     <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
@@ -1051,65 +1052,65 @@
             </div>
         </div>
     </div>
-    <div id="momoQrModal" class="voucher-overlay" style="display:none;">
-            <div class="voucher-popup" style="max-width: 500px;">
-                <div class="popup-header">
-                    <h3 class="voucher-title">Thanh toán Momo</h3>
-                    <button onclick="closeMomoQR()" class="close-btn">&times;</button>
-                </div>
-                <div style="text-align: center;">
-                    <img src="${pageContext.request.contextPath}/assets/img/logoBank/momo.png" alt="QR Momo" style="width: 250px; margin-bottom: 10px;">
-                    <p><strong>Số tiền:</strong> <span id="momoAmount">0</span> ₫</p>
-                    <p><strong>Nội dung chuyển khoản:</strong><br> <code id="momoNote"></code></p>
-                    <button class="submit-btn" onclick="confirmMomoPayment()">Tôi đã chuyển khoản</button>
-                </div>
-            </div>
-        </div>
-    <script>
-        function showMomoQR() {
-            document.getElementById("payment_method").value = "MOMO";
+<%--    <div id="momoQrModal" class="voucher-overlay" style="display:none;">--%>
+<%--            <div class="voucher-popup" style="max-width: 500px;">--%>
+<%--                <div class="popup-header">--%>
+<%--                    <h3 class="voucher-title">Thanh toán Momo</h3>--%>
+<%--                    <button onclick="closeMomoQR()" class="close-btn">&times;</button>--%>
+<%--                </div>--%>
+<%--                <div style="text-align: center;">--%>
+<%--                    <img src="${pageContext.request.contextPath}/assets/img/logoBank/momo.png" alt="QR Momo" style="width: 250px; margin-bottom: 10px;">--%>
+<%--                    <p><strong>Số tiền:</strong> <span id="momoAmount">0</span> ₫</p>--%>
+<%--                    <p><strong>Nội dung chuyển khoản:</strong><br> <code id="momoNote"></code></p>--%>
+<%--                    <button class="submit-btn" onclick="confirmMomoPayment()">Tôi đã chuyển khoản</button>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--    <script>--%>
+<%--        function showMomoQR() {--%>
+<%--            document.getElementById("payment_method").value = "MOMO";--%>
 
-            const totalText = document.getElementById("final_total_value")?.textContent || "0 đ";
-            const rawAmount = totalText.replace(/\./g, '').replace(/[^\d]/g, '');
-            const amount = parseInt(rawAmount || "0");
+<%--            const totalText = document.getElementById("final_total_value")?.textContent || "0 đ";--%>
+<%--            const rawAmount = totalText.replace(/\./g, '').replace(/[^\d]/g, '');--%>
+<%--            const amount = parseInt(rawAmount || "0");--%>
 
-            const invoiceId = Math.floor(Math.random() * 100000); // sinh tạm ID
-            const note = "DH" + invoiceId + "VitaminFruit";
+<%--            const invoiceId = Math.floor(Math.random() * 100000); // sinh tạm ID--%>
+<%--            const note = "DH" + invoiceId + "VitaminFruit";--%>
 
-            document.getElementById("momoAmount").innerText = amount.toLocaleString('vi-VN');
-            document.getElementById("momoNote").innerText = note;
+<%--            document.getElementById("momoAmount").innerText = amount.toLocaleString('vi-VN');--%>
+<%--            document.getElementById("momoNote").innerText = note;--%>
 
-            document.getElementById("momoQrModal").style.display = "flex";
+<%--            document.getElementById("momoQrModal").style.display = "flex";--%>
 
-            document.getElementById("btn-cod").classList.remove("active");
-            document.getElementById("btn-transfer").classList.add("active");
-        }
+<%--            document.getElementById("btn-cod").classList.remove("active");--%>
+<%--            document.getElementById("btn-transfer").classList.add("active");--%>
+<%--        }--%>
 
-        function closeMomoQR() {
-            document.getElementById("momoQrModal").style.display = "none";
-        }
+<%--        function closeMomoQR() {--%>
+<%--            document.getElementById("momoQrModal").style.display = "none";--%>
+<%--        }--%>
 
-        function confirmMomoPayment() {
-            Swal.fire({
-                icon: 'success',
-                title: 'Xác nhận thành công',
-                text: 'Cảm ơn bạn đã thanh toán. Vui lòng nhấn "Xác nhận thanh toán" để hoàn tất.',
-                confirmButtonText: 'Đã hiểu'
-            });
-            closeMomoQR();
-        }
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const momoOverlay = document.getElementById("momoQrModal");
-            const popup = momoOverlay.querySelector(".voucher-popup");
+<%--        function confirmMomoPayment() {--%>
+<%--            Swal.fire({--%>
+<%--                icon: 'success',--%>
+<%--                title: 'Xác nhận thành công',--%>
+<%--                text: 'Cảm ơn bạn đã thanh toán. Vui lòng nhấn "Xác nhận thanh toán" để hoàn tất.',--%>
+<%--                confirmButtonText: 'Đã hiểu'--%>
+<%--            });--%>
+<%--            closeMomoQR();--%>
+<%--        }--%>
+<%--    </script>--%>
+<%--    <script>--%>
+<%--        document.addEventListener("DOMContentLoaded", function () {--%>
+<%--            const momoOverlay = document.getElementById("momoQrModal");--%>
+<%--            const popup = momoOverlay.querySelector(".voucher-popup");--%>
 
-            window.addEventListener("click", function (e) {
-                if (e.target === momoOverlay) {
-                    momoOverlay.style.display = "none";
-                }
-            });
-        });
-    </script>
+<%--            window.addEventListener("click", function (e) {--%>
+<%--                if (e.target === momoOverlay) {--%>
+<%--                    momoOverlay.style.display = "none";--%>
+<%--                }--%>
+<%--            });--%>
+<%--        });--%>
+<%--    </script>--%>
     </body>
     </html>

@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.model.Invoice;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public class InvoiceService {
     private final InvoiceDao invoiceDao = new InvoiceDao();
@@ -88,7 +89,15 @@ public class InvoiceService {
             }
         }
     }
-
+    public Map<Integer, Double> getMonthlyRevenue() {
+        return invoiceDao.getMonthlyRevenue();
+    }
+    public Map<String, Double> getTopProductRevenue() {
+        return invoiceDao.getTopProductRevenue();
+    }
+    public Map<String, Double> getRevenueByPaymentMethod() {
+        return invoiceDao.getRevenueByPaymentMethod();
+    }
     // Test nhanh từ service
     public static void main(String[] args) {
         InvoiceService service = new InvoiceService();

@@ -36,7 +36,19 @@ public class ProductService {
         return productDao.getBestSellingProducts();
     }
     public boolean updateProduct(Product product) {
+        // Ở đây bạn có thể thêm logic kiểm tra, validate trước khi gọi dao
+        if (product == null || product.getId_product() <= 0) {
+            System.err.println("Dữ liệu sản phẩm không hợp lệ để cập nhật!");
+            return false;
+        }
+        // Gọi hàm cập nhật trong DAO
         return productDao.updateProduct(product);
+    }
+    public Product getProductById(int id) {
+        if (id <= 0) {
+            return null;
+        }
+        return productDao.getById(id);
     }
     public static void main(String[] args) {
         ProductService productService = new ProductService();

@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InvoiceDao {
     public int addInvoice(Invoice invoice) {
@@ -199,35 +201,78 @@ public class InvoiceDao {
         }
         return 0;
     }
-    public static void main(String[] args) {
-        InvoiceDao invoiceDao = new InvoiceDao();
-        List<Invoice> invoices = invoiceDao.getAllInvoices();
+    public Map<Integer, Double> getMonthlyRevenue() {
+        Map<Integer, Double> result = new LinkedHashMap<>();
+        String sql = "SELECT MONTH(create_date) AS month, SUM(total_price) AS revenue " +
+                "FROM invoices WHERE status = 'Đã thanh toán' " +
+                "GROUP BY MONTH(create_date) ORDER BY MONTH(create_date)";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
+             ResultSet rs = ps.executeQuery()) {
 
-        if (invoices.isEmpty()) {
-            System.out.println("⚠️ Không có đơn hàng nào trong hệ thống.");
-            return;
+            while (rs.next()) {
+                int month = rs.getInt("month");
+                double revenue = rs.getDouble("revenue");
+                result.put(month, revenue);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return result;
+    }
+    public Map<String, Double> getTopProductRevenue() {
+        Map<String, Double> result = new LinkedHashMap<>();
+        String sql = """
+        SELECT p.product_name, SUM(d.price * d.quantity) AS revenue
+        FROM invoices i
+        JOIN invoices_details d ON i.id_invoice = d.id_invoice
+        JOIN products p ON p.id_product = d.id_product
+        WHERE i.status = 'Đã thanh toán'
+        GROUP BY p.product_name
+        ORDER BY revenue DESC
+        LIMIT 5
+    """;
 
-        System.out.println("📋 DANH SÁCH TẤT CẢ ĐƠN HÀNG:\n");
-
-        int index = 1;
-        for (Invoice invoice : invoices) {
-            System.out.println("========= Đơn hàng #" + invoice.getIdInvoice() + " =========");
-            System.out.println("🔢 STT: " + index++);
-            System.out.println("👤 Người đặt: " + invoice.getAccountName());
-            System.out.println("📞 SĐT: " + invoice.getPhone());
-            System.out.println("📧 Email: " + invoice.getEmail());
-            System.out.println("📍 Địa chỉ nhận hàng: " + invoice.getAddressFull());
-            System.out.println("💳 Phương thức thanh toán: " + invoice.getPaymentMethod());
-            System.out.println("🚛 Phí vận chuyển: " + invoice.getShippingFee() + " đ");
-            System.out.println("💰 Tổng thanh toán: " + invoice.getTotalPrice() + " đ");
-            System.out.println("📦 Trạng thái thanh toán: " + invoice.getStatus());
-            System.out.println("🔄 Trạng thái đơn hàng: " + invoice.getOrderStatus());
-            System.out.println("📅 Ngày tạo: " + invoice.getCreateDate());
-            System.out.println("--------------------------------------------\n");
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                result.put(rs.getString("product_name"), rs.getDouble("revenue"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return result;
+    }
+    public Map<String, Double> getRevenueByPaymentMethod() {
+        Map<String, Double> result = new LinkedHashMap<>();
+        String sql = """
+        SELECT payment_method, SUM(total_price) AS revenue
+        FROM invoices
+        WHERE status = 'Đã thanh toán'
+        GROUP BY payment_method
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                result.put(rs.getString("payment_method"), rs.getDouble("revenue"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
+    public static void main(String[] args) {
+        InvoiceDao dao = new InvoiceDao();
 
-
+        System.out.println("▶ Các sản phẩm đóng góp doanh thu nhiều nhất:");
+        Map<String, Double> topProducts = dao.getTopProductRevenue();
+        if (topProducts.isEmpty()) {
+            System.out.println("Không có dữ liệu.");
+        } else {
+            for (Map.Entry<String, Double> entry : topProducts.entrySet()) {
+                System.out.printf("- %s: %.0f đ\n", entry.getKey(), entry.getValue());
+            }
+        }
+    }
 }

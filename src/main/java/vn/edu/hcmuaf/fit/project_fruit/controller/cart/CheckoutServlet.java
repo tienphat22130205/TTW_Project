@@ -10,6 +10,7 @@
     import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
     import vn.edu.hcmuaf.fit.project_fruit.service.InvoiceService;
     import vn.edu.hcmuaf.fit.project_fruit.service.PromotionService;
+    import vn.edu.hcmuaf.fit.project_fruit.utils.VnpayUtils;
 
     import java.io.IOException;
     import java.util.List;
@@ -94,59 +95,43 @@
             Boolean otpVerified = (Boolean) session.getAttribute("otp_verified");
             if (otpVerified == null || !otpVerified) {
                 request.setAttribute("otpError", "Bạn cần xác minh email trước khi đặt hàng.");
-                doGet(request, response); // Hiển thị lại trang payment.jsp kèm lỗi
+                request.getRequestDispatcher("/user/payment.jsp").forward(request, response);
                 return;
             }
+
             String receiverName = request.getParameter("receiver_name");
             String phone = request.getParameter("phone");
             String email = request.getParameter("email");
 
-            // Lấy tên hiển thị tỉnh - quận - phường từ input hidden (đã được JS gán)
             String province = request.getParameter("province_name");
             String district = request.getParameter("district_name");
             String ward = request.getParameter("ward_name");
-
             String addressDetail = request.getParameter("address");
             String paymentMethod = request.getParameter("payment_method");
             String shippingMethodId = request.getParameter("shipping_method");
-            String status;
-            if ("COD".equalsIgnoreCase(paymentMethod)) {
-                status = "Chưa thanh toán"; // Đơn chờ admin xác nhận
-            } else {
-                status = "Đã thanh toán"; // Đơn đã chuyển khoản
-            }
 
-            // Ghép thành địa chỉ đầy đủ
-            StringBuilder fullAddressBuilder = new StringBuilder();
-            if (ward != null && !ward.isEmpty()) fullAddressBuilder.append(ward).append(", ");
-            if (district != null && !district.isEmpty()) fullAddressBuilder.append(district).append(", ");
-            if (province != null && !province.isEmpty()) fullAddressBuilder.append(province).append(", ");
-            fullAddressBuilder.append(addressDetail);
-            String fullAddress = fullAddressBuilder.toString();
+            String status = paymentMethod.equalsIgnoreCase("COD") ? "Chưa thanh toán" : "Đã thanh toán";
 
-            // Lấy thông tin vận chuyển
+            String fullAddress = String.join(", ", ward, district, province, addressDetail);
+
             ShippingMethodDAO shippingMethodDAO = new ShippingMethodDAO();
             ShippingMethod selectedMethod = shippingMethodDAO.getShippingMethodById(Integer.parseInt(shippingMethodId));
             String shippingMethodName = selectedMethod != null ? selectedMethod.getMethodName() : "Không rõ";
             double shippingFee = selectedMethod != null ? selectedMethod.getShippingFee() : 0;
 
             double tempTotal = cart.getTotalPrice();
-            double discount = 0;
-            Object discountObj = session.getAttribute("discount");
-            if (discountObj instanceof Number) {
-                discount = ((Number) discountObj).doubleValue();
-            }
-
+            double discount = session.getAttribute("discount") instanceof Number ? ((Number) session.getAttribute("discount")).doubleValue() : 0;
             double finalTotal = tempTotal - discount + shippingFee;
 
             InvoiceService service = new InvoiceService();
-            int invoiceId = service.createInvoice(
-                    user, receiverName, phone, email, fullAddress,
-                    paymentMethod, shippingMethodName,
-                    finalTotal, shippingFee, status, cart
-            );
+            int invoiceId = service.createInvoice(user, receiverName, phone, email, fullAddress, paymentMethod, shippingMethodName, finalTotal, shippingFee, status, cart);
 
             if (invoiceId > 0) {
+                if (paymentMethod.equalsIgnoreCase("VNPAY")) {
+                    String redirectUrl = VnpayUtils.buildPaymentUrl(invoiceId, finalTotal);
+                    response.sendRedirect(redirectUrl);
+                    return;
+                }
                 String emailBody = "<h3>Chào " + receiverName + ",</h3>" +
                         "<p>Cảm ơn bạn đã đặt hàng tại VitaminFruit.</p>" +
                         "<p>Mã hóa đơn của bạn là: <strong>#" + invoiceId + "</strong></p>" +
@@ -166,7 +151,7 @@
                 request.getRequestDispatcher("/user/payment.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Thanh toán thất bại, vui lòng thử lại.");
-                doGet(request, response);
+                request.getRequestDispatcher("/user/payment.jsp").forward(request, response);
             }
         }
     }

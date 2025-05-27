@@ -593,41 +593,57 @@ public class ProductDao {
 // ========================== MAIN TEST ==========================
 
     public static void main(String[] args) {
-//        ProductDao productDao = new ProductDao();
-//
-//        // Tạo đối tượng Product mẫu để test cập nhật
-//        Product product = new Product();
-//
-//        // Giả sử bạn có setter trong class Product, set đầy đủ thông tin cần cập nhật:
-//        product.setId_product(10);                // ID sản phẩm cần update (phải có trong DB)
-//        product.setName("Quà tết 2025");
-//        product.setPrice(1500000);
-//        product.setOrigin("Việt Nam");
-//        product.setQuantity(50);
-//        product.setWarranty_period("12 tháng");
-//        product.setEntry_date("2025-05-21");    // định dạng yyyy-MM-dd hoặc phù hợp DB
-//        product.setShelf_life("6 tháng");
-//        product.setDescribe_1("Mô tả cập nhật cho sản phẩm");
-//        product.setRating("4.5");
-//        product.setCharacteristic("Đặc điểm cập nhật");
-//        product.setPreserve_product("Bảo quản nơi khô ráo");
-//        product.setUse_prodcut("Sử dụng theo hướng dẫn");
-//        product.setBenefit("Lợi ích khi dùng sản phẩm");
-//        product.setStatus(true);                 // trạng thái sản phẩm
-//
-//        boolean updated = productDao.updateProduct(product);
-//
-//        if (updated) {
-//            System.out.println("Cập nhật sản phẩm thành công!");
-//        } else {
-//            System.out.println("Cập nhật sản phẩm thất bại.");
-//        }
-            ProductDao productDao = new ProductDao();
+        ProductDao productDao = new ProductDao();
 
-            int totalSold = productDao.getTotalSoldProducts();
+        // Tạo đối tượng Product mẫu để test cập nhật
+        Product product = new Product();
 
-            System.out.println("Tổng số sản phẩm đã bán: " + totalSold);
+        // Giả sử bạn có setter trong class Product, set đầy đủ thông tin cần cập nhật:
+        product.setId_product(10);                // ID sản phẩm cần update (phải có trong DB)
+        product.setName("Quà tết 2025");
+        product.setPrice(1500000);
+        product.setOrigin("Việt Nam");
+        product.setQuantity(50);
+        product.setWarranty_period("12 tháng");
+        product.setEntry_date("2025-05-21");    // định dạng yyyy-MM-dd hoặc phù hợp DB
+        product.setShelf_life("6 tháng");
+        product.setDescribe_1("Mô tả cập nhật cho sản phẩm");
+        product.setRating("4.5");
+        product.setCharacteristic("Đặc điểm cập nhật");
+        product.setPreserve_product("Bảo quản nơi khô ráo");
+        product.setUse_prodcut("Sử dụng theo hướng dẫn");
+        product.setBenefit("Lợi ích khi dùng sản phẩm");
+        product.setStatus(true);                 // trạng thái sản phẩm
+
+        boolean updated = productDao.updateProduct(product);
+
+        if (updated) {
+            System.out.println("✅ Cập nhật sản phẩm thành công!");
+            // Có thể lấy lại sản phẩm vừa cập nhật để kiểm tra
+            Product updatedProduct = productDao.getById(product.getId_product());
+            if (updatedProduct != null) {
+                System.out.println("Thông tin sản phẩm sau cập nhật:");
+                System.out.println("Tên sản phẩm: " + updatedProduct.getName());
+                System.out.println("Giá: " + updatedProduct.getPrice());
+                System.out.println("Xuất xứ: " + updatedProduct.getOrigin());
+                System.out.println("Số lượng: " + updatedProduct.getQuantity());
+                System.out.println("Bảo hành: " + updatedProduct.getWarranty_period());
+                System.out.println("Ngày nhập: " + updatedProduct.getEntry_date());
+                System.out.println("Hạn sử dụng: " + updatedProduct.getShelf_life());
+                System.out.println("Mô tả: " + updatedProduct.getDescribe_1());
+                System.out.println("Đánh giá: " + updatedProduct.getRating());
+                System.out.println("Đặc điểm: " + updatedProduct.getCharacteristic());
+                System.out.println("Bảo quản: " + updatedProduct.getPreserve_product());
+                System.out.println("Cách dùng: " + updatedProduct.getUse_prodcut());
+                System.out.println("Lợi ích: " + updatedProduct.getBenefit());
+                System.out.println("Trạng thái: " + (updatedProduct.isStatus() ? "Hoạt động" : "Ngừng hoạt động"));
+            } else {
+                System.out.println("Không thể lấy dữ liệu sản phẩm sau khi cập nhật!");
+            }
+        } else {
+            System.out.println("❌ Cập nhật sản phẩm thất bại.");
         }
+    }
 
 
 }

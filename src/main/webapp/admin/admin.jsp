@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/custom-datatable.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <style>
         .modal-overlay {
             position: fixed;
@@ -260,6 +261,285 @@
                 width: 140px;
             }
         }
+        #editProductOverlay.modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 10px 20px;  /* giảm padding tổng */
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #editProductOverlay .modal-content {
+            background: #fff;
+            border-radius: 12px;
+            width: 1100px;       /* giảm chiều rộng */
+            max-width: 95%;
+            max-height: 85vh;    /* giới hạn chiều cao */
+            padding: 20px 30px;  /* giảm padding */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #222;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Phần chứa ảnh + form chính */
+        #editProductOverlay .product-detail-container {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            overflow: hidden;
+            max-height: calc(85vh - 100px);  /* trừ header + footer */
+        }
+
+        /* Ảnh sản phẩm bên trái */
+        #editProductOverlay .product-image-wrapper {
+            flex: 0 0 300px; /* giảm kích thước ảnh */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10px;
+        }
+
+        #editProductOverlay .product-image-wrapper img {
+            width: 280px; /* nhỏ hơn để cân đối */
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Bảng form bên phải */
+        #editProductOverlay .product-info-wrapper {
+            flex: 1;
+            overflow-y: auto;  /* cuộn dọc */
+            min-width: 0;      /* để tránh tràn */
+        }
+
+        /* Bảng form */
+        #editProductOverlay .product-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px; /* nhỏ hơn 1 chút */
+            color: #333;
+        }
+
+        #editProductOverlay .product-info-table th,
+        #editProductOverlay .product-info-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;  /* giảm padding */
+            vertical-align: top;
+            text-align: left;
+        }
+
+        #editProductOverlay .product-info-table th {
+            background-color: #f5f5f5;
+            width: 150px;
+            font-weight: 600;
+            color: #222;
+            user-select: none;
+        }
+
+        #editProductOverlay .product-info-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        #editProductOverlay .product-info-table tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Nút bấm dưới */
+        #editProductOverlay form > div:last-child {
+            margin-top: 1em;
+            text-align: center;
+            gap: 12px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #editProductOverlay button {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #editEnableBtn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #editEnableBtn:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+
+        #editSaveBtn {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        #editSaveBtn:hover:not(:disabled) {
+            background-color: #1e8449;
+        }
+
+        #editProductOverlay button[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #editProductOverlay button:nth-child(3) {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        #editProductOverlay button:nth-child(3):hover {
+            background-color: #c0392b;
+        }
+
+        /* Responsive cho màn hình nhỏ */
+        @media (max-width: 900px) {
+            #editProductOverlay .modal-content {
+                width: 95%;
+                padding: 15px 20px;
+                max-height: 90vh;
+            }
+            #editProductOverlay .product-detail-container {
+                flex-direction: column;
+                max-height: none;
+                overflow: visible;
+            }
+            #editProductOverlay .product-image-wrapper {
+                margin-bottom: 20px;
+                flex: none;
+            }
+            #editProductOverlay .product-info-wrapper {
+                width: 100%;
+                overflow: visible;
+            }
+            #editProductOverlay .product-info-table th {
+                width: 140px;
+            }
+        }
+
+        #editProductOverlay form > div:last-child {
+            margin-top: 1.5em;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* khoảng cách giữa các nút */
+            padding-bottom: 10px; /* cách đáy modal */
+            border-top: 1px solid #eee; /* gạch nhẹ phía trên */
+        }
+
+        /* chung cho cả 3 nút */
+        #editProductOverlay button {
+            min-width: 110px;  /* chiều rộng tối thiểu */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
+        }
+
+        /* Nút Chỉnh sửa - màu xanh dương */
+        #editEnableBtn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #editEnableBtn:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+
+        /* Nút Lưu - màu xanh lá */
+        #editSaveBtn {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        #editSaveBtn:hover:not(:disabled) {
+            background-color: #1e8449;
+        }
+
+        /* Nút bị disabled sẽ mờ */
+        #editProductOverlay button[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Nút Đóng - màu đỏ */
+        #editProductOverlay button:nth-child(3) {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        #editProductOverlay button:nth-child(3):hover {
+            background-color: #c0392b;
+        }
+        #custom-toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .custom-toast {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-left: 5px solid #28a745;
+            border-radius: 6px;
+            padding: 12px 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            min-width: 280px;
+            animation: slideIn 0.4s ease;
+            position: relative;
+            font-family: Arial, sans-serif;
+            color: #000 !important;
+        }
+
+        .custom-toast.success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-icon {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 14px;
+            color: #000000;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #aaa;
+            position: absolute;
+            top: 8px;
+            right: 10px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to   { transform: translateX(0); opacity: 1; }
+        }
         .btn-circle {
              width: 36px;
              height: 36px;
@@ -362,6 +642,25 @@
         }
 
     </style>
+    <script>
+        function showCustomToast(message, type = 'success') {
+            const container = document.getElementById("custom-toast-container");
+
+            const toast = document.createElement("div");
+            toast.className = `custom-toast ${type}`;
+
+            toast.innerHTML = `
+                <div class="toast-icon">✅</div>
+                <div class="toast-message">${message}</div>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+              `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
 <body>
 <input type="checkbox" name="" id="nav-toggle">
 <div class="sidebar">
@@ -834,7 +1133,8 @@
                                             </td>
 
                                             <td>
-                                                <button class="edit-button" onclick="window.location.href='edit-product?pid=${product.id_product}'">Chỉnh sửa</button>
+                                                <!-- Thay vì onclick inline, dùng data attribute chứa JSON -->
+                                                <button class="edit-button" data-product='${fn:escapeXml(productJsonMap[product.id_product])}'>Chỉnh sửa</button>
                                                 <button class="delete-button" onclick="window.location.href='remove-product?pid=${product.id_product}'">Xóa</button>
                                             </td>
                                         </tr>
@@ -980,8 +1280,8 @@
                     <canvas id="productDonutChart"></canvas>
                 </div>
                 <div class="chart-box common-chart">
-                    <h3>Doanh thu theo Loại sản phẩm tháng vừa qua</h3>
-                    <canvas id="productTypeRevenueChart"></canvas>
+                    <h3>Doanh thu theo phương thức thanh toán</h3>
+                    <canvas id="paymentMethodRevenueChart"></canvas>
                 </div>
             </div>
         </div>
@@ -1382,11 +1682,106 @@
         </div>
     </div>
 </div>
+<div id="editProductOverlay" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeEditProductOverlay()">&times;</span>
+        <h2 class="modal-title">✏️ Chỉnh sửa sản phẩm</h2>
 
+        <form id="editProductForm">
+            <div class="product-detail-container">
+                <div class="product-image-wrapper">
+                    <div id="editProductImagesDisplay" class="product-images"></div>
+                </div>
+
+                <div class="product-info-wrapper">
+                    <table class="product-info-table">
+                        <tbody>
+                        <tr>
+                            <th>Mã sản phẩm</th>
+                            <td><input type="text" id="editProductId" name="id_product" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <td><input type="text" id="editProductName" name="name" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Xuất xứ</th>
+                            <td><input type="text" id="editProductOrigin" name="origin" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Giá</th>
+                            <td><input type="number" id="editProductPrice" name="price" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Đánh giá</th>
+                            <td><input type="text" id="editProductRating" name="rating" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Trạng thái</th>
+                            <td>
+                                <select id="editProductStatus" name="status" disabled>
+                                    <option value="true">Còn hàng</option>
+                                    <option value="false">Hết hàng</option>
+                                </select>
+                                <input type="hidden" id="hiddenStatus" name="status">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Mô tả</th>
+                            <td><textarea id="editProductDescribe" name="describe_1" readonly></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>Số lượng</th>
+                            <td><input type="number" id="editProductQuantity" name="quantity" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Ngày nhập</th>
+                            <td><input type="date" id="editProductEntryDate" name="entry_date" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Hạn sử dụng</th>
+                            <td><input type="text" id="editProductShelfLife" name="shelf_life" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Thời gian bảo hành</th>
+                            <td><input type="text" id="editProductWarranty" name="warranty_period" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Đặc điểm</th>
+                            <td><input type="text" id="editProductCharacteristic" name="characteristic" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Cách bảo quản</th>
+                            <td><input type="text" id="editProductPreserve" name="preserve_product" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Cách sử dụng</th>
+                            <td><input type="text" id="editProductUse" name="use_product" readonly></td> <!-- note corrected name -->
+                        </tr>
+                        <tr>
+                            <th>Lợi ích</th>
+                            <td><input type="text" id="editProductBenefit" name="benefit" readonly></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="margin-top: 1em; text-align: center;">
+                <button type="button" id="editEnableBtn">Chỉnh sửa</button>
+                <button type="submit" id="editSaveBtn" disabled>Lưu</button>
+                <button type="button" onclick="closeEditProductOverlay()">Đóng</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="custom-toast-container"></div>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 <script>
     $(document).ready(function () {
@@ -1547,14 +1942,7 @@
                                 }
                             }
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Thành công!',
-                                text: `${actionLabel} đơn hàng #${id} thành công`,
-                                timer: 1500,
-                                showConfirmButton: false,
-                                width: 320
-                            });
+                            showCustomToast(`${actionLabel} đơn hàng #${id} thành công!`);
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -1617,6 +2005,274 @@
     function closeProductOverlay() {
         document.getElementById('productOverlay').style.display = 'none';
     }
+</script>
+<script>
+    function openEditProductOverlay(product) {
+        document.getElementById('editProductId').value = product.id_product || '';
+        document.getElementById('editProductName').value = product.name || '';
+        document.getElementById('editProductOrigin').value = product.origin || '';
+        document.getElementById('editProductPrice').value = product.price || '';
+        document.getElementById('editProductRating').value = product.rating || '';
+        document.getElementById('editProductStatus').value = product.status ? 'true' : 'false';
+        document.getElementById('hiddenStatus').value = product.status ? 'true' : 'false';
+        document.getElementById('editProductDescribe').value = product.describe_1 || '';
+        document.getElementById('editProductQuantity').value = product.quantity || '';
+        document.getElementById('editProductEntryDate').value = product.entry_date || '';
+        document.getElementById('editProductShelfLife').value = product.shelf_life || '';
+        document.getElementById('editProductWarranty').value = product.warranty_period || '';
+        document.getElementById('editProductCharacteristic').value = product.characteristic || '';
+        document.getElementById('editProductPreserve').value = product.preserve_product || '';
+        document.getElementById('editProductUse').value = product.use_product || '';
+        document.getElementById('editProductBenefit').value = product.benefit || '';
+
+        // Hiển thị ảnh sản phẩm
+        const imagesDiv = document.getElementById('editProductImagesDisplay');
+        imagesDiv.innerHTML = '';
+        if (product.listImg && Array.isArray(product.listImg)) {
+            product.listImg.forEach(img => {
+                const imgEl = document.createElement('img');
+                imgEl.src = img.url;
+                imgEl.alt = product.name || 'Product Image';
+                imgEl.style.width = '320px';
+                imgEl.style.height = 'auto';
+                imgEl.style.borderRadius = '6px';
+                imagesDiv.appendChild(imgEl);
+            });
+        } else {
+            imagesDiv.textContent = 'Không có ảnh sản phẩm.';
+        }
+
+        disableEditFields(true);
+        document.getElementById('editSaveBtn').disabled = true;
+        document.getElementById('editEnableBtn').disabled = false;
+
+        document.getElementById('editProductOverlay').style.display = 'flex';
+    }
+
+    function disableEditFields(disabled) {
+        const form = document.getElementById('editProductForm');
+        Array.from(form.elements).forEach(el => {
+            if (el.name !== 'id_product') {
+                if (el.tagName.toLowerCase() === 'select') {
+                    el.disabled = disabled;
+                    document.getElementById('hiddenStatus').value = el.value;
+                } else {
+                    el.readOnly = disabled;
+                }
+            }
+        });
+    }
+
+    function closeEditProductOverlay() {
+        document.getElementById('editProductOverlay').style.display = 'none';
+    }
+
+    // Bật chế độ chỉnh sửa
+    document.getElementById('editEnableBtn').addEventListener('click', function () {
+        disableEditFields(false);
+        this.disabled = true;
+        document.getElementById('editSaveBtn').disabled = false;
+    });
+
+    // Submit form AJAX
+    document.getElementById('editProductForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const form = this;
+
+        // Tạm thời enable tất cả trường để lấy đủ dữ liệu
+        const disabledElements = [];
+        Array.from(form.elements).forEach(el => {
+            if (el.disabled) {
+                disabledElements.push(el);
+                el.disabled = false;
+            }
+            if (el.readOnly) {
+                disabledElements.push(el);
+                el.readOnly = false;
+            }
+        });
+
+        const formData = new FormData(form);
+
+        // Khôi phục lại trạng thái disabled và readOnly
+        disabledElements.forEach(el => {
+            if (el.tagName.toLowerCase() === 'select') {
+                el.disabled = true;
+            } else {
+                el.readOnly = true;
+            }
+        });
+
+        // Đồng bộ giá trị status từ select sang hidden input
+        formData.set('status', document.getElementById('editProductStatus').value);
+
+        fetch('admin/edit-product', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    closeEditProductOverlay();
+                    location.reload();
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(err => alert('Lỗi kết nối: ' + err.message));
+    });
+
+    // Gắn sự kiện nút chỉnh sửa trên bảng
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.edit-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const jsonStr = btn.getAttribute('data-product');
+                try {
+                    const product = JSON.parse(jsonStr);
+                    openEditProductOverlay(product);
+                } catch (e) {
+                    console.error('Lỗi parse JSON:', e);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/project_fruit/admin/revenue-monthly")
+            .then(res => res.json())
+            .then(data => {
+                console.log("Dữ liệu từ servlet:", data);
+
+                const labels = Array.from({ length: 12 }, (_, i) => `Tháng ${i + 1}`);
+                const dataset = Array.from({ length: 12 }, (_, i) => data[i + 1] || 0);
+
+                labels.forEach((label, i) => {
+                    console.log(`Label[${i}]:`, label);
+                });
+                console.log("DATASET =", dataset);
+
+                const ctx = document.getElementById("monthlyRevenueChart1").getContext("2d");
+                new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Doanh thu (VND)",
+                            data: dataset,
+                            borderColor: "#00c5cc",
+                            backgroundColor: "rgba(0, 197, 204, 0.1)",
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'category', // ✅ ép trục X là loại phân loại (không phải số)
+                                ticks: {
+                                    autoSkip: false,
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    font: {
+                                        family: 'Arial'
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: value => value.toLocaleString("vi-VN") + " đ"
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (ctx) {
+                                        return ctx.dataset.label + ": " + ctx.parsed.y.toLocaleString("vi-VN") + " đ";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(err => console.error("Lỗi khi fetch doanh thu:", err));
+    });
+</script>
+<script>
+    fetch("/project_fruit/admin/revenue-top-products")
+        .then(res => res.json())
+        .then(data => {
+            const ctx = document.getElementById("productDonutChart").getContext("2d");
+            new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: [
+                            "#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#E91E63"
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "bottom"
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    return ctx.label + ": " + ctx.raw.toLocaleString("vi-VN") + " đ";
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+</script>
+<script>
+    fetch("/project_fruit/admin/revenue-by-payment-method")
+        .then(res => res.json())
+        .then(data => {
+            const ctx = document.getElementById("paymentMethodRevenueChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: "Doanh thu (VND)",
+                        data: Object.values(data),
+                        backgroundColor: ["#4CAF50", "#FF9800", "#03A9F4", "#9C27B0"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    const label = ctx.label || "";
+                                    const value = ctx.raw || 0;
+                                    return `${label}: ${value.toLocaleString("vi-VN")} đ`;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: "bottom"
+                        }
+                    }
+                }
+            });
+        });
 </script>
 
 </body>
