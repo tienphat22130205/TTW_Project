@@ -85,7 +85,7 @@ public class ListAdmin extends HttpServlet {
 //        List<Customer> customers = customerDao.getCustomersByPage(customerPage, recordsPerPageCustomers);
         int totalCustomers = customerDao.getTotalRecords();  // Lấy tổng số khách hàng
         int customerPages = (int) Math.ceil(totalCustomers * 1.0 / recordsPerPageCustomers);
-
+        int totalCustomers1 = customerService.getTotalCustomers();
         List<String> userRoles = Arrays.asList("user");
         List<String> AdminStaffRoles = Arrays.asList("admin", "staff");
 
@@ -100,6 +100,7 @@ public class ListAdmin extends HttpServlet {
 //        request.setAttribute("customers", customers);
         request.setAttribute("customerPages", customerPages);
         request.setAttribute("currentCustomerPage", customerPage);
+        request.setAttribute("totalCustomers1", totalCustomers1);
 
         // Kiểm tra xem có khách hàng không
         if (customers.isEmpty()) {
@@ -195,13 +196,14 @@ public class ListAdmin extends HttpServlet {
         int processingOrders = invoiceDao.getProcessingOrders();
         int paidOrders = invoiceDao.getPaidOrders();
         int cancelledOrders = invoiceDao.getCancelledOrders();
+        Double growth = invoiceService.getRevenueGrowthPercent();
 
         request.setAttribute("totalOrders", totalOrders);
         request.setAttribute("processingOrders", processingOrders);
         request.setAttribute("paidOrders", paidOrders);
         request.setAttribute("cancelledOrders", cancelledOrders);
         request.setAttribute("invoices", invoices);
-
+        request.setAttribute("growthPercent", growth);
 
 
         // Chuyển tiếp tới JSP

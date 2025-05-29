@@ -233,8 +233,18 @@ public class CustomerDao {
         }
         return customerList;
     }
-
-//moi
+    public int getTotalCustomers() {
+        String sql = "SELECT COUNT(*) AS total_customers FROM customers";
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("total_customers");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
  
     // Main để kiểm tra và in ra dữ liệu
     public static void main(String[] args) {

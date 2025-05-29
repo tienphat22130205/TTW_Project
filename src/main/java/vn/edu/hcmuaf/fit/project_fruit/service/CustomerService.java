@@ -57,6 +57,9 @@ public class CustomerService {
             System.out.println("Không có khách hàng gần đây.");
         }
     }
+    public int getTotalCustomers() {
+        return customerDao.getTotalCustomers(); // hoặc customerDao nếu tách DAO
+    }
     public static void main(String[] args) {
         CustomerService customerService = new CustomerService();
 

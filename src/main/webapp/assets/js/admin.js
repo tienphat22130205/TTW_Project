@@ -102,63 +102,63 @@ const monthlyRevenueChart = new Chart(ctxMonthly, {
 // Doanh thu theo tháng
 const monthlyRevenueCtx = document.getElementById('monthlyRevenueChart1').getContext('2d');
 
-const monthlyRevenueChart1 = new Chart(monthlyRevenueCtx, {
-    type: 'line', // Loại biểu đồ đường
-    data: {
-        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
-        datasets: [{
-            label: 'Doanh thu (VND)',
-            data: [150000000, 200000000, 180000000, 220000000, 250000000, 300000000, 350000000, 320000000, 280000000, 310000000, 400000000, 450000000],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderWidth: 2,
-            pointRadius: 4, // Độ lớn của các điểm trên biểu đồ
-            pointHoverRadius: 6, // Độ lớn của các điểm khi hover
-            fill: true,
-            tension: 0.4 // Độ cong của đường biểu đồ
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: (context) => `${context.raw.toLocaleString('vi-VN')} VND` // Định dạng tooltip là VND
-                }
-            },
-            legend: {
-                display: true,
-                position: 'top',
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Doanh thu (VND)',
-                    font: {
-                        size: 12
-                    }
-                },
-                ticks: {
-                    callback: function (value) {
-                        return `${value.toLocaleString('vi-VN')} đ`; // Hiển thị "đồng" cho trục y
-                    }
-                }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Tháng',
-                    font: {
-                        size: 12
-                    }
-                }
-            }
-        }
-    }
-});
+// const monthlyRevenueChart1 = new Chart(monthlyRevenueCtx, {
+//     type: 'line', // Loại biểu đồ đường
+//     data: {
+//         labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+//         datasets: [{
+//             label: 'Doanh thu (VND)',
+//             data: [150000000, 200000000, 180000000, 220000000, 250000000, 300000000, 350000000, 320000000, 280000000, 310000000, 400000000, 450000000],
+//             borderColor: 'rgba(75, 192, 192, 1)',
+//             backgroundColor: 'rgba(75, 192, 192, 0.2)',
+//             borderWidth: 2,
+//             pointRadius: 4, // Độ lớn của các điểm trên biểu đồ
+//             pointHoverRadius: 6, // Độ lớn của các điểm khi hover
+//             fill: true,
+//             tension: 0.4 // Độ cong của đường biểu đồ
+//         }]
+//     },
+//     options: {
+//         responsive: true,
+//         plugins: {
+//             tooltip: {
+//                 callbacks: {
+//                     label: (context) => `${context.raw.toLocaleString('vi-VN')} VND` // Định dạng tooltip là VND
+//                 }
+//             },
+//             legend: {
+//                 display: true,
+//                 position: 'top',
+//             }
+//         },
+//         scales: {
+//             y: {
+//                 beginAtZero: true,
+//                 title: {
+//                     display: true,
+//                     text: 'Doanh thu (VND)',
+//                     font: {
+//                         size: 12
+//                     }
+//                 },
+//                 ticks: {
+//                     callback: function (value) {
+//                         return `${value.toLocaleString('vi-VN')} đ`; // Hiển thị "đồng" cho trục y
+//                     }
+//                 }
+//             },
+//             x: {
+//                 title: {
+//                     display: true,
+//                     text: 'Tháng',
+//                     font: {
+//                         size: 12
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// });
 
 // Khi người dùng nhấn vào overlay (bên ngoài thông báo), đóng thông báo
 document.getElementById("logoutOverlay").onclick = function () {
