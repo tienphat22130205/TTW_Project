@@ -174,7 +174,6 @@ public class InvoiceDao {
         }
         return 0;
     }
-
     // Lấy số đơn hàng đã thanh toán
     public int getPaidOrders() {
         String sql = "SELECT COUNT(*) FROM invoices WHERE status = 'Đã thanh toán'";
@@ -186,7 +185,6 @@ public class InvoiceDao {
         }
         return 0;
     }
-
     // Lấy số đơn hàng đã hủy
     public int getCancelledOrders() {
         String sql = "SELECT COUNT(*) FROM invoices WHERE order_status = 'Đã hủy'";
