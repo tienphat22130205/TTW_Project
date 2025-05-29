@@ -128,27 +128,241 @@
                 transform: translateY(0);
             }
         }
+        #productOverlay.modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #productModalContent.modal-content {
+            background: #fff;
+            border-radius: 12px;
+            width: 1400px;
+            max-width: 95%;
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #222;
+            position: relative;
+            height: 100%; /* cao full container overlay */
+            display: flex;
+            flex-direction: column;
+        }
+
+        #productCloseBtn.close-button {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        #productCloseBtn.close-button:hover {
+            color: #e74c3c;
+        }
+
+        #productModalTitle.modal-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 12px;
+            color: #111;
+        }
+
+        .product-detail-container {
+            display: flex;
+            gap: 30px;
+            flex: 1; /* chiếm hết chiều cao */
+            overflow: hidden;
+        }
+
+        /* Ảnh sản phẩm */
+        .product-image-wrapper {
+            flex: 0 0 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image-wrapper img#mainProductImage {
+            width: 320px;
+            height: 320px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Bảng thông tin */
+        .product-info-wrapper {
+            flex: 1;
+            overflow-x: auto;
+            padding-right: 10px;
+        }
+
+        .product-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .product-info-table th,
+        .product-info-table td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .product-info-table th {
+            background-color: #f5f5f5;
+            width: 160px;
+            font-weight: 600;
+            color: #222;
+            user-select: none;
+        }
+
+        .product-info-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .product-info-table tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Responsive cho màn hình nhỏ */
+        @media (max-width: 900px) {
+            #productModalContent.modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            .product-detail-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .product-image-wrapper {
+                margin-bottom: 20px;
+            }
+            .product-info-wrapper {
+                width: 100%;
+            }
+            .product-info-table th {
+                width: 140px;
+            }
+        }
+        .btn-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s ease;
+            font-size: 16px;
+            margin: 0 3px;
+        }
+
+        .btn-approve {
+            background-color: #d4f5e9;
+            color: #2ecc71;
+        }
+
+        .btn-approve:hover {
+            background-color: #a8eecf;
+        }
+
+        .btn-cancel {
+            background-color: #ffe6e6;
+            color: #e74c3c;
+        }
+
+        .btn-cancel:hover {
+            background-color: #f5bfbf;
+        }
+
+        .btn-icon {
+            pointer-events: none;
+        }
+        /* Trạng thái thanh toán */
+        .status-paid {
+            background-color: #d4f8d4; /* xanh nhạt */
+            color: #2e7d32;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-unpaid {
+            background-color: #ffe0b2; /* cam nhạt */
+            color: #ef6c00;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-canceled {
+            background-color: #ffcdd2; /* đỏ nhạt */
+            color: #c62828;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Trạng thái đơn hàng */
+        .order-processing {
+            background-color: #fff3cd; /* vàng nhạt */
+            color: #856404;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .order-shipped {
+            background-color: #e1f5fe; /* xanh dương nhạt */
+            color: #0277bd;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .order-delivered {
+            background-color: #d4edda; /* xanh lá nhạt */
+            color: #155724;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .swal2-smaller-popup {
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+        .swal2-sm-btn {
+            font-size: 14px !important;
+            padding: 6px 16px !important;
+            border-radius: 4px !important;
+        }
+
     </style>
 <body>
-
-<!-- thong bao dang nhap-->
-<div id="custom-popup" style="display:none;
-    position: fixed; top: 25%; left: 50%; transform: translate(-50%, -50%);
-    background-color: #ffffff; color: #000000;
-    padding: 30px 40px; text-align: center; font-weight: 600; font-size: 18px;
-    border-radius: 8px; box-shadow: 0 0 10px rgb(0,0,0);
-    user-select: none; z-index: 9999;">
-    <div style="margin-bottom: 10px;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A6CF8E" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="11" stroke="#A6CF8E" stroke-width="1.5"/>
-            <path d="M7 12l3 3 7-7" stroke="#A6CF8E" stroke-width="2"/>
-        </svg>
-    </div>
-    <p id="popup-message" style="margin: 0;"></p>
-</div>
-<!-- thong bao dang nhap-->
-
 <input type="checkbox" name="" id="nav-toggle">
 <div class="sidebar">
     <div class="sidebar-brand">
@@ -496,7 +710,6 @@
                         <i class="fa-solid fa-star"></i>
                     </div>
                 </div>
-            
             </div>
             <div class="recent-grid">
                 <div class="customers">
@@ -598,6 +811,7 @@
                                         <th>Xuất xứ</th>
                                         <th>Giá Sản Phẩm</th>
                                         <th>Trạng thái</th>
+                                        <th>Chi tiết</th>
                                         <th>Thao tác</th>
                                     </tr>
                                     </thead>
@@ -615,15 +829,14 @@
                                                     ${product.status ? 'Còn Hàng' : 'Hết Hàng'}
                                             </td>
                                             <td>
-                                                <button class="detail-button" onclick="openModal({
-                                                        id_product: ${product.id_product},
-                                                        name: '${product.name}',
-                                                        categoryName: '${product.categoryName}',
-                                                        origin: '${product.origin}',
-                                                        price: '${product.price}',
-                                                        image: '${product.getProductImgUrl()}',
-                                                        description: '${product.describe_1}'
-                                                        }, 'productDescription')">Xem chi tiết</button>
+                                                <button onclick='openProductOverlayFromButton(this)'
+                                                        data-product='${fn:escapeXml(productJsonMap[product.id_product])}'>
+                                                    Xem chi tiết
+                                                </button>
+                                            </td>
+
+                                            <td>
+                                                <button class="edit-button" onclick="window.location.href='edit-product?pid=${product.id_product}'">Chỉnh sửa</button>
                                                 <button class="delete-button" onclick="window.location.href='remove-product?pid=${product.id_product}'">Xóa</button>
                                             </td>
                                         </tr>
@@ -641,22 +854,22 @@
             <div class="orders">
                 <div class="overview-grid">
                     <div class="overview-item">
-                        <h3>39</h3>
+                        <h3>${totalOrders}</h3>
                         <p>Tổng đơn hàng</p>
                         <i class="fa-solid fa-boxes-stacked"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>6</h3>
+                        <h3>${processingOrders}</h3>
                         <p>Đơn hàng đang xử lý</p>
                         <i class="fa-solid fa-hourglass-start"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>31</h3>
+                        <h3>${paidOrders}</h3>
                         <p>Đơn hàng đã thanh toán</p>
                         <i class="fa-regular fa-handshake"></i>
                     </div>
                     <div class="overview-item">
-                        <h3>2</h3>
+                        <h3>${cancelledOrders}</h3>
                         <p>Đơn hàng đã hủy</p>
                         <i class="fa-regular fa-circle-xmark"></i>
                     </div>
@@ -669,51 +882,87 @@
                                 <tr>
                                     <th>Họ tên</th>
                                     <th>SĐT</th>
-                                    <th>Email</th>
                                     <th>Chi tiết hóa đơn</th>
                                     <th>Phương thức thanh toán</th>
-                                    <th>Tình trạng</th>
+                                    <th>Tình trạng thanh toán</th>
+                                    <th>Tình trạng đơn hàng</th>
                                     <th>Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="invoice" items="${invoices}">
                                     <tr>
-                                        <td>${invoice.receiverName}</td>
+                                        <td>${invoice.accountName}</td>
                                         <td>${invoice.phone}</td>
-                                        <td>${invoice.email}</td>
                                         <td>
-                                            <button class="detail-button"
-                                                    onclick='openInvoiceDetail({
-                                                            id: "${invoice.idInvoice}",
-                                                            name: "${invoice.receiverName}",
-                                                            phone: "${invoice.phone}",
-                                                            email: "${invoice.email}",
-                                                            address: "${invoice.addressFull}",
-                                                            paymentMethod: "${invoice.paymentMethod}",
-                                                            status: "${invoice.status}",
-                                                            createdAt: "${invoice.createDate}",
-                                                            accountName: "${invoice.accountName}",
-                                                            shippingFee: ${invoice.shippingFee},
-                                                            totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
-                                                            })'>
+                                            <button onclick='openInvoiceDetail({
+                                                    id: "${invoice.idInvoice}",
+                                                    name: "${invoice.receiverName}",
+                                                    phone: "${invoice.phone}",
+                                                    email: "${invoice.email}",
+                                                    address: "${invoice.addressFull}",
+                                                    paymentMethod: "${invoice.paymentMethod}",
+                                                    status: "${invoice.status}",
+                                                    createdAt: "${invoice.createDate}",
+                                                    accountName: "${invoice.accountName}",
+                                                    shippingFee: ${invoice.shippingFee},
+                                                    totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
+                                                    })'>
                                                 Xem chi tiết
                                             </button>
                                         </td>
                                         <td>${invoice.paymentMethod}</td>
-                                        <td class="<c:choose>
-                                                 <c:when test="${invoice.status == 'Hoàn thành'}">status-completed</c:when>
-                                                 <c:when test="${invoice.status == 'Chưa thanh toán'}">status-pending</c:when>
-                                                 <c:when test="${invoice.status == 'Hủy'}">status-cancelled</c:when>
-                                                 <c:otherwise>status-unknown</c:otherwise>
-                                                 </c:choose>">
-                                                ${invoice.status}
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${invoice.status == 'Đã thanh toán'}">
+                                                    <span class="badge status-paid">Đã thanh toán</span>
+                                                </c:when>
+                                                <c:when test="${invoice.status == 'Đã hủy'}">
+                                                    <span class="badge status-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge status-unpaid">Chưa thanh toán</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
 
+                                        <!-- Tình trạng đơn hàng -->
+                                        <td class="order-status">
+                                            <c:choose>
+                                                <c:when test="${invoice.orderStatus == 'Đang xử lý'}">
+                                                    <span class="badge order-processing">Đang xử lý</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã giao'}">
+                                                    <span class="badge order-shipped">Đã giao</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã hủy'}">
+                                                    <span class="badge order-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đang chuẩn bị đơn hàng'}">
+                                                    <span class="badge order-processing">Đang chuẩn bị đơn hàng</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge order-delivered">${invoice.orderStatus}</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:if test="${invoice.status == 'Chưa thanh toán'}">
+                                                <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
+                                                    <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
+                                                        <i class="fas fa-check btn-icon"></i>
+                                                    </button>
+                                                    <button class="btn-circle btn-cancel" onclick="handleAction(${invoice.idInvoice}, 'cancel')">
+                                                        <i class="fas fa-times btn-icon"></i>
+                                                    </button>
+                                                </div>
+                                            </c:if>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -738,38 +987,8 @@
                 </div>
             </div>
         </div>
-      <div id="suppliers" class="section">
+        <div id="suppliers" class="section">
             <div class="container">
-                <div class="addSupplier">
-                <h2>Thêm Nhà Cung Cấp</h2>
-
-                <form id="addSupplierForm">
-                    <label for="name">Tên Nhà Cung Cấp:</label>
-                    <input type="text" id="name" name="name" required placeholder="Nhập tên nhà cung cấp"><br><br>
-
-                    <label for="address">Địa Chỉ:</label>
-                    <input type="text" id="address" name="address" required placeholder="Nhập địa chỉ"><br><br>
-
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required placeholder="Nhập email"><br><br>
-
-                    <label for="phone_number">Số Điện Thoại:</label>
-                    <input type="tel" id="phone_number" name="phone_number" required placeholder="Nhập số điện thoại"><br><br>
-                    <label for="id_category">Danh Mục Sản Phẩm:</label>
-                    <select id="id_category" name="id_category" required>
-                        <option value="1">Trái cây hôm nay</option>
-                        <option value="2">Trái cây Việt Nam</option>
-                        <option value="3">Trái cây nhập khẩu</option>
-                        <option value="4">Trái cây cắt sẵn</option>
-                        <option value="5">Quà tặng trái cây</option>
-                        <option value="6">Hộp quà trái cây</option>
-                        <option value="7">Trái cây sấy khô</option>
-                        <option value="8">Mứt trái cây</option>
-                    </select><br><br>
-
-                    <button type="submit">Thêm Nhà Cung Cấp</button>
-                </form>
-                </div>
                 <!-- Supplier Table -->
                 <table id="supplierTable">
                     <thead>
@@ -782,7 +1001,6 @@
                         <th>Trạng thái hợp tác</th>
                         <th>Đánh giá</th>
                         <th>Danh sách sản phẩm</th>
-                        <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -807,66 +1025,13 @@
                             </td>
                             <td>${supplier.rating} <i class="fas fa-star" style="color: #ffcc00;"></i></td>
                             <td>${supplier.name_category}</td>
-                            <td>
-                                <button onclick="editSupplier(${supplier.id_supplier})">
-                                    <i class="fas fa-pen" style="color: green;"></i>
-                                </button>
-                                <button onclick="deleteSupplier(${supplier.id_supplier})">
-                                    <i class="fas fa-trash" style="color: red;"></i>
-                                </button>
-                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
             </div>
         </div>
-        <!-- Overlay nền mờ và modal -->
-        <div id="editSupplierModal" class="modal-container">
-            <div class="modal-box">
-                <h3><strong>Chỉnh Sửa Thông Tin Nhà Cung Cấp</strong></h3>
-                <form id="editSupplierForm">
-                    <input type="hidden" id="editSupplierId" />
 
-                    <label>Tên Nhà Cung Cấp</label>
-                    <input type="text" id="editSupplierName" />
-
-                    <label>Địa Chỉ</label>
-                    <input type="text" id="editSupplierAddress" />
-
-                    <label>Email</label>
-                    <input type="email" id="editSupplierEmail" />
-
-                    <label>Số Điện Thoại</label>
-                    <input type="text" id="editSupplierPhone" />
-
-                    <label>Trạng Thái</label>
-                    <select id="editSupplierStatus">
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
-
-                    <label>Danh Sách Sản Phẩm</label>
-                    <select id="editSupplierProducts">
-                        <option value="1">Trái cây hôm nay</option>
-                        <option value="2">Trái cây Việt Nam</option>
-                        <option value="3">Trái cây nhập khẩu</option>
-                        <option value="4">Trái cây cắt sẵn</option>
-                        <option value="5">Quà tặng trái cây</option>
-                        <option value="6">Hộp quà trái cây</option>
-                        <option value="7">Trái cây sấy khô</option>
-                        <option value="8">Mứt trái cây</option>
-                    </select>
-
-                    <label>Đánh Giá</label>
-                    <input type="number" id="editSupplierRating" min="0" max="5" step="0.1" />
-                </form>
-                <div style="margin-top: 20px; text-align: right;">
-                    <button onclick="saveSupplier()" style="background-color: #007bff; padding: 8px 20px;">Lưu</button>
-                    <button onclick="closeModal()" style="background-color: red; padding: 8px 20px;">Hủy</button>
-                </div>
-            </div>
-        </div>
         <div id="promotions" class="section">
             <div class="promotion-container">
                 <div class="promotion-header">
@@ -877,14 +1042,8 @@
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
                       method="POST">
                     <div class="form-group">
-                        <label for="promotion-name">Tên khuyến mãi:</label>
-                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
-                               required/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="promotion-code">Mã khuyến mãi:</label>
-                        <input type="text" id="promotion-code0" name="promotion_code" placeholder="Nhập mã giảm giá"
+                        <label for="promotion-code">Tên khuyến mãi:</label>
+                        <input type="text" id="promotion-code" name="promotion_code" placeholder="Nhập mã giảm giá"
                                required/>
                     </div>
 
@@ -917,19 +1076,7 @@
                             <option value="general">General</option>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <label for="min-order-amount">Giá trị đơn tối thiểu (VNĐ):</label>
-                        <input type="number" id="min-order-amount" name="min_order_amount"
-                               placeholder="Nhập giá trị tối thiểu" min="0" required/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="max-usage">Số lượt sử dụng tối đa:</label>
-                        <input type="number" id="max-usage" name="max_usage" placeholder="Nhập số lượt tối đa" min="1"
-                               required/>
-                    </div>
-                    <button type="submit" class="btn-submit">Thêm khuyến mãi</button>
+                    <button type="submit" class="btn-submit">Cập nhật</button>
                 </form>
 
                 <h3>Danh sách Khuyến mãi</h3>
@@ -943,15 +1090,11 @@
                         <tr style="text-align: center">
                             <th>ID</th>
                             <th style="text-align: left">Tên Khuyến Mãi</th>
-                            <th>Mã</th>
                             <th>Mô Tả</th>
                             <th>Ngày Bắt Đầu</th>
                             <th>Ngày Kết Thúc</th>
-                            <th>Phần Trăm Giảm</th>
+                            <th>Phần Trăm Giảm Giá</th>
                             <th>Loại</th>
-                            <th>Giá trị đơn tối thiểu</th>
-                            <th>Số lượt sử dụng tối đa</th>
-                            <th>Số lượt đã sử dụng</th>
                             <th>Hành Động</th>
                         </tr>
                         </thead>
@@ -964,8 +1107,6 @@
                             </td>
                             <td><%= promotion.getPromotion_name() %>
                             </td>
-                            <td><%= promotion.getCode() %>
-                            </td>
                             <td><%= promotion.getDescribe_1() %>
                             </td>
                             <td><%= promotion.getStart_date() %>
@@ -976,32 +1117,9 @@
                             </td>
                             <td style="text-align: center"><%= promotion.getType() %>
                             </td>
-                            <td style="text-align: center"><%= promotion.getMin_order_amount() %>
-                            </td>
-                            <td style="text-align: center"><%= promotion.getMax_usage() %>
-                            </td>
-                            <td style="text-align: center"><%= promotion.getUsage_count() %>
-                            </td>
                             <td>
-                                <button onclick="openModal({
-                                        promoId: '<%= promotion.getId_promotion() %>',
-                                        promoTitle: '<%= promotion.getPromotion_name() %>',
-                                        promoDesc: '<%= promotion.getDescribe_1() %>',
-                                        promoStart: '<%= promotion.getStart_date() %>',
-                                        promoEnd: '<%= promotion.getEnd_date() %>',
-                                        promoDiscount: '<%= promotion.getPercent_discount() %>',
-                                        promoType: '<%= promotion.getType() %>',
-                                        promoCode: '<%= promotion.getCode() %>',
-                                        promoMinOrder: '<%= promotion.getMin_order_amount() %>',
-                                        promoMaxUsage: '<%= promotion.getMax_usage() %>'
-                                        }, 'editPromotion')">Sửa
-                                </button>
-
-                                <button class="delete-btn" onclick="openModal({
-                                        promoId: '<%= promotion.getId_promotion() %>',
-                                        promoTitle: '<%= promotion.getPromotion_name() %>'
-                                        }, 'deletePromotion')">Xóa
-                                </button>
+                                <button onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Sửa</button>
+                                <button onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
                             </td>
                         </tr>
                         <%
@@ -1010,7 +1128,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
         <div id="feedback" class="section">
@@ -1026,26 +1143,18 @@
                             <th>Nội dung</th>
                             <th>Ngày tạo</th>
                             <th>Đánh giá</th>
-                            <th>Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                         <!-- Lặp qua danh sách feedback -->
                         <c:forEach var="feedback" items="${feedback}">
                             <tr>
-                                <td style="text-align: center">${feedback.idFeedback}</td>
-                                <td style="text-align: center">${feedback.productName}</td>
-                                <td style="text-align: center">${feedback.cusName}</td>
+                                <td>${feedback.idFeedback}</td>
+                                <td>${feedback.productName}</td>
+                                <td>${feedback.cusName}</td>
                                 <td>${feedback.content}</td>
                                 <td>${feedback.dateCreate}</td>
-                                <td style="text-align: center; gap: 5px;">${feedback.rating} <i class="fas fa-star"></i>
-                                </td>
-                                <td style="text-align: center">
-                                    <button class="delete-btn" onclick="openModal({
-                                            feedbackId: '${feedback.idFeedback}'
-                                            }, 'deleteFeedback')">Xóa
-                                    </button>
-                                <td>
+                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star"></i></td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -1053,7 +1162,6 @@
                 </div>
             </div>
         </div>
-
         <div id="system" class="section">
             <div class="system-settings">
                 <div class="system-menu">
@@ -1160,6 +1268,7 @@
         <button id="cancelDeleteBtn">Không</button>
     </div>
 </div>
+<%--chi tiết hóa đơn--%>
 <div id="invoiceOverlay" class="modal-overlay">
     <div class="modal-content invoice-modal">
         <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
@@ -1193,10 +1302,91 @@
         </div>
     </div>
 </div>
+<!-- Overlay chi tiết sản phẩm -->
+<div id="productOverlay" class="modal-overlay" style="display:none;">
+    <div id="productModalContent" class="modal-content">
+        <span id="productCloseBtn" class="close-button" onclick="closeProductOverlay()">&times;</span>
+        <h2 id="productModalTitle" class="modal-title">📦 Chi tiết sản phẩm</h2>
+
+        <div class="product-detail-container">
+            <!-- Ảnh lớn bên trái -->
+            <div class="product-image-wrapper">
+                <div id="productImagesDisplay" class="product-images"></div>
+            </div>
+
+            <!-- Thông tin chi tiết bên phải dùng bảng -->
+            <div class="product-info-wrapper">
+                <table class="product-info-table">
+                    <tbody>
+                    <tr>
+                        <th>Mã sản phẩm</th>
+                        <td id="productIdDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <td id="productNameDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Xuất xứ</th>
+                        <td id="productOriginDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Giá</th>
+                        <td><span id="productPriceDisplay"></span> đ</td>
+                    </tr>
+                    <tr>
+                        <th>Đánh giá</th>
+                        <td id="productRatingDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Trạng thái</th>
+                        <td id="productStatusDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Mô tả</th>
+                        <td id="productDescribeDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Số lượng</th>
+                        <td id="productQuantityDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Ngày nhập</th>
+                        <td id="productEntryDateDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Hạn sử dụng</th>
+                        <td id="productShelfLifeDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Thời gian bảo hành</th>
+                        <td id="productWarrantyDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Đặc điểm</th>
+                        <td id="productCharacteristicDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Cách bảo quản</th>
+                        <td id="productPreserveDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Cách sử dụng</th>
+                        <td id="productUseDisplay"></td>
+                    </tr>
+                    <tr>
+                        <th>Lợi ích</th>
+                        <td id="productBenefitDisplay"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<%--<script src="${pageContext.request.contextPath}/assets/js/logicAdmin.js"></script>--%>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
@@ -1220,53 +1410,6 @@
             }
         });
     });
-</script>
-<script>
-    document.getElementById("addSupplierForm").addEventListener("submit", function(e) {
-        e.preventDefault(); // Chặn form submit mặc định
-        const form = e.target;
-        const data = {
-            name: form.name.value,
-            address: form.address.value,
-            email: form.email.value,
-            phone_number: form.phone_number.value,
-            id_category: form.id_category.value
-        };
-        fetch("${pageContext.request.contextPath}/add-supplier-ajax", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        }).then(res => res.json())
-            .then(result => {
-                if (result.success) {
-                    alert("Thêm thành công!");
-                    location.reload(); // load lại danh sách
-                } else {
-                    alert("Thêm thất bại: " + result.message);
-                }
-            }).catch(err => {
-            console.error("Lỗi:", err);
-            alert("Lỗi khi gửi dữ liệu");
-        });
-    });
-    function deleteSupplier(id) {
-        if (confirm("Bạn có chắc muốn xoá nhà cung cấp này?")) {
-            fetch('${pageContext.request.contextPath}/delete-supplier?id=' + id, {
-                method: 'POST'
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Xoá thành công");
-                        location.reload();
-                    } else {
-                        alert("Xoá thất bại: " + data.message);
-                    }
-                });
-        }
-    }
 </script>
 <script src="${pageContext.request.contextPath}/assets/js/admin.js" defer></script>
 <script>
@@ -1303,22 +1446,6 @@
     });
 </script>
 <script>
-    const contextPath = "${pageContext.request.contextPath}";
-</script>
-
-<!-- thong bao dang nhap-->
-<script>
-    function showPopup(message, duration = 2000) {
-        const popup = document.getElementById("custom-popup");
-        const messageBox = document.getElementById("popup-message");
-        messageBox.innerText = message;
-        popup.style.display = "block";
-        setTimeout(() => {
-            popup.style.display = "none";
-        }, duration);
-    }
-</script>
-<script>
     function openInvoiceDetail(invoice) {
         document.getElementById('invoiceOverlay').style.display = 'flex';
 
@@ -1326,30 +1453,174 @@
         document.getElementById('customerName').innerText = invoice.name;
         document.getElementById('createdAt').innerText = invoice.createdAt;
         document.getElementById('address').innerText = invoice.address;
-        document.getElementById('shippingFee').innerText = invoice.shippingFee.toLocaleString() + ' đ';
+        document.getElementById('shippingFee').innerText = invoice.shippingFee.toLocaleString('vi-VN') + ' đ';
+        document.getElementById('totalPrice').innerText = invoice.totalPrice.toLocaleString('vi-VN') + ' đ';
 
-        const body = document.getElementById('invoiceProductBody');
-        body.innerHTML = '';
+        const body = document.getElementById("invoiceProductBody");
+        body.innerHTML = "";
 
-        let totalProduct = 0;
-        invoice.products.forEach((p, index) => {
-            const subtotal = p.quantity * p.price;
-            totalProduct += subtotal;
-            body.innerHTML += `
+        // ✅ Sửa tại đây
+        const contextPath = "/" + window.location.pathname.split("/")[1];
+        const fullUrl = `${contextPath}/admin/invoice-detail?id=${invoice.id}`;
+        console.log("📤 Fetch URL:", fullUrl);
+
+        fetch(fullUrl)
+            .then(res => {
+                if (!res.ok) throw new Error("Lỗi khi gọi API chi tiết hóa đơn");
+                return res.json();
+            })
+            .then(products => {
+                console.log("📦 Sản phẩm nhận được:", products);
+
+                if (!products || products.length === 0) {
+                    body.innerHTML = `<tr><td colspan="5" style="color:red;">Không có sản phẩm nào.</td></tr>`;
+                    return;
+                }
+
+                products.forEach((p, index) => {
+                    console.log(`🧾 [${index}]`, p);
+                    const subtotal = p.quantity * p.price * (1 - p.discount / 100);
+                    const row = `
             <tr>
                 <td>${index + 1}</td>
                 <td>${p.name}</td>
                 <td>${p.quantity}</td>
-                <td>${p.price.toLocaleString()} đ</td>
-                <td>${subtotal.toLocaleString()} đ</td>
-            </tr>
-        `;
-        });
-
-        document.getElementById('totalPrice').innerText = Number(invoice.totalPrice).toLocaleString() + ' đ';
+                <td>${p.price.toLocaleString("vi-VN")} đ</td>
+                <td>${subtotal.toLocaleString("vi-VN")} đ</td>
+            </tr>`;
+                    console.log("📋 Dòng HTML tạo ra:", row);
+                    body.innerHTML += row;
+                });
+            })
+            .catch(err => {
+                console.error("❌ Lỗi khi fetch chi tiết sản phẩm:", err);
+                body.innerHTML = `<tr><td colspan="5" style="color:red;">Không thể tải danh sách sản phẩm.</td></tr>`;
+            });
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function handleAction(id, action) {
+        const actionText = action === 'approve' ? 'duyệt đơn hàng' : 'hủy đơn hàng';
+        const actionLabel = action === 'approve' ? 'Duyệt' : 'Hủy';
+
+        Swal.fire({
+            text: `Bạn có chắc chắn muốn ${actionText} #${id}?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            width: 320,
+            padding: '1em',
+            backdrop: true,
+            customClass: {
+                popup: 'swal2-smaller-popup',
+                confirmButton: 'swal2-sm-btn',
+                cancelButton: 'swal2-sm-btn'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('${pageContext.request.contextPath}/admin/approve-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'id=' + id + '&action=' + action
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            const actionWrapper = document.querySelector('[data-id="' + id + '"]');
+                            if (actionWrapper) {
+                                actionWrapper.innerHTML = '';
+
+                                const statusCell = actionWrapper.closest('tr').querySelector('td:nth-child(5)');
+                                if (statusCell) {
+                                    statusCell.innerHTML = (action === 'approve')
+                                        ? '<span class="badge status-paid">Đã thanh toán</span>'
+                                        : '<span class="badge status-canceled">Đã hủy</span>';
+                                }
+
+                                const orderStatusCell = actionWrapper.closest('tr').querySelector('.order-status');
+                                if (orderStatusCell) {
+                                    orderStatusCell.innerHTML = (action === 'approve')
+                                        ? '<span class="badge order-processing">Đang chuẩn bị đơn hàng</span>'
+                                        : '<span class="badge order-canceled">Đã hủy</span>';
+                                }
+                            }
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công!',
+                                text: `${actionLabel} đơn hàng #${id} thành công`,
+                                timer: 1500,
+                                showConfirmButton: false,
+                                width: 320
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: data.message,
+                                width: 320
+                            });
+                        }
+                    });
+            }
+        });
+    }
+</script>
+<script>
+    function openProductOverlayFromButton(button) {
+        const jsonStr = button.getAttribute('data-product');
+        try {
+            const product = JSON.parse(jsonStr);
+            openProductOverlay(product);
+        } catch (e) {
+            console.error("Lỗi parse JSON:", e);
+        }
+    }
+    function openProductOverlay(product) {
+        document.getElementById('productIdDisplay').textContent = product.id_product || 'N/A';
+        document.getElementById('productNameDisplay').textContent = product.name || 'N/A';
+        document.getElementById('productOriginDisplay').textContent = product.origin || '';
+        document.getElementById('productPriceDisplay').textContent = product.price !== undefined ? product.price : 'N/A';
+        document.getElementById('productRatingDisplay').textContent = product.rating || '';
+        document.getElementById('productStatusDisplay').textContent = product.status ? 'Còn hàng' : 'Hết hàng';
+        document.getElementById('productDescribeDisplay').textContent = product.describe_1 || '';
+        document.getElementById('productQuantityDisplay').textContent = product.quantity !== undefined ? product.quantity : '';
+        document.getElementById('productEntryDateDisplay').textContent = product.entry_date || '';
+        document.getElementById('productShelfLifeDisplay').textContent = product.shelf_life || '';
+        document.getElementById('productWarrantyDisplay').textContent = product.warranty_period || '';
+        document.getElementById('productCharacteristicDisplay').textContent = product.characteristic || '';
+        document.getElementById('productPreserveDisplay').textContent = product.preserve_product || '';
+        document.getElementById('productUseDisplay').textContent = product.use_prodcut || '';
+        document.getElementById('productBenefitDisplay').textContent = product.benefit || '';
+
+        const imagesDiv = document.getElementById('productImagesDisplay');
+        imagesDiv.innerHTML = ''; // Xóa ảnh cũ nếu có
+
+        if (product.listImg && Array.isArray(product.listImg) && product.listImg.length > 0) {
+            product.listImg.forEach(img => {
+                const imgEl = document.createElement('img');
+                imgEl.src = img.url;  // url ảnh
+                imgEl.alt = product.name || 'Product Image';
+                imgEl.style.width = '320px';
+                imgEl.style.height = 'auto';
+                imgEl.style.borderRadius = '6px';
+                imagesDiv.appendChild(imgEl);
+            });
+        } else {
+            imagesDiv.textContent = 'Không có ảnh sản phẩm.';
+        }
+        document.getElementById('productOverlay').style.display = 'flex';
+    }
+
+    function closeProductOverlay() {
+        document.getElementById('productOverlay').style.display = 'none';
+    }
+</script>
+
 </body>
 
 </html>
-

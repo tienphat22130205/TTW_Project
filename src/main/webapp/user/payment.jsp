@@ -60,37 +60,49 @@
                 width: 100%;
                 margin-bottom: 15px;
             }
+            /* ==== RADIO THANH TOÁN PHONG CÁCH CHUYÊN NGHIỆP ==== */
             .btn-container {
                 display: flex;
-                justify-content: space-between;
                 gap: 10px;
-            }
-            button {
-                width: 100%;
-                padding: 12px;
-                background-color: #ff6600;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
+                flex-direction: column;
                 margin-top: 15px;
             }
-            button.cod {
-                background: green;
-                border: 2px solid transparent;
+
+            .btn-container input[type="radio"] {
+                display: none; /* Ẩn radio mặc định */
             }
 
-            button.transfer {
-                background: blue;
-                border: 2px solid transparent;
+            .btn-container label {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                border: 2px solid #ccc;
+                border-radius: 8px;
+                background-color: #fafafa;
+                cursor: pointer;
+                font-weight: 500;
+                transition: all 0.25s ease;
+                font-size: 16px;
+                color: #333;
             }
 
-            /* Khi được chọn (active) sẽ có viền đậm */
-            button.cod.active,
-            button.transfer.active {
-                border: 2px solid #222;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            .btn-container label:hover {
+                background-color: #f0f8ff;
+                border-color: #1e90ff;
+            }
+
+            .btn-container input[type="radio"]:checked + label {
+                border-color: #1e90ff;
+                background-color: #e6f3ff;
+                box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
+                font-weight: bold;
+                color: #1e90ff;
+            }
+
+            .btn-container label i {
+                font-size: 20px;
+                color: #1e90ff;
             }
             .cart-item {
                 display: flex;
@@ -108,7 +120,7 @@
             .submit-btn {
                 width: 100%;
                 padding: 12px;
-                background: #ff6600;
+                background: #1e90ff;
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -129,13 +141,14 @@
             }
             .loader {
                 border: 3px solid #f3f3f3;
-                border-top: 3px solid #009688;
+                border-top: 3px solid white;
                 border-radius: 50%;
-                width: 20px;
-                height: 20px;
+                width: 16px;
+                height: 16px;
                 animation: spin 0.8s linear infinite;
                 display: inline-block;
-                margin-left: 10px;
+                vertical-align: middle;
+                margin-left: 6px;
             }
 
             @keyframes spin {
@@ -319,6 +332,11 @@
 
             .apply-btn:hover {
                 background-color: #0056b3;
+            }
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                pointer-events: none;
             }
         </style>
         <script>
@@ -672,6 +690,84 @@
         <script>
             function setPaymentMethod(method) {
                 document.getElementById("payment_method").value = method;
+
+                const codBtn = document.getElementById("btn-cod");
+                const transferBtn = document.getElementById("btn-transfer");
+
+                codBtn.classList.remove("active");
+                transferBtn.classList.remove("active");
+
+                if (method === "COD") {
+                    codBtn.classList.add("active");
+                } else {
+                    transferBtn.classList.add("active");
+                }
+                document.addEventListener("DOMContentLoaded", function () {
+                    setPaymentMethod("COD");
+                });
+            }
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const emailInput = document.getElementById("emailInput");
+                const sendBtn = document.getElementById("sendOtpBtn");
+
+                if (emailInput && sendBtn) {
+                    emailInput.addEventListener("input", function () {
+                        const isValid = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailInput.value);
+                        sendBtn.disabled = !isValid;
+                    });
+                }
+            });
+
+            function sendOrderOtp() {
+                const email = document.getElementById("emailInput").value;
+                const btn = document.getElementById("sendOtpBtn");
+                btn.disabled = true;
+                btn.innerHTML = 'Đang gửi <span class="loader"></span>';
+
+                fetch("send-order-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "email=" + encodeURIComponent(email)
+                })
+                    .then(res => res.text())
+                    .then(msg => {
+                        Swal.fire("Thông báo", msg, "info");
+                    })
+                    .finally(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = "Gửi mã xác minh";
+                    });
+            }
+
+            function verifyOtp() {
+                const otp = document.getElementById("otpInput").value;
+                const btn = document.getElementById("verifyOtpBtn");
+                btn.disabled = true;
+                btn.innerHTML = 'Đang kiểm tra <span class="loader"></span>';
+
+                fetch("verify-order-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "otp=" + encodeURIComponent(otp)
+                })
+                    .then(res => res.text())
+                    .then(msg => {
+                        setTimeout(() => {
+                            const statusEl = document.getElementById("otpStatus");
+                            if (msg === "success") {
+                                statusEl.innerText = "✅ Mã xác minh hợp lệ!";
+                                statusEl.style.color = "green";
+                            } else {
+                                statusEl.innerText = "❌ " + msg;
+                                statusEl.style.color = "red";
+                            }
+
+                            btn.disabled = false;
+                            btn.innerHTML = "Xác minh mã";
+                        }, 800); // ⏱ delay 800ms tạo cảm giác đang kiểm tra
+                    });
             }
         </script>
 
@@ -706,8 +802,31 @@
                     <label>Số điện thoại:</label>
                     <input type="tel" name="phone" required>
 
-                    <label>Email:</label>
-                    <input type="email" name="email" required>
+                    <div style="margin-bottom: 15px;">
+                        <label>Email:</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="email" name="email" id="emailInput" required style="flex: 2; padding: 10px;height: 42px; border-radius: 5px; border: 1px solid #ccc;">
+                            <button type="button" id="sendOtpBtn" onclick="sendOrderOtp()" disabled
+                                    style="flex: 1; padding: 10px 14px; height: 42px; background-color: #007bff;
+               color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                Gửi mã xác minh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label>Nhập mã OTP:</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" id="otpInput" name="otp" placeholder="Nhập mã OTP" required
+                                   style="flex: 2; padding: 10px;height: 42px; border-radius: 5px; border: 1px solid #ccc;">
+                            <button type="button" id="verifyOtpBtn" onclick="verifyOtp()"
+                                    style="flex: 1; padding: 10px 14px; height: 42px; background-color: #28a745;
+               color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                Xác minh mã
+                            </button>
+                        </div>
+                    </div>
+                    <p id="otpStatus" style="font-weight: bold;"></p>
 
                     <label>Tỉnh/Thành phố:</label>
                     <select type="hidden" id="province" name="province">
@@ -768,16 +887,22 @@
 
                     <h3>Phương thức thanh toán</h3>
                     <div class="btn-container">
-                        <button type="button" id="btn-cod" class="cod" onclick="setPaymentMethod('COD')">COD</button>
-                        <button type="button" id="btn-transfer" class="transfer" onclick="setPaymentMethod('Bank Transfer')">Chuyển khoản</button>
-                    </div>
+                        <input type="radio" name="payment_method_choice" id="pay_cod" value="COD" checked hidden>
+                        <label for="pay_cod" onclick="setPaymentMethod('COD')">
+                            <i class="fas fa-box"></i> Thanh toán khi nhận hàng (COD)
+                        </label>
 
+                        <input type="radio" name="payment_method_choice" id="pay_momo" value="MOMO" hidden>
+                        <label for="pay_momo" onclick="showMomoQR()">
+                            <i class="fas fa-money-check-alt"></i> Chuyển khoản qua ngân hàng
+                        </label>
+                    </div>
                     <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
                 </form>
             </div>
             <!-- Bên phải: Hiển thị sản phẩm và tổng tiền -->
             <div class="right">
-                <h2>Giỏ hàng</h2>
+                <h2>Thông tin giỏ hàng</h2>
                 <c:forEach var="item" items="${cart.getList()}">
                     <div class="cart-item">
                         <c:if test="${not empty item.listImg}">
@@ -793,12 +918,13 @@
                     </div>
                 </c:forEach>
 
+                <!-- Mã giảm giá -->
                 <div class="voucher">
                     <form action="apply-voucher" method="post" style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <label for="voucher" style="width: 100%;">Mã giảm giá:</label>
                         <input type="text" name="voucherCode" id="voucher" placeholder="Nhập mã giảm giá" style="flex: 2;">
                         <input type="hidden" name="shipping_method" value="${selectedShippingId}" />
-                        <button type="submit" class="submit-btn" style="flex: 1; background: #009688;">Áp dụng</button>
+                        <button type="submit" class="submit-btn" style="flex: 1; background: #1e90ff;">Áp dụng</button>
                     </form>
                     <a href="#" class="show-voucher-link">
                         <i class="fas fa-ticket-alt"></i> Xem thêm mã giảm giá
@@ -813,43 +939,32 @@
                     </c:choose>
                 </div>
 
-                <c:choose>
-                    <c:when test="${not empty newTotalPrice}">
-                        <!-- Nếu đã áp dụng mã giảm giá -->
-                        <p><strong>Tạm tính:</strong>
-                            <fmt:formatNumber value="${tempTotal}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <p><strong>Mã giảm giá:</strong>
+                <!-- Tóm tắt hóa đơn -->
+                <p><strong>Tạm tính:</strong>
+                    <fmt:formatNumber value="${tempTotal != null ? tempTotal : cart.getTotalPrice()}" type="number" groupingUsed="true" /> đ
+                </p>
+                <p><strong>Mã giảm giá:</strong>
+                    <c:choose>
+                        <c:when test="${discount != null}">
                             - <fmt:formatNumber value="${discount}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <p><strong>Phí vận chuyển:</strong>
-                            <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <hr />
-                        <h3><strong>Tổng cộng:</strong>
-                            <span style="color: red;">
-                    <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" /> đ
-                </span>
-                        </h3>
-                        <p>(Đã áp dụng mã: <strong>${appliedPromotion.code}</strong>)</p>
-                    </c:when>
-                    <c:otherwise>
-                        <!-- Trường hợp chưa áp mã, hiển thị mặc định -->
-                        <p><strong>Tạm tính:</strong>
-                            <fmt:formatNumber value="${cart.getTotalPrice()}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <p><strong>Mã giảm giá:</strong> 0 ₫</p>
-                        <p><strong>Phí vận chuyển:</strong>
-                            <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
-                        </p>
-                        <hr />
-                        <h3><strong>Tổng cộng:</strong>
-                            <span style="color: red;">
-                    <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" /> đ
-                </span>
-                        </h3>
-                    </c:otherwise>
-                </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            0 ₫
+                        </c:otherwise>
+                    </c:choose>
+                </p>
+                <p><strong>Phí vận chuyển:</strong>
+                    <fmt:formatNumber value="${shippingFee}" type="number" groupingUsed="true" /> đ
+                </p>
+                <hr />
+                <h3><strong>Tổng cộng:</strong>
+                    <span style="color: red;" id="final_total_value">
+            <fmt:formatNumber value="${finalTotal}" type="number" groupingUsed="true" />
+        </span> đ
+                </h3>
+                <c:if test="${not empty appliedPromotion}">
+                    <p>(Đã áp dụng mã: <strong>${appliedPromotion.code}</strong>)</p>
+                </c:if>
             </div>
 
         </div>
@@ -936,5 +1051,65 @@
             </div>
         </div>
     </div>
+    <div id="momoQrModal" class="voucher-overlay" style="display:none;">
+            <div class="voucher-popup" style="max-width: 500px;">
+                <div class="popup-header">
+                    <h3 class="voucher-title">Thanh toán Momo</h3>
+                    <button onclick="closeMomoQR()" class="close-btn">&times;</button>
+                </div>
+                <div style="text-align: center;">
+                    <img src="${pageContext.request.contextPath}/assets/img/logoBank/momo.png" alt="QR Momo" style="width: 250px; margin-bottom: 10px;">
+                    <p><strong>Số tiền:</strong> <span id="momoAmount">0</span> ₫</p>
+                    <p><strong>Nội dung chuyển khoản:</strong><br> <code id="momoNote"></code></p>
+                    <button class="submit-btn" onclick="confirmMomoPayment()">Tôi đã chuyển khoản</button>
+                </div>
+            </div>
+        </div>
+    <script>
+        function showMomoQR() {
+            document.getElementById("payment_method").value = "MOMO";
+
+            const totalText = document.getElementById("final_total_value")?.textContent || "0 đ";
+            const rawAmount = totalText.replace(/\./g, '').replace(/[^\d]/g, '');
+            const amount = parseInt(rawAmount || "0");
+
+            const invoiceId = Math.floor(Math.random() * 100000); // sinh tạm ID
+            const note = "DH" + invoiceId + "VitaminFruit";
+
+            document.getElementById("momoAmount").innerText = amount.toLocaleString('vi-VN');
+            document.getElementById("momoNote").innerText = note;
+
+            document.getElementById("momoQrModal").style.display = "flex";
+
+            document.getElementById("btn-cod").classList.remove("active");
+            document.getElementById("btn-transfer").classList.add("active");
+        }
+
+        function closeMomoQR() {
+            document.getElementById("momoQrModal").style.display = "none";
+        }
+
+        function confirmMomoPayment() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Xác nhận thành công',
+                text: 'Cảm ơn bạn đã thanh toán. Vui lòng nhấn "Xác nhận thanh toán" để hoàn tất.',
+                confirmButtonText: 'Đã hiểu'
+            });
+            closeMomoQR();
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const momoOverlay = document.getElementById("momoQrModal");
+            const popup = momoOverlay.querySelector(".voucher-popup");
+
+            window.addEventListener("click", function (e) {
+                if (e.target === momoOverlay) {
+                    momoOverlay.style.display = "none";
+                }
+            });
+        });
+    </script>
     </body>
     </html>

@@ -722,28 +722,26 @@ main {
     /* Giới hạn trang không có sẵn */
 }
 
-/* Phần khách hàng */
-.edit-button {
-    background-color: #5cb85c;
-    color: white;
-    margin: 5px;
-    border: 1px solid #5cb85c;
-}
-
-.edit-button:hover {
-    background-color: #418141
-}
-
 .delete-button {
-    background-color: var(--red);
-    color: white;
+    background-color: #ffcdd2;
+    color: #c62828;
     margin: 5px;
-    border: 1px solid var(--red);
+    border: 1px solid #ffcdd2;
 }
 
 .delete-button:hover {
-    background-color: #9d0309;
+    background-color: #fda9b5;
 }
+.edit-button {
+    background-color: #afd8ff;
+    color: #3399ff;
+    margin: 5px;
+    border: 1px solid #afd8ff;
+}
+.edit-button:hover {
+    background-color: #99cbfb;
+}
+
 
 table {
     border-collapse: collapse;
@@ -2053,6 +2051,7 @@ h2 {
     gap: 20px;
     /* Tăng khoảng cách giữa các nút */
     margin-top: 30px;
+    padding-left: 15px;
 }
 
 .action-buttons .btn-clear,

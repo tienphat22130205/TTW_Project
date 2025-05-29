@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller.login;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

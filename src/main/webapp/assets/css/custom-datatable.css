@@ -46,12 +46,11 @@ table.dataTable tbody tr:hover {
 }
 
 /* Ô dữ liệu */
-table.dataTable tbody td {
-    padding: 10px;
-    text-align: left;
-    font-size: 14px;
-    color: #333;
-}
+/*table.dataTable tbody td {*/
+/*    padding: 10px;*/
+/*    font-size: 14px;*/
+/*    color: #333;*/
+/*}*/
 
 
 /* Nút hành động */

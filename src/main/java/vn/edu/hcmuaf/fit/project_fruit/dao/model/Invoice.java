@@ -16,6 +16,7 @@ public class Invoice {
     private Date createDate;
     private String shippingMethod;
     private String accountName;// Tình trạng đơn hàng
+    private String orderStatus;
 
     public Invoice() {
     }
@@ -121,5 +122,13 @@ public class Invoice {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }
