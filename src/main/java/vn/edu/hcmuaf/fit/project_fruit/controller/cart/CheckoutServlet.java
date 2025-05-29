@@ -145,16 +145,14 @@ public class CheckoutServlet extends HttpServlet {
                 LogsDao logsDao = new LogsDao(conn);
 
                 String beforeData = cart.toString(); // hoặc chuỗi JSON của giỏ hàng trước khi thanh toán
-                String afterData = String.format("Invoice ID: %d, Tổng tiền: %.2f, Phương thức thanh toán: %s",
-                        invoiceId, finalTotal, paymentMethod);
 
                 Logs log = new Logs();
-                log.setUserId(user.getIdCustomer());              // ID người dùng thanh toán
+                log.setUserId(user.getId_account());              // ID người dùng thanh toán
                 log.setLevel("INFO");                      // Mức log
                 log.setAction("CREATE_INVOICE");          // Hành động log
                 log.setResource("Invoice");                // Đối tượng liên quan
                 log.setBeforeData(beforeData);             // Dữ liệu trước khi thao tác
-                log.setAfterData(afterData);               // Dữ liệu sau thao tác
+                log.setAfterData("Thanh toán thành công đơn hàng ID#" + invoiceId);          // Dữ liệu sau thao tác
                 log.setRole(user.getRole());               // Vai trò người dùng (nếu có)
 
                 logsDao.insertLog(log);
