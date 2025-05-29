@@ -6,12 +6,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
+import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Customer;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Logs;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 import vn.edu.hcmuaf.fit.project_fruit.service.CustomerService;
 import vn.edu.hcmuaf.fit.project_fruit.service.UserService;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginController extends HttpServlet {
@@ -52,10 +56,29 @@ public class LoginController extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("customer", customer);
 
+            // Sau khi đăng nhập thành công:
+            Logs log = new Logs(
+                    user.getId_account(),
+                    "INFO",
+                    "Login",
+                    "accounts",
+                    null,
+                    null,
+                    user.getRole() // 👈 Truyền vai trò
+            );
+            LogsDao logDao = new LogsDao(DbConnect.getConnection());
+            try {
+                logDao.insertLog(log);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
             // Chuyển hướng theo vai trò
             if ("admin".equals(user.getRole()) || "staff".equals(user.getRole())) {
+                session.setAttribute("loginMessage", "Đăng nhập thành công!");
                 response.sendRedirect(request.getContextPath() + "/admin");
             } else if ("user".equals(user.getRole())) {
+                session.setAttribute("loginMessage", "Đăng nhập thành công!");
                 response.sendRedirect(request.getContextPath() + "/home");
             } else {
                 response.sendRedirect(request.getContextPath() + "/unauthorized");

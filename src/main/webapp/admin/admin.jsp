@@ -130,6 +130,25 @@
         }
     </style>
 <body>
+
+<!-- thong bao dang nhap-->
+<div id="custom-popup" style="display:none;
+    position: fixed; top: 25%; left: 50%; transform: translate(-50%, -50%);
+    background-color: #ffffff; color: #000000;
+    padding: 30px 40px; text-align: center; font-weight: 600; font-size: 18px;
+    border-radius: 8px; box-shadow: 0 0 10px rgb(0,0,0);
+    user-select: none; z-index: 9999;">
+    <div style="margin-bottom: 10px;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A6CF8E" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" stroke="#A6CF8E" stroke-width="1.5"/>
+            <path d="M7 12l3 3 7-7" stroke="#A6CF8E" stroke-width="2"/>
+        </svg>
+    </div>
+    <p id="popup-message" style="margin: 0;"></p>
+</div>
+<!-- thong bao dang nhap-->
+
 <input type="checkbox" name="" id="nav-toggle">
 <div class="sidebar">
     <div class="sidebar-brand">
@@ -682,16 +701,19 @@
                                             </button>
                                         </td>
                                         <td>${invoice.paymentMethod}</td>
-                                        <td>${invoice.status}</td>
-                                        <td>
-                                            <button class="btn-approve">Duyệt</button>
-                                            <button class="btn-cancel">Hủy</button>
+                                        <td class="<c:choose>
+                                                 <c:when test="${invoice.status == 'Hoàn thành'}">status-completed</c:when>
+                                                 <c:when test="${invoice.status == 'Chưa thanh toán'}">status-pending</c:when>
+                                                 <c:when test="${invoice.status == 'Hủy'}">status-cancelled</c:when>
+                                                 <c:otherwise>status-unknown</c:otherwise>
+                                                 </c:choose>">
+                                                ${invoice.status}
                                         </td>
+
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
@@ -855,8 +877,14 @@
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
                       method="POST">
                     <div class="form-group">
-                        <label for="promotion-code">Tên khuyến mãi:</label>
-                        <input type="text" id="promotion-code" name="promotion_code" placeholder="Nhập mã giảm giá"
+                        <label for="promotion-name">Tên khuyến mãi:</label>
+                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
+                               required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promotion-code">Mã khuyến mãi:</label>
+                        <input type="text" id="promotion-code0" name="promotion_code" placeholder="Nhập mã giảm giá"
                                required/>
                     </div>
 
@@ -889,7 +917,19 @@
                             <option value="general">General</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-submit">Cập nhật</button>
+
+                    <div class="form-group">
+                        <label for="min-order-amount">Giá trị đơn tối thiểu (VNĐ):</label>
+                        <input type="number" id="min-order-amount" name="min_order_amount"
+                               placeholder="Nhập giá trị tối thiểu" min="0" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="max-usage">Số lượt sử dụng tối đa:</label>
+                        <input type="number" id="max-usage" name="max_usage" placeholder="Nhập số lượt tối đa" min="1"
+                               required/>
+                    </div>
+                    <button type="submit" class="btn-submit">Thêm khuyến mãi</button>
                 </form>
 
                 <h3>Danh sách Khuyến mãi</h3>
@@ -903,11 +943,15 @@
                         <tr style="text-align: center">
                             <th>ID</th>
                             <th style="text-align: left">Tên Khuyến Mãi</th>
+                            <th>Mã</th>
                             <th>Mô Tả</th>
                             <th>Ngày Bắt Đầu</th>
                             <th>Ngày Kết Thúc</th>
-                            <th>Phần Trăm Giảm Giá</th>
+                            <th>Phần Trăm Giảm</th>
                             <th>Loại</th>
+                            <th>Giá trị đơn tối thiểu</th>
+                            <th>Số lượt sử dụng tối đa</th>
+                            <th>Số lượt đã sử dụng</th>
                             <th>Hành Động</th>
                         </tr>
                         </thead>
@@ -920,6 +964,8 @@
                             </td>
                             <td><%= promotion.getPromotion_name() %>
                             </td>
+                            <td><%= promotion.getCode() %>
+                            </td>
                             <td><%= promotion.getDescribe_1() %>
                             </td>
                             <td><%= promotion.getStart_date() %>
@@ -930,9 +976,32 @@
                             </td>
                             <td style="text-align: center"><%= promotion.getType() %>
                             </td>
+                            <td style="text-align: center"><%= promotion.getMin_order_amount() %>
+                            </td>
+                            <td style="text-align: center"><%= promotion.getMax_usage() %>
+                            </td>
+                            <td style="text-align: center"><%= promotion.getUsage_count() %>
+                            </td>
                             <td>
-                                <button onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Sửa</button>
-                                <button onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
+                                <button onclick="openModal({
+                                        promoId: '<%= promotion.getId_promotion() %>',
+                                        promoTitle: '<%= promotion.getPromotion_name() %>',
+                                        promoDesc: '<%= promotion.getDescribe_1() %>',
+                                        promoStart: '<%= promotion.getStart_date() %>',
+                                        promoEnd: '<%= promotion.getEnd_date() %>',
+                                        promoDiscount: '<%= promotion.getPercent_discount() %>',
+                                        promoType: '<%= promotion.getType() %>',
+                                        promoCode: '<%= promotion.getCode() %>',
+                                        promoMinOrder: '<%= promotion.getMin_order_amount() %>',
+                                        promoMaxUsage: '<%= promotion.getMax_usage() %>'
+                                        }, 'editPromotion')">Sửa
+                                </button>
+
+                                <button class="delete-btn" onclick="openModal({
+                                        promoId: '<%= promotion.getId_promotion() %>',
+                                        promoTitle: '<%= promotion.getPromotion_name() %>'
+                                        }, 'deletePromotion')">Xóa
+                                </button>
                             </td>
                         </tr>
                         <%
@@ -941,6 +1010,7 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
         <div id="feedback" class="section">
@@ -956,18 +1026,26 @@
                             <th>Nội dung</th>
                             <th>Ngày tạo</th>
                             <th>Đánh giá</th>
+                            <th>Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                         <!-- Lặp qua danh sách feedback -->
                         <c:forEach var="feedback" items="${feedback}">
                             <tr>
-                                <td>${feedback.idFeedback}</td>
-                                <td>${feedback.productName}</td>
-                                <td>${feedback.cusName}</td>
+                                <td style="text-align: center">${feedback.idFeedback}</td>
+                                <td style="text-align: center">${feedback.productName}</td>
+                                <td style="text-align: center">${feedback.cusName}</td>
                                 <td>${feedback.content}</td>
                                 <td>${feedback.dateCreate}</td>
-                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star"></i></td>
+                                <td style="text-align: center; gap: 5px;">${feedback.rating} <i class="fas fa-star"></i>
+                                </td>
+                                <td style="text-align: center">
+                                    <button class="delete-btn" onclick="openModal({
+                                            feedbackId: '${feedback.idFeedback}'
+                                            }, 'deleteFeedback')">Xóa
+                                    </button>
+                                <td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -975,6 +1053,7 @@
                 </div>
             </div>
         </div>
+
         <div id="system" class="section">
             <div class="system-settings">
                 <div class="system-menu">
@@ -1222,6 +1301,22 @@
             popup.style.display = "none";
         });
     });
+</script>
+<script>
+    const contextPath = "${pageContext.request.contextPath}";
+</script>
+
+<!-- thong bao dang nhap-->
+<script>
+    function showPopup(message, duration = 2000) {
+        const popup = document.getElementById("custom-popup");
+        const messageBox = document.getElementById("popup-message");
+        messageBox.innerText = message;
+        popup.style.display = "block";
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, duration);
+    }
 </script>
 <script>
     function openInvoiceDetail(invoice) {

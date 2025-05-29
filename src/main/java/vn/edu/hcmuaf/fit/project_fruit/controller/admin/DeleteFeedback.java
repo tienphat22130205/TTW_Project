@@ -24,9 +24,9 @@ public class DeleteFeedback extends HttpServlet {
         try {
             boolean isDeleted = FeedbackDao.deleteFeedbackById(feedbackId);
             if (isDeleted) {
-                response.sendRedirect(request.getContextPath() + "/admin.jsp?status=success");
+                response.sendRedirect(request.getContextPath() + "/admin?status=success"); // Thành công
             } else {
-                response.sendRedirect(request.getContextPath() + "/admin.jsp?status=error");
+                response.sendRedirect(request.getContextPath() + "/admin?status=error"); // Xóa thất bại
             }
         } catch (SQLException e) {
             e.printStackTrace();
