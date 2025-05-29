@@ -1,5 +1,4 @@
-@@ -0,0 +1,59 @@
-        package vn.edu.hcmuaf.fit.project_fruit.controller;
+gipackage vn.edu.hcmuaf.fit.project_fruit.controller;
 
 import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
@@ -13,7 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-        import java.io.IOException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
