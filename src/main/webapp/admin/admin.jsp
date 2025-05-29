@@ -542,18 +542,18 @@
             to   { transform: translateX(0); opacity: 1; }
         }
         .btn-circle {
-             width: 36px;
-             height: 36px;
-             border-radius: 50%;
-             border: none;
-             display: inline-flex;
-             align-items: center;
-             justify-content: center;
-             cursor: pointer;
-             transition: 0.3s ease;
-             font-size: 16px;
-             margin: 0 3px;
-         }
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s ease;
+            font-size: 16px;
+            margin: 0 3px;
+        }
 
         .btn-approve {
             background-color: #d4f5e9;
@@ -1266,75 +1266,75 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="invoice" items="${invoices}">
-                                        <tr>
-                                            <td>${invoice.accountName}</td>
-                                            <td>${invoice.phone}</td>
-                                            <td>
-                                                <button onclick='openInvoiceDetail({
-                                                        id: "${invoice.idInvoice}",
-                                                        name: "${invoice.receiverName}",
-                                                        phone: "${invoice.phone}",
-                                                        email: "${invoice.email}",
-                                                        address: "${invoice.addressFull}",
-                                                        paymentMethod: "${invoice.paymentMethod}",
-                                                        status: "${invoice.status}",
-                                                        createdAt: "${invoice.createDate}",
-                                                        accountName: "${invoice.accountName}",
-                                                        shippingFee: ${invoice.shippingFee},
-                                                        totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
-                                                        })'>
-                                                    Xem chi tiết
-                                                </button>
-                                            </td>
-                                            <td>${invoice.paymentMethod}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${invoice.status == 'Đã thanh toán'}">
-                                                        <span class="badge status-paid">Đã thanh toán</span>
-                                                    </c:when>
-                                                    <c:when test="${invoice.status == 'Đã hủy'}">
-                                                        <span class="badge status-canceled">Đã hủy</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge status-unpaid">Chưa thanh toán</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
+                                    <tr>
+                                        <td>${invoice.accountName}</td>
+                                        <td>${invoice.phone}</td>
+                                        <td>
+                                            <button onclick='openInvoiceDetail({
+                                                    id: "${invoice.idInvoice}",
+                                                    name: "${invoice.receiverName}",
+                                                    phone: "${invoice.phone}",
+                                                    email: "${invoice.email}",
+                                                    address: "${invoice.addressFull}",
+                                                    paymentMethod: "${invoice.paymentMethod}",
+                                                    status: "${invoice.status}",
+                                                    createdAt: "${invoice.createDate}",
+                                                    accountName: "${invoice.accountName}",
+                                                    shippingFee: ${invoice.shippingFee},
+                                                    totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
+                                                    })'>
+                                                Xem chi tiết
+                                            </button>
+                                        </td>
+                                        <td>${invoice.paymentMethod}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${invoice.status == 'Đã thanh toán'}">
+                                                    <span class="badge status-paid">Đã thanh toán</span>
+                                                </c:when>
+                                                <c:when test="${invoice.status == 'Đã hủy'}">
+                                                    <span class="badge status-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge status-unpaid">Chưa thanh toán</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
 
-                                            <!-- Tình trạng đơn hàng -->
-                                            <td class="order-status">
-                                                <c:choose>
-                                                    <c:when test="${invoice.orderStatus == 'Đang xử lý'}">
-                                                        <span class="badge order-processing">Đang xử lý</span>
-                                                    </c:when>
-                                                    <c:when test="${invoice.orderStatus == 'Đã giao'}">
-                                                        <span class="badge order-shipped">Đã giao</span>
-                                                    </c:when>
-                                                    <c:when test="${invoice.orderStatus == 'Đã hủy'}">
-                                                        <span class="badge order-canceled">Đã hủy</span>
-                                                    </c:when>
-                                                    <c:when test="${invoice.orderStatus == 'Đang chuẩn bị đơn hàng'}">
-                                                        <span class="badge order-processing">Đang chuẩn bị đơn hàng</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge order-delivered">${invoice.orderStatus}</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <c:if test="${invoice.status == 'Chưa thanh toán'}">
-                                                    <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
-                                                        <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
-                                                            <i class="fas fa-check btn-icon"></i>
-                                                        </button>
-                                                        <button class="btn-circle btn-cancel" onclick="handleAction(${invoice.idInvoice}, 'cancel')">
-                                                            <i class="fas fa-times btn-icon"></i>
-                                                        </button>
-                                                    </div>
-                                                </c:if>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
+                                        <!-- Tình trạng đơn hàng -->
+                                        <td class="order-status">
+                                            <c:choose>
+                                                <c:when test="${invoice.orderStatus == 'Đang xử lý'}">
+                                                    <span class="badge order-processing">Đang xử lý</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã giao'}">
+                                                    <span class="badge order-shipped">Đã giao</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã hủy'}">
+                                                    <span class="badge order-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đang chuẩn bị đơn hàng'}">
+                                                    <span class="badge order-processing">Đang chuẩn bị đơn hàng</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge order-delivered">${invoice.orderStatus}</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:if test="${invoice.status == 'Chưa thanh toán'}">
+                                                <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
+                                                    <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
+                                                        <i class="fas fa-check btn-icon"></i>
+                                                    </button>
+                                                    <button class="btn-circle btn-cancel" onclick="handleAction(${invoice.idInvoice}, 'cancel')">
+                                                        <i class="fas fa-times btn-icon"></i>
+                                                    </button>
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
 
@@ -1645,38 +1645,38 @@
 </div>
 <%--chi tiết hóa đơn--%>
 <div id="invoiceOverlay" class="modal-overlay">
-        <div class="modal-content invoice-modal">
-            <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
-            <h2 class="modal-title">🧾 Chi tiết đơn hàng</h2>
+    <div class="modal-content invoice-modal">
+        <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
+        <h2 class="modal-title">🧾 Chi tiết đơn hàng</h2>
 
-            <div class="invoice-info">
-                <div><strong>Mã đơn hàng:</strong> <span id="invoiceIdDisplay"></span></div>
-                <div><strong>Tên người nhận:</strong> <span id="customerName"></span></div>
-                <div><strong>Ngày tạo:</strong> <span id="createdAt"></span></div>
-                <div><strong>Địa chỉ nhận hàng:</strong> <span id="address"></span></div>
-                <div><strong>Phí vận chuyển:</strong> <span id="shippingFee" class="badge green"></span></div>
-            </div>
+        <div class="invoice-info">
+            <div><strong>Mã đơn hàng:</strong> <span id="invoiceIdDisplay"></span></div>
+            <div><strong>Tên người nhận:</strong> <span id="customerName"></span></div>
+            <div><strong>Ngày tạo:</strong> <span id="createdAt"></span></div>
+            <div><strong>Địa chỉ nhận hàng:</strong> <span id="address"></span></div>
+            <div><strong>Phí vận chuyển:</strong> <span id="shippingFee" class="badge green"></span></div>
+        </div>
 
-            <h4 class="section-title">🛒 Danh sách sản phẩm</h4>
-            <table class="invoice-table">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                </tr>
-                </thead>
-                <tbody id="invoiceProductBody">
-                </tbody>
-            </table>
+        <h4 class="section-title">🛒 Danh sách sản phẩm</h4>
+        <table class="invoice-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+            </thead>
+            <tbody id="invoiceProductBody">
+            </tbody>
+        </table>
 
-            <div class="total-section">
-                <p><strong>Tổng thanh toán:</strong> <span id="totalPrice" class="money large"></span></p>
-            </div>
+        <div class="total-section">
+            <p><strong>Tổng thanh toán:</strong> <span id="totalPrice" class="money large"></span></p>
         </div>
     </div>
+</div>
 <!-- Overlay chi tiết sản phẩm -->
 <div id="productOverlay" class="modal-overlay" style="display:none;">
     <div id="productModalContent" class="modal-content">
@@ -1962,7 +1962,7 @@
                     body.innerHTML += row;
                 });
             })
-                .catch(err => {
+            .catch(err => {
                 console.error("❌ Lỗi khi fetch chi tiết sản phẩm:", err);
                 body.innerHTML = `<tr><td colspan="5" style="color:red;">Không thể tải danh sách sản phẩm.</td></tr>`;
             });
