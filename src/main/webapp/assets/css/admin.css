@@ -785,7 +785,7 @@ td .status {
 }
 
 tr td:last-child {
-    display: flex;
+    display: block;
     align-items: center;
 }
 
@@ -1518,7 +1518,6 @@ td:nth-child(4) {
 
 /* ---------------He thong--------------- */
 .system-settings {
-    max-width: 1300px;
     margin: 20px auto;
     padding: 20px;
     background: #fff;
@@ -2868,22 +2867,6 @@ table.dataTable td:nth-child(5) {
     font-weight: bold;
     margin-bottom: 20px;
 }
-
-/* Điều chỉnh độ rộng cột */
-#supplierTable td:nth-child(4), /* Email */
-#supplierTable th:nth-child(4) {
-    width: 130px; /* Giảm bớt độ rộng của cột Email */
-}
-
-#supplierTable td:nth-child(6), /* Trạng thái hợp tác */
-#supplierTable th:nth-child(6) {
-    width: 100px; /* Tăng độ rộng của cột trạng thái hợp tác */
-}
-
-#supplierTable td:nth-child(8), /* Email */
-#supplierTable th:nth-child(8) {
-    width: 140px;
-}
 /*------------------------------------*/
 
 /*-------------------------------------*/
@@ -3603,6 +3586,58 @@ table.dataTable thead .sorting_asc {
 }
 
 .productAddTable .form-group.wide {
+    grid-column: span 2;
+}
+.supplierAddForm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.supplierAddForm .form-group {
+    display: flex;
+    flex-direction: column;
+    grid-column: span 1;
+}
+
+.supplierAddForm .form-group label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.supplierAddForm .form-group input,
+.supplierAddForm .form-group select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.supplierAddForm .btn-submit {
+    grid-column: span 1;
+    padding: 8px 16px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    justify-self: start;
+    margin-top: 30px;
+}
+
+.supplierAddForm .btn-submit:hover {
+    background-color: #0056b3;
+}
+
+.supplierAddForm .form-group.wide {
     grid-column: span 2;
 }
 

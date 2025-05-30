@@ -45,12 +45,12 @@ table.dataTable tbody tr:hover {
     background-color: #ebebeb; /* Khi di chuột vào */
 }
 
-/* Ô dữ liệu */
-/*table.dataTable tbody td {*/
-/*    padding: 10px;*/
-/*    font-size: 14px;*/
-/*    color: #333;*/
-/*}*/
+table.dataTable tbody td {
+    padding: 20px;
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+}
 
 
 /* Nút hành động */
