@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.project_fruit.dao;
 
+import org.mindrot.jbcrypt.BCrypt;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 
@@ -142,6 +143,37 @@ public class UserDao {
             e.printStackTrace();
         }
         return false;
+    }
+    // Kiểm tra mật khẩu mới có trùng với mật khẩu gần đây không
+    public boolean isPasswordRecentlyUsed(String email, String newPlainPassword) {
+        String sql = "SELECT hashed_password FROM password_history WHERE email = ? AND changed_at >= NOW() - INTERVAL 1 MONTH";
+        try (Connection conn = DbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String oldHashed = rs.getString("hashed_password");
+                if (BCrypt.checkpw(newPlainPassword, oldHashed)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Lưu mật khẩu cũ vào bảng history
+    public void savePasswordHistory(String email, String hashedPassword) {
+        String sql = "INSERT INTO password_history (email, hashed_password) VALUES (?, ?)";
+        try (Connection conn = DbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, hashedPassword);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Lấy thông tin người dùng qua email

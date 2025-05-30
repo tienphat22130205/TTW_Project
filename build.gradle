@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.11.0'
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'mysql:mysql-connector-java:8.0.33'
 }
 
 group = 'vn.edu.hcmuaf.fit'
