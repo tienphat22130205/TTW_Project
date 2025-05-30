@@ -114,6 +114,28 @@ public class UserService {
     public boolean verifyOtp(String email, String otp) {
         return userDao.verifyOtpCode(email, otp);
     }
+    public boolean changePassword(String email, String currentPassword, String newPassword) {
+        User user = userDao.getUserByEmail(email);
+        if (user == null) return false;
+
+        if (!BCrypt.checkpw(currentPassword, user.getPassword())) return false;
+
+        // Check nếu mật khẩu mới giống với mật khẩu đã sử dụng trong vòng 1 tháng
+        if (userDao.isPasswordRecentlyUsed(email, newPassword)) {
+            return false; // Có thể trả lỗi riêng: "Mật khẩu đã được sử dụng gần đây"
+        }
+
+        String newHashed = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+        // Lưu mật khẩu cũ vào bảng history
+        userDao.savePasswordHistory(email, user.getPassword());
+
+        return userDao.updatePasswordByEmail(email, newHashed);
+    }
+    public boolean isPasswordRecentlyUsed(String email, String newPassword) {
+        return userDao.isPasswordRecentlyUsed(email, newPassword);
+    }
+
 
 }
 

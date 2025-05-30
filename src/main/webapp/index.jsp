@@ -1121,6 +1121,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     var swiper = new Swiper(".background-slider", {
         loop: true,
@@ -1148,43 +1149,35 @@
 </script>
 
 <!-- thong bao dang nhap dang xuat-->
-<script>
-    function showPopup(message, duration = 2000) {
-        const popup = document.getElementById("custom-popup");
-        const messageBox = document.getElementById("popup-message");
-        messageBox.innerText = message;
-        popup.style.display = "block";
-        setTimeout(() => {
-            popup.style.display = "none";
-        }, duration);
-    }
-</script>
 <c:if test="${not empty sessionScope.loginMessage}">
     <script>
-        showPopup("${sessionScope.loginMessage}");
+        Swal.fire({
+            icon: 'success',
+            title: 'Đăng nhập thành công',
+            text: '${sessionScope.loginMessage}',
+            timer: 2000,
+            showConfirmButton: false
+        });
     </script>
     <c:remove var="loginMessage" scope="session"/>
 </c:if>
+
 <c:if test="${not empty sessionScope.logoutMessage}">
     <script>
-        showPopup("${sessionScope.logoutMessage}");
+        Swal.fire({
+            icon: 'info',
+            title: 'Đăng xuất',
+            text: '${sessionScope.logoutMessage}',
+            timer: 2000,
+            showConfirmButton: false
+        });
     </script>
     <c:remove var="logoutMessage" scope="session"/>
 </c:if>
+
 <!-- thong bao dang nhap dang xuat -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<%--<script>--%>
-<%--    const params = new URLSearchParams(window.location.search);--%>
-<%--    if (params.get("message") === "google-success") {--%>
-<%--        Swal.fire({--%>
-<%--            icon: 'success',--%>
-<%--            title: 'Đăng nhập Google thành công!',--%>
-<%--            text: 'Chào mừng bạn đến với VitaminFruit!',--%>
-<%--            timer: 2500,--%>
-<%--            showConfirmButton: false--%>
-<%--        });--%>
-<%--    }--%>
-<%--</script>--%>
+
 
 </body>
 

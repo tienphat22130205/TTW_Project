@@ -704,6 +704,7 @@
 </div>
 <script src="${pageContext.request.contextPath}/assets/js/user.js" defer></script>
 <script src="${pageContext.request.contextPath}/assets/js/fruit.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Script để chuyển đổi giữa các section
     function showSection(sectionId, element) {
@@ -719,6 +720,39 @@
         document.getElementById("logoutOverlay").style.display = "flex";
     });
 </script>
+<script>
+    // Mở lại tab nếu servlet đã set
+    const activeSection = "${activeSection}";
+    if (activeSection) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const section = document.getElementById(activeSection);
+        if (section) section.classList.add('active');
+
+        document.querySelectorAll('.sidebar ul li a').forEach(a => a.classList.remove('active'));
+        const activeLink = document.querySelector(`.sidebar ul li a[onclick*='${activeSection}']`);
+        if (activeLink) activeLink.classList.add('active');
+    }
+
+    // Hiển thị thông báo nếu có
+    <c:if test="${not empty successMessage}">
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: '${successMessage}',
+        confirmButtonText: 'OK'
+    });
+    </c:if>
+
+    <c:if test="${not empty errorMessage}">
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: '${errorMessage}',
+        confirmButtonText: 'Thử lại'
+    });
+    </c:if>
+</script>
+
 </body>
 
 </html>
