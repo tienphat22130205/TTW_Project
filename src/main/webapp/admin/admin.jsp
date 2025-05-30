@@ -2435,31 +2435,6 @@
             document.getElementById("summary-canceled").textContent = data.canceledOrders || 0;
         });
 </script>
-<script>
-    function filterFeedback() {
-        const filter = document.getElementById("feedbackFilter").value;
-        const table = document.getElementById("feedbackTable").getElementsByTagName("tbody")[0];
-        const rows = Array.from(table.rows);
-
-        // Sắp xếp hoặc lọc
-        if (filter === "newest") {
-            rows.sort((a, b) => new Date(b.dataset.date) - new Date(a.dataset.date));
-        } else if (filter === "best") {
-            rows.sort((a, b) => parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating));
-        } else if (filter === "worst") {
-            rows.sort((a, b) => parseFloat(a.dataset.rating) - parseFloat(b.dataset.rating));
-        }
-
-        // Gắn lại thứ tự hàng
-        table.innerHTML = "";
-        rows.forEach(row => table.appendChild(row));
-    }
-
-    // Gọi mặc định
-    document.addEventListener("DOMContentLoaded", filterFeedback);
-</script>
-
-
 </body>
 
 </html>
