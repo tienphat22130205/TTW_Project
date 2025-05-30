@@ -691,6 +691,19 @@
         .icon.green { color: #2ecc71; }
         .icon.blue  { color: #3498db; }
         .icon.red   { color: #e74c3c; }
+        .contact-button {
+            background-color: #6294f6; /* màu vàng nhẹ */
+            color: #d9e3f4;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .contact-button:hover {
+            background-color: #417dfa; /* màu vàng nhẹ */
+            color: #d9e3f4;
+        }
     </style>
     <script>
         function showCustomToast(message, type = 'success') {
@@ -725,17 +738,17 @@
                     <span>Dashboard</span></a>
             </li>
             <li>
-                <a href="#" class="menu-item" onclick="showSection('customers', 'Khách hàng')"><span><i
+                <a href="#" class="menu-item" onclick="showSection('customers', 'Quản lý khách hàng')"><span><i
                         class="fa-solid fa-user"></i></span>
                     <span>Quản lý khách hàng</span></a>
             </li>
             <li>
-                <a href="#" class="menu-item" onclick="showSection('products', 'Sản phẩm')"><span><i
+                <a href="#" class="menu-item" onclick="showSection('products', 'Quản lý sản phẩm')"><span><i
                         class="fa-solid fa-box"></i></span>
                     <span>Quản lý sản phẩm</span></a>
             </li>
             <li>
-                <a href="#" class="menu-item" onclick="showSection('orders', 'Đặt hàng')"><span><i
+                <a href="#" class="menu-item" onclick="showSection('orders', 'Quản lý đặt hàng')"><span><i
                         class="fa-solid fa-bag-shopping"></i></span>
                     <span>Quản lý đặt hàng</span></a>
             </li>
@@ -760,7 +773,7 @@
                     <span>Thống kê doanh thu</span></a>
             </li>
             <li>
-                <a href="#" class="menu-item" onclick="showSection('system', 'Hệ thống')"><span><i
+                <a href="#" class="menu-item" onclick="showSection('system', 'Quản lý người dùng')"><span><i
                         class="fa-solid fa-user-gear"></i></span>
                     <span>Quản Lý Người Dùng</span></a>
             </li>
@@ -788,41 +801,7 @@
             <div class="notification-dropdown" id="notificationDropdown">
                 <h3 class="notification-title">Thông báo</h3>
                 <ul class="notification-list">
-                    <li class="notification-item">
-                        <h4>Cập nhật hệ thống</h4>
-                        <p>Hệ thống sẽ được bảo trì vào lúc 12:00 AM ngày 25/11/2023.</p>
-                        <span class="notification-time">20/11/2023, 10:00 AM</span>
-                    </li>
-                    <li class="notification-item">
-                        <h4>Cập nhật hệ thống</h4>
-                        <p>Hệ thống sẽ được bảo trì vào lúc 12:00 AM ngày 25/11/2023.</p>
-                        <span class="notification-time">20/11/2023, 10:00 AM</span>
-                    </li>
-                    <li class="notification-item">
-                        <h4>Cập nhật hệ thống</h4>
-                        <p>Hệ thống sẽ được bảo trì vào lúc 12:00 AM ngày 25/11/2023.</p>
-                        <span class="notification-time">20/11/2023, 10:00 AM</span>
-                    </li>
-                    <li class="notification-item">
-                        <h4>Cập nhật mã giảm giá mới</h4>
-                        <p>Giảm giá 40% cho tất cả trái cây nhập khẩu</p>
-                        <span class="notification-time">20/11/2023, 10:00 AM</span>
-                    </li>
-                    <li class="notification-item">
-                        <h4>Chương trình ưu đãi</h4>
-                        <p>Miễn phí giao hàng cho đơn hàng trên 500.000 VNĐ.</p>
-                        <span class="notification-time">18/11/2023, 8:00 PM</span>
-                    </li>
-                    <li class="notification-item">
-                        <h4>Khuyến mãi đặc biệt</h4>
-                        <p>Mua 1 tặng 1 cho tất cả các loại táo nhập khẩu.</p>
-                        <span class="notification-time">17/11/2023, 6:00 PM</span>
-                    </li>
-                    <li class="notification-item">
-                        <h4>Khuyến mãi ngày lễ</h4>
-                        <p>Giảm 20% tất cả sản phẩm nhân ngày lễ Tạ Ơn.</p>
-                        <span class="notification-time">13/11/2023, 10:00 AM</span>
-                    </li>
+
                 </ul>
             </div>
             <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px" height="40px" alt="">
@@ -1033,12 +1012,12 @@
                     <thead>
                     <tr>
                         <th>Mã khách hàng</th>
-                        <th>Họ và tên</th>
+                        <th>Tên khách hàng</th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
+                        <th>Chi tiết khách hàng</th>
                         <th>Ngày đăng ký</th>
-                        <th>Chi tiết sản phẩm đã mua</th>
+                        <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -1049,16 +1028,20 @@
                             <td>${customer.customerName}</td>
                             <td>${customer.email}</td>
                             <td>${customer.customerPhone}</td>
-                            <td>${customer.address}</td>
+                            <td>
+                                <button class="detail-button" onclick="window.location.href='customer-detail?id=${customer.idCustomer}'">Xem chi tiết</button>
+                            </td>
                             <td>${customer.dateRegister}</td>
-                            <td><button class="detail-button">Xem chi tiết</button></td>
+                            <td>
+                                <button class="edit-button" data-customer='${fn:escapeXml(customerJsonMap[customer.idCustomer])}'>Chỉnh sửa</button>
+                                <button class="delete-button" onclick="window.location.href='remove-customer?id=${customer.idCustomer}'">Xóa</button>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
             </div>
         </div>
-        <!-- Products section -->
         <div id="products" class="section">
             <div class="overview-section">
                 <!-- Tổng quan sản phẩm -->
@@ -1088,7 +1071,6 @@
             <div class="recent-grid">
                 <div class="customers">
                     <div class="card">
-                        <h1>Danh sách sản phẩm</h1>
                         <div class="card-body">
                             <h3>Thêm sản phẩm</h3>
                             <form class="productAddTable" action="<%= request.getContextPath() %>/addproduct"
@@ -1174,7 +1156,7 @@
                                 </div>
                                 <button type="submit" class="btn-submit">Cập nhật</button>
                             </form>
-
+                            <h3>Danh sách sản phẩm</h3>
                             <div class="table-reponsive">
                                 <table id="productTable" class="product-table">
                                     <thead>
@@ -1224,7 +1206,6 @@
                 </div>
             </div>
         </div>
-        <!-- Orders section -->
         <div id="orders" class="section">
             <div class="orders">
                 <div class="overview-grid">
@@ -1345,7 +1326,6 @@
             </div>
 
         </div>
-        <!-- Statistics section -->
         <div id="statistics" class="section">
             <div class="chart-box large-chart">
                 <h3>Doanh thu theo tháng</h3>
@@ -1363,54 +1343,106 @@
             </div>
         </div>
         <div id="suppliers" class="section">
-            <div class="container">
-                <!-- Supplier Table -->
-                <table id="supplierTable">
-                    <thead>
-                    <tr>
-                        <th>Mã số</th>
-                        <th>Tên nhà cung cấp</th>
-                        <th>Địa chỉ</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Trạng thái hợp tác</th>
-                        <th>Đánh giá</th>
-                        <th>Danh sách sản phẩm</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Lặp qua tất cả nhà cung cấp -->
-                    <c:forEach var="supplier" items="${suppliers}">
-                        <tr id="supplier-${supplier.id_supplier}">
-                            <td>${supplier.id_supplier}</td>
-                            <td>${supplier.name}</td>
-                            <td>${supplier.address}</td>
-                            <td>${supplier.email}</td>
-                            <td>${supplier.phone_number}</td>
-                            <td>
-                                    ${supplier.status}
-                                <c:choose>
-                                    <c:when test="${supplier.status == 'Đang hợp tác'}">
-                                        <i class="fas fa-circle" style="color: blue;"></i>
-                                    </c:when>
-                                    <c:when test="${supplier.status == 'Đã dừng'}">
-                                        <i class="fas fa-circle" style="color: red;"></i>
-                                    </c:when>
-                                </c:choose>
-                            </td>
-                            <td>${supplier.rating} <i class="fas fa-star" style="color: #ffcc00;"></i></td>
-                            <td>${supplier.name_category}</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+            <div class="card">
+                <div class="card-body">
+                    <h3>Thêm nhà cung cấp</h3>
+                    <form class="supplierAddForm" action="<%= request.getContextPath() %>/addsupplier" method="post">
+                        <div class="form-group">
+                            <label for="supplier-name">Tên nhà cung cấp:</label>
+                            <input type="text" id="supplier-name" name="supplier-name" placeholder="Nhập tên nhà cung cấp" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier-email">Email:</label>
+                            <input type="email" id="supplier-email" name="supplier-email" placeholder="Nhập email" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier-phone">Số điện thoại:</label>
+                            <input type="text" id="supplier-phone" name="supplier-phone" placeholder="Nhập số điện thoại" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier-address">Địa chỉ:</label>
+                            <input type="text" id="supplier-address" name="supplier-address" placeholder="Nhập địa chỉ" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier-rating">Đánh giá:</label>
+                            <input type="text" id="supplier-rating" name="supplier-rating" placeholder="Nhập đánh giá (số sao)" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fruit-type">Loại trái cây cung cấp:</label>
+                            <select id="fruit-type" name="fruit-type" required>
+                                <option value="">-- Chọn loại trái cây --</option>
+                                <option value="Cam">Cam</option>
+                                <option value="Táo">Táo</option>
+                                <option value="Xoài">Xoài</option>
+                                <option value="Chuối">Chuối</option>
+                                <option value="Dưa hấu">Dưa hấu</option>
+                                <!-- Bạn có thể thay danh sách này bằng dữ liệu từ DB -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit">Thêm nhà cung cấp</button>
+                    </form>
+                    <h3>Danh sách nhà cung cấp</h3>
+                    <div class="table-responsive">
+                        <table id="supplierTable" class="display" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Tên nhà cung cấp</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Trạng thái hợp tác</th>
+                                <th>Đánh giá</th>
+                                <th>Hành động</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="supplier" items="${suppliers}">
+                                <tr id="supplier-${supplier.id_supplier}">
+                                    <td>${supplier.name}</td>
+                                    <td>${supplier.email}</td>
+                                    <td>${supplier.phone_number}</td>
+                                    <td>
+                                            ${supplier.status}
+                                        <c:choose>
+                                            <c:when test="${supplier.status == 'Đang hợp tác'}">
+                                                <i class="fas fa-circle" style="color: #d4f8d4;"></i>
+                                            </c:when>
+                                            <c:when test="${supplier.status == 'Đã dừng'}">
+                                                <i class="fas fa-circle" style="color: #ffcdd2;"></i>
+                                            </c:when>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                            ${supplier.rating} <i class="fas fa-star" style="color: #ffeb98;"></i>
+                                    </td>
+                                    <td>
+                                        <!-- Nút chỉnh sửa: truyền thông tin nhà cung cấp bằng data attribute -->
+                                        <button class="edit-button"
+                                                data-supplier='${fn:escapeXml(supplierJsonMap[supplier.id_supplier])}'>
+                                            Chỉnh sửa
+                                        </button>
+
+                                        <!-- Nút xóa: chuyển hướng bằng URL -->
+                                        <button class="delete-button"
+                                                onclick="window.location.href='remove-supplier?id=${supplier.id_supplier}'">
+                                            Xóa
+                                        </button>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-
         <div id="promotions" class="section">
             <div class="promotion-container">
                 <div class="promotion-header">
-                    <h1>Quản Lý Khuyến Mãi</h1>
                 </div>
                 <!-- Form Thêm Khuyến Mãi -->
                 <h3>Thêm khuyến mãi</h3>
@@ -1463,7 +1495,6 @@
                     <table id="promotionTable">
                         <thead>
                         <tr style="text-align: center">
-                            <th>ID</th>
                             <th style="text-align: left">Tên Khuyến Mãi</th>
                             <th>Mô Tả</th>
                             <th>Ngày Bắt Đầu</th>
@@ -1478,23 +1509,27 @@
                             for (Promotions promotion : promotionsList) {
                         %>
                         <tr>
-                            <td><%= promotion.getId_promotion() %>
-                            </td>
-                            <td><%= promotion.getPromotion_name() %>
-                            </td>
-                            <td><%= promotion.getDescribe_1() %>
-                            </td>
-                            <td><%= promotion.getStart_date() %>
-                            </td>
-                            <td style="text-align: center"><%= promotion.getEnd_date() %>
-                            </td>
-                            <td style="text-align: center"><%= promotion.getPercent_discount()%>%
-                            </td>
-                            <td style="text-align: center"><%= promotion.getType() %>
+                            <td>
+                                <%= promotion.getPromotion_name() %>
                             </td>
                             <td>
-                                <button onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Sửa</button>
-                                <button onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
+                                <%= promotion.getDescribe_1() %>
+                            </td>
+                            <td>
+                                <%= promotion.getStart_date() %>
+                            </td>
+                            <td>
+                                <%= promotion.getEnd_date() %>
+                            </td>
+                            <td>
+                                <%= promotion.getPercent_discount()%>%
+                            </td>
+                            <td>
+                                <%= promotion.getType() %>
+                            </td>
+                            <td>
+                                <button class="edit-button" onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Chỉnh sửa</button>
+                                <button class="delete-button" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
                             </td>
                         </tr>
                         <%
@@ -1512,24 +1547,26 @@
                     <table id="feedbackTable" class="feedback-table">
                         <thead>
                         <tr>
-                            <th>ID Feedback</th>
                             <th>Tên sản phẩm</th>
                             <th>Tên khách hàng</th>
                             <th>Nội dung</th>
                             <th>Ngày tạo</th>
                             <th>Đánh giá</th>
+                            <th>Liên hệ</th>
                         </tr>
                         </thead>
                         <tbody>
                         <!-- Lặp qua danh sách feedback -->
                         <c:forEach var="feedback" items="${feedback}">
                             <tr>
-                                <td>${feedback.idFeedback}</td>
                                 <td>${feedback.productName}</td>
                                 <td>${feedback.cusName}</td>
                                 <td>${feedback.content}</td>
                                 <td>${feedback.dateCreate}</td>
-                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star"></i></td>
+                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star" style="color: #ffeb98"></i></td>
+                                <td>
+                                    <button class="contact-button">Liên hệ</button>
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -2398,6 +2435,30 @@
             document.getElementById("summary-canceled").textContent = data.canceledOrders || 0;
         });
 </script>
+<script>
+    function filterFeedback() {
+        const filter = document.getElementById("feedbackFilter").value;
+        const table = document.getElementById("feedbackTable").getElementsByTagName("tbody")[0];
+        const rows = Array.from(table.rows);
+
+        // Sắp xếp hoặc lọc
+        if (filter === "newest") {
+            rows.sort((a, b) => new Date(b.dataset.date) - new Date(a.dataset.date));
+        } else if (filter === "best") {
+            rows.sort((a, b) => parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating));
+        } else if (filter === "worst") {
+            rows.sort((a, b) => parseFloat(a.dataset.rating) - parseFloat(b.dataset.rating));
+        }
+
+        // Gắn lại thứ tự hàng
+        table.innerHTML = "";
+        rows.forEach(row => table.appendChild(row));
+    }
+
+    // Gọi mặc định
+    document.addEventListener("DOMContentLoaded", filterFeedback);
+</script>
+
 
 </body>
 
