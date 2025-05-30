@@ -45,8 +45,9 @@ public class DbConnect {
             return null;
         }
     }
-    private static void makeConnect() throws ClassNotFoundException , SQLException{
+    private static void makeConnect() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
+        System.out.println("🔗 Kết nối tới: " + url);
         conn = DriverManager.getConnection(url, DbProperties.username(), DbProperties.password());
     }
 }

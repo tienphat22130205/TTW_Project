@@ -7,9 +7,15 @@ public class DbProperties {
     private static Properties prod = new Properties();
     static {
         try {
-            prod.load(DbProperties.class.getClassLoader().getResourceAsStream("db.properties"));
+            var input = DbProperties.class.getClassLoader().getResourceAsStream("db.properties");
+            if (input == null) {
+                throw new RuntimeException("❌ Không tìm thấy file db.properties trong classpath!");
+            }
+            prod.load(input);
+            System.out.println("✅ Đã load file db.properties:");
+            prod.forEach((k, v) -> System.out.println("   " + k + " = " + v));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("❌ Lỗi khi load file db.properties", e);
         }
     }
 
