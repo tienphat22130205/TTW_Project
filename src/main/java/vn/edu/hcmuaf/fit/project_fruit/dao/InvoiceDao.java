@@ -351,9 +351,7 @@ public class InvoiceDao {
             if (rs.next()) {
                 double current = rs.getDouble("current_month");
                 double last = rs.getDouble("last_month");
-
                 if (last == 0) return null; // Tránh chia cho 0
-
                 return ((current - last) / last) * 100;
             }
 
@@ -363,10 +361,71 @@ public class InvoiceDao {
 
         return null;
     }
+    public List<Map<String, Object>> getPurchasedProductsByUserId(int accountId) {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            i.id_invoice,
+            i.create_date,
+            i.total_price,
+            d.quantity,
+            d.price AS unit_price,
+            p.id_product,
+            p.product_name,
+            p.price AS product_price,
+            pi.url AS image_url
+        FROM invoices i
+        JOIN invoices_details d ON i.id_invoice = d.id_invoice
+        JOIN products p ON d.id_product = p.id_product
+        LEFT JOIN (
+            SELECT id_product, MIN(url) AS url
+            FROM product_images
+            GROUP BY id_product
+        ) pi ON p.id_product = pi.id_product
+        WHERE i.id_account = ?
+        ORDER BY i.create_date DESC
+    """;
+
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ps.setInt(1, accountId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("invoiceId", rs.getInt("id_invoice"));
+                row.put("createDate", rs.getTimestamp("create_date"));
+                row.put("totalPrice", rs.getDouble("total_price"));
+                row.put("quantity", rs.getInt("quantity"));
+                row.put("unitPrice", rs.getDouble("unit_price"));
+                row.put("productId", rs.getInt("id_product"));
+                row.put("productName", rs.getString("product_name"));
+                row.put("productPrice", rs.getDouble("product_price"));
+                row.put("imageUrl", rs.getString("image_url"));
+                result.add(row);
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi lấy sản phẩm đã mua:");
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
         InvoiceDao dao = new InvoiceDao();
-        List<Map<String, Object>> list = dao.getTopSpendingCustomers(5);
-        System.out.println("TEST DAO RESULT:");
-        list.forEach(System.out::println);
+        int testAccountId = 56; // Thay bằng ID tài khoản có dữ liệu thực tế
+
+        List<Map<String, Object>> orders = dao.getPurchasedProductsByUserId(testAccountId);
+        System.out.println("Danh sách sản phẩm đã mua:");
+
+        for (Map<String, Object> item : orders) {
+            System.out.println("Đơn #" + item.get("invoiceId") +
+                    " | Ngày: " + item.get("createDate") +
+                    " | Sản phẩm: " + item.get("productName") +
+                    " | Giá: " + item.get("unitPrice") +
+                    " | Số lượng: " + item.get("quantity") +
+                    " | Ảnh: " + item.get("imageUrl"));
+        }
     }
+
 }

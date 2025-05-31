@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "f" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -499,7 +500,7 @@
         </div>
         <ul>
             <li><a class="active" href="#" onclick="showSection('account-info', this)"><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
-            <li><a href="#" onclick="showSection('order-management', this)"><i class="fas fa-box"></i> Quản lý đơn hàng</a></li>
+            <li><a href="#" onclick="showSection('order-management', this); loadOrders();"><i class="fas fa-box"></i> Quản lý đơn hàng</a></li>
             <li><a href="#" onclick="showSection('recent-viewed', this)"><i class="fas fa-clock"></i> Sản phẩm đã xem</a></li>
             <li><a href="#" onclick="showSection('change-password', this)"><i class="fas fa-key"></i> Đổi Mật Khẩu</a></li>
             <li>
@@ -570,7 +571,8 @@
 
             <div class="tab-content">
                 <div id="all-orders" class="tab-pane active">
-                    <p>Quý khách chưa có đơn hàng nào.</p>
+                    <%-- Tải fragment đơn hàng --%>
+                    <jsp:include page="/WEB-INF/views/user/orders_fragment.jsp" />
                 </div>
                 <div id="new-orders" class="tab-pane">
                     <p>Không có đơn hàng mới.</p>
@@ -751,6 +753,19 @@
         confirmButtonText: 'Thử lại'
     });
     </c:if>
+</script>
+<script>
+    function loadOrders() {
+        fetch('/project_fruit/user/purchased-orders?ajax=true')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('#all-orders').innerHTML = html;
+            })
+            .catch(err => {
+                console.error('Lỗi tải đơn hàng:', err);
+                document.querySelector('#all-orders').innerHTML = '<p>Không tải được đơn hàng.</p>';
+            });
+    }
 </script>
 
 </body>

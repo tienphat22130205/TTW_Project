@@ -392,18 +392,20 @@
 <!-- header section ends -->
 
 <!-- home section starts -->
-<section class="home" id="home">
-    <div class="swiper-container background-slider">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="./assets/img/back6.webp" alt="Background 4"></div>
-            <div class="swiper-slide"><img src="./assets/img/back5.webp" alt="Background 1"></div>
-            <div class="swiper-slide"><img src="./assets/img/back7.webp" alt="Background 2"></div>
-            <div class="swiper-slide"><img src="./assets/img/back3.jpg" alt="Background 3"></div>
-            <div class="swiper-slide"><img src="./assets/img/back3.webp" alt="Background 4"></div>
+<section class="home-container">
+    <section class="home" id="home">
+        <div class="swiper-container background-slider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="./assets/img/back6.webp" alt="Background 4"></div>
+                <div class="swiper-slide"><img src="./assets/img/back5.webp" alt="Background 1"></div>
+                <div class="swiper-slide"><img src="./assets/img/back7.webp" alt="Background 2"></div>
+                <div class="swiper-slide"><img src="./assets/img/back3.jpg" alt="Background 3"></div>
+                <div class="swiper-slide"><img src="./assets/img/back3.webp" alt="Background 4"></div>
+            </div>
         </div>
-    </div>
-    <div class="swiper-button-pre"><i class="fa-solid fa-angle-left"></i></div>
-    <div class="swiper-button-nex"><i class="fa-solid fa-angle-right"></i></div>
+        <div class="swiper-button-pre"><i class="fa-solid fa-angle-left"></i></div>
+        <div class="swiper-button-nex"><i class="fa-solid fa-angle-right"></i></div>
+    </section>
 </section>
 
 <!-- home section ends -->
