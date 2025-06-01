@@ -884,24 +884,21 @@
                         </c:forEach>
                         </tbody>
                     </table>
-                    <form action="${pageContext.request.contextPath}/checkout" method="post" id="paymentForm">
-                        <input type="hidden" id="payment_method" name="payment_method" value="COD" />
+                    <input type="hidden" id="payment_method" name="payment_method" value="COD" />
 
-                        <h3>Phương thức thanh toán</h3>
-                        <div class="btn-container">
-                            <input type="radio" name="payment_method_choice" id="pay_cod" value="COD" checked hidden>
-                            <label for="pay_cod" onclick="setPaymentMethod('COD')">
-                                <i class="fas fa-box"></i> Thanh toán khi nhận hàng (COD)
-                            </label>
+                    <h3>Phương thức thanh toán</h3>
+                    <div class="btn-container">
+                        <input type="radio" name="payment_method_choice" id="pay_cod" value="COD" checked hidden>
+                        <label for="pay_cod" onclick="setPaymentMethod('COD')">
+                            <i class="fas fa-box"></i> Thanh toán khi nhận hàng (COD)
+                        </label>
 
-                            <input type="radio" name="payment_method_choice" id="pay_vnpay" value="VNPAY" hidden>
-                            <label for="pay_vnpay" onclick="setPaymentMethod('VNPAY')" id="btn-vnpay">
-                                <i class="fas fa-credit-card"></i> Thanh toán qua VNPAY
-                            </label>
-                        </div>
-
-                        <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
-                    </form>
+                        <input type="radio" name="payment_method_choice" id="pay_vnpay" value="VNPAY" hidden>
+                        <label for="pay_vnpay" onclick="setPaymentMethod('VNPAY')" id="btn-vnpay">
+                            <i class="fas fa-credit-card"></i> Thanh toán qua VNPAY
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Xác nhận thanh toán</button>
                 </form>
             </div>
             <!-- Bên phải: Hiển thị sản phẩm và tổng tiền -->
