@@ -12,13 +12,15 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.model.ShippingMethod;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 import vn.edu.hcmuaf.fit.project_fruit.service.InvoiceService;
 import vn.edu.hcmuaf.fit.project_fruit.service.PromotionService;
-import vn.edu.hcmuaf.fit.project_fruit.utils.VnpayUtils;
+import vn.edu.hcmuaf.fit.project_fruit.utils.Config;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-    @WebServlet(name = "CheckoutServlet", value = "/checkout")
+@WebServlet(name = "CheckoutServlet", value = "/checkout")
     public class CheckoutServlet extends HttpServlet {
 
         @Override
@@ -115,8 +117,14 @@ import java.util.List;
             String paymentMethod = request.getParameter("payment_method");
             String shippingMethodId = request.getParameter("shipping_method");
 
-            String status = paymentMethod.equalsIgnoreCase("COD") ? "Chưa thanh toán" : "Đã thanh toán";
-
+            String status;
+            if ("COD".equalsIgnoreCase(paymentMethod)) {
+                status = "Chưa thanh toán";
+            } else if ("VNPAY".equalsIgnoreCase(paymentMethod)) {
+                status = "Chờ thanh toán";
+            } else {
+                status = "Chưa thanh toán";
+            }
             String fullAddress = String.join(", ", ward, district, province, addressDetail);
 
             ShippingMethodDAO shippingMethodDAO = new ShippingMethodDAO();
@@ -151,10 +159,56 @@ import java.util.List;
                     e.printStackTrace();
                 }
                 if (paymentMethod.equalsIgnoreCase("VNPAY")) {
-                    String redirectUrl = VnpayUtils.buildPaymentUrl(invoiceId, finalTotal);
-                    response.sendRedirect(redirectUrl);
+                    // Tạo tham số VNPAY
+                    Map<String, String> vnp_Params = new HashMap<>();
+                    vnp_Params.put("vnp_Version", "2.1.0");
+                    vnp_Params.put("vnp_Command", "pay");
+                    vnp_Params.put("vnp_TmnCode", Config.vnp_TmnCode);
+                    vnp_Params.put("vnp_Amount", String.valueOf((long)(finalTotal * 100))); // nhân 100
+                    vnp_Params.put("vnp_CurrCode", "VND");
+                    vnp_Params.put("vnp_TxnRef", String.valueOf(invoiceId));
+                    vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang: " + invoiceId);
+                    vnp_Params.put("vnp_OrderType", "other");
+                    vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+                    vnp_Params.put("vnp_Locale", "vn");
+                    vnp_Params.put("vnp_IpAddr", request.getRemoteAddr());
+
+                    Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+                    String vnp_CreateDate = formatter.format(cld.getTime());
+                    vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+                    cld.add(Calendar.MINUTE, 15);
+                    String vnp_ExpireDate = formatter.format(cld.getTime());
+                    vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
+                    // Sắp xếp key
+                    List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
+                    Collections.sort(fieldNames);
+
+                    StringBuilder hashData = new StringBuilder();
+                    StringBuilder query = new StringBuilder();
+
+                    Iterator<String> itr = fieldNames.iterator();
+                    while (itr.hasNext()) {
+                        String fieldName = itr.next();
+                        String fieldValue = vnp_Params.get(fieldName);
+                        if (fieldValue != null && fieldValue.length() > 0) {
+                            hashData.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, "UTF-8"));
+                            query.append(URLEncoder.encode(fieldName, "UTF-8")).append('=').append(URLEncoder.encode(fieldValue, "UTF-8"));
+                            if (itr.hasNext()) {
+                                hashData.append('&');
+                                query.append('&');
+                            }
+                        }
+                    }
+                    String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
+                    query.append("&vnp_SecureHash=").append(vnp_SecureHash);
+                    String paymentUrl = Config.vnp_PayUrl + "?" + query.toString();
+                    // Redirect trực tiếp sang URL thanh toán VNPAY
+                    response.sendRedirect(paymentUrl);
                     return;
                 }
+
                 String emailBody = "<h3>Chào " + receiverName + ",</h3>" +
                         "<p>Cảm ơn bạn đã đặt hàng tại VitaminFruit.</p>" +
                         "<p>Mã hóa đơn của bạn là: <strong>#" + invoiceId + "</strong></p>" +
