@@ -1,4 +1,4 @@
-gipackage vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller;
 
 import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;

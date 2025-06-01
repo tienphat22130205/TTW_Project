@@ -755,7 +755,7 @@
 
                     <div class="form-group">
                         <label for="promotion-code">Mã khuyến mãi:</label>
-                        <input type="text" id="promotion-code0" name="promotion_code" placeholder="Nhập mã giảm giá"
+                        <input type="text" id="promotion-code-input" name="promotion_code_input" placeholder="Nhập mã giảm giá"
                                required/>
                     </div>
 
@@ -836,7 +836,7 @@
                             </td>
                             <td><%= promotion.getPromotion_name() %>
                             </td>
-                            <td><%= promotion.getCode() %>
+                            <td><%= promotion.getPromotion_code() %>
                             </td>
                             <td><%= promotion.getDescribe_1() %>
                             </td>
@@ -862,7 +862,7 @@
                                         promoEnd: '<%= promotion.getEnd_date() %>',
                                         promoDiscount: '<%= promotion.getPercent_discount() %>',
                                         promoType: '<%= promotion.getType() %>',
-                                        promoCode: '<%= promotion.getCode() %>',
+                                        promoCode: '<%= promotion.getPromotion_code() %>',
                                         promoMinOrder: '<%= promotion.getMin_order_amount() %>',
                                         promoMaxUsage: '<%= promotion.getMax_usage() %>'
                                         }, 'editPromotion')">Sửa
