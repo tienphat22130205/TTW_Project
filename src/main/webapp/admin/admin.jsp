@@ -1451,133 +1451,218 @@
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
                       method="POST">
                     <div class="form-group"
-                        <label for="promotion-name">Tên khuyến mãi:</label>
-                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
-                               required/>
-                    </div>
+                    <label for="promotion-name">Tên khuyến mãi:</label>
+                    <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
+                           required/>
+            </div>
 
-                    <div class="form-group">
-                        <label for="promotion-code">Mã khuyến mãi:</label>
-                        <input type="text" id="promotion-code-input" name="promotion_code_input" placeholder="Nhập mã giảm giá"
-                               required/>
-                    </div>
+            <div class="form-group">
+                <label for="promotion-code">Mã khuyến mãi:</label>
+                <input type="text" id="promotion-code-input" name="promotion_code_input" placeholder="Nhập mã giảm giá"
+                       required/>
+            </div>
 
-                    <div class="form-group">
-                        <label for="description-add">Mô tả:</label>
-                        <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
-                               required/>
-                    </div>
+            <div class="form-group">
+                <label for="description-add">Mô tả:</label>
+                <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
+                       required/>
+            </div>
 
-                    <div class="form-group">
-                        <label for="start-date">Ngày bắt đầu:</label>
-                        <input type="date" id="start-date" name="start_date" required/>
-                    </div>
+            <div class="form-group">
+                <label for="start-date">Ngày bắt đầu:</label>
+                <input type="date" id="start-date" name="start_date" required/>
+            </div>
 
-                    <div class="form-group">
-                        <label for="expiration-date">Ngày hết hạn:</label>
-                        <input type="date" id="expiration-date" name="expiration_date" required/>
-                    </div>
+            <div class="form-group">
+                <label for="expiration-date">Ngày hết hạn:</label>
+                <input type="date" id="expiration-date" name="expiration_date" required/>
+            </div>
 
-                    <div class="form-group">
-                        <label for="promotion-discount">Mức giảm (%):</label>
-                        <input type="number" id="promotion-discount" name="promotion_discount"
-                               placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
-                    </div>
+            <div class="form-group">
+                <label for="promotion-discount">Mức giảm (%):</label>
+                <input type="number" id="promotion-discount" name="promotion_discount"
+                       placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
+            </div>
 
-                    <div class="form-group">
-                        <label for="promotion-type">Loại:</label>
-                        <select id="promotion-type" name="promotion_type" class="promotionType" required>
-                            <option value="weekly">Weekly</option>
-                            <option value="general">General</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-submit">Cập nhật</button>
-                </form>
+            <div class="form-group">
+                <label for="promotion-type">Loại:</label>
+                <select id="promotion-type" name="promotion_type" class="promotionType" required>
+                    <option value="weekly">Weekly</option>
+                    <option value="general">General</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Cập nhật</button>
+            </form>
 
-                <h3>Danh sách Khuyến mãi</h3>
-                <div class="promotion-table">
+            <h3>Danh sách Khuyến mãi</h3>
+            <div class="promotion-table">
+                <%
+                    PromotionsDao promotionsDao = new PromotionsDao();
+                    List<Promotions> promotionsList = promotionsDao.getAll();
+                %>
+                <table id="promotionTable">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th style="text-align: left">Tên Khuyến Mãi</th>
+                        <th>Mã</th>
+                        <th>Mô Tả</th>
+                        <th>Ngày Bắt Đầu</th>
+                        <th>Ngày Kết Thúc</th>
+                        <th>Phần Trăm Giảm</th>
+                        <th>Loại</th>
+                        <th>Giá trị đơn tối thiểu</th>
+                        <th>Số lượt sử dụng tối đa</th>
+                        <th>Số lượt đã sử dụng</th>
+                        <th>Hành Động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <%
-                        PromotionsDao promotionsDao = new PromotionsDao();
-                        List<Promotions> promotionsList = promotionsDao.getAll();
+                        for (Promotions promotion : promotionsList) {
                     %>
-                    <table id="promotionTable">
-                        <thead>
-                        <tr style="text-align: center">
-                            <th style="text-align: left">Tên Khuyến Mãi</th>
-                            <th>Mã</th>
-                            <th>Mô Tả</th>
-                            <th>Ngày Bắt Đầu</th>
-                            <th>Ngày Kết Thúc</th>
-                            <th>Phần Trăm Giảm</th>
-                            <th>Loại</th>
-                            <th>Giá trị đơn tối thiểu</th>
-                            <th>Số lượt sử dụng tối đa</th>
-                            <th>Số lượt đã sử dụng</th>
-                            <th>Hành Động</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <%
-                            for (Promotions promotion : promotionsList) {
-                        %>
-                        <tr>
-                            <td>
-                                <%= promotion.getPromotion_name() %>
-                            </td>
-                            <td>
-                                <%= promotion.getDescribe_1() %>
-                            </td>
-                            <td>
-                                <%= promotion.getStart_date() %>
-                            </td>
-                            <td>
-                                <%= promotion.getEnd_date() %>
-                            </td>
-                            <td>
-                                <%= promotion.getPercent_discount()%>%
-                            </td>
-                            <td>
-                                <%= promotion.getType() %>
-                            </td>
-                            <td>
-                                <button class="edit-button" onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Chỉnh sửa</button>
-                                <button class="delete-button" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
-                            </td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                        </tbody>
-                    </table>
-                </div>
+                    <tr>
+                        <td>
+                            <%= promotion.getPromotion_name() %>
+                        </td>
+                        <td>
+                            <%= promotion.getDescribe_1() %>
+                        </td>
+                        <td>
+                            <%= promotion.getStart_date() %>
+                        </td>
+                        <td>
+                            <%= promotion.getEnd_date() %>
+                        </td>
+                        <td>
+                            <%= promotion.getPercent_discount()%>%
+                        </td>
+                        <td>
+                            <%= promotion.getType() %>
+                        </td>
+                        <td>
+                            <button class="edit-button" onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Chỉnh sửa</button>
+                            <button class="delete-button" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div id="feedback" class="section">
-            <div class="feedback-container">
-                <div class="feedback-content">
-                    <h1>Phản Hồi Khách Hàng</h1>
-                    <table id="feedbackTable" class="feedback-table">
+</div>
+<div id="feedback" class="section">
+    <div class="feedback-container">
+        <div class="feedback-content">
+            <h1>Phản Hồi Khách Hàng</h1>
+            <table id="feedbackTable" class="feedback-table">
+                <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Tên khách hàng</th>
+                    <th>Nội dung</th>
+                    <th>Ngày tạo</th>
+                    <th>Đánh giá</th>
+                    <th>Liên hệ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Lặp qua danh sách feedback -->
+                <c:forEach var="feedback" items="${feedback}">
+                    <tr>
+                        <td>${feedback.productName}</td>
+                        <td>${feedback.cusName}</td>
+                        <td>${feedback.content}</td>
+                        <td>${feedback.dateCreate}</td>
+                        <td style="gap: 5px">${feedback.rating} <i class="fas fa-star" style="color: #ffeb98"></i></td>
+                        <td>
+                            <button class="contact-button">Liên hệ</button>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="system" class="section">
+    <div class="system-settings">
+        <div class="system-menu">
+            <!-- Tab Quản lý tài khoản -->
+            <div class="tab-content">
+                <h2>QUẢN LÝ TÀI KHOẢN</h2>
+                <!-- Khu vực thêm tài khoản -->
+                <div class="account-management">
+                    <!-- Form thêm tài khoản mới -->
+                    <div class="account-form">
+                        <h3>Thêm Tài Khoản</h3>
+                        <form class="accountAddTable" action="<%= request.getContextPath() %>/AddAccountServlet"
+                              method="post">
+                            <!-- Họ và tên -->
+                            <div class="form-group">
+                                <label for="username">Họ và tên:</label>
+                                <input type="text" id="username" name="username" placeholder="Nhập họ và tên"
+                                       required/>
+                            </div>
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" placeholder="Nhập email" required/>
+                            </div>
+                            <!-- Mật khẩu -->
+                            <div class="form-group">
+                                <label for="password">Mật khẩu:</label>
+                                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
+                                       minlength="6" required/>
+                            </div>
+                            <!-- Xác nhận mật khẩu -->
+                            <div class="form-group">
+                                <label for="confirm-password">Xác nhận mật khẩu:</label>
+                                <input type="password" id="confirm-password" name="confirm-password"
+                                       placeholder="Xác nhận mật khẩu" minlength="6" required/>
+                            </div>
+                            <!-- Vai trò -->
+                            <div class="form-group">
+                                <label for="role">Phân quyền:</label>
+                                <select id="role" name="role" class="accountRole" required>
+                                    <option value="" disabled selected>Chọn vai trò</option>
+                                    <option value="admin">Quản trị viên</option>
+                                    <option value="staff">Nhân viên</option>
+                                </select>
+                            </div>
+                            <!-- Nút thêm tài khoản -->
+                            <div class="form-group">
+                                <button type="submit" class="btn-submit">Thêm tài khoản</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danh sách tài khoản -->
+                <div id="account-list">
+                    <h3>DANH SÁCH TÀI KHOẢN</h3>
+                    <table id = "userAdmin">
                         <thead>
                         <tr>
-                            <th>Tên sản phẩm</th>
-                            <th>Tên khách hàng</th>
-                            <th>Nội dung</th>
-                            <th>Ngày tạo</th>
-                            <th>Đánh giá</th>
-                            <th>Liên hệ</th>
+                            <th>ID</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Email</th>
+                            <th>Phân quyền</th>
+                            <th>Thao tác</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <!-- Lặp qua danh sách feedback -->
-                        <c:forEach var="feedback" items="${feedback}">
-                            <tr>
-                                <td>${feedback.productName}</td>
-                                <td>${feedback.cusName}</td>
-                                <td>${feedback.content}</td>
-                                <td>${feedback.dateCreate}</td>
-                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star" style="color: #ffeb98"></i></td>
+                        <c:forEach var="customer" items="${AdminStaff}">
+                            <tr id="customer-${customer.idCustomer}">
+                                <td>${customer.idCustomer}</td>
+                                <td>${customer.customerName}</td>
+                                <td>${customer.email}</td>
+                                <td>${customer.role}</td>
                                 <td>
-                                    <button class="contact-button">Liên hệ</button>
+                                    <button onclick="window.location.href='remove-account?pid=${customer.idCustomer}'">
+                                        Xóa
+                                    </button>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -1586,94 +1671,9 @@
                 </div>
             </div>
         </div>
-        <div id="system" class="section">
-            <div class="system-settings">
-                <div class="system-menu">
-                    <!-- Tab Quản lý tài khoản -->
-                    <div class="tab-content">
-                        <h2>QUẢN LÝ TÀI KHOẢN</h2>
-                        <!-- Khu vực thêm tài khoản -->
-                        <div class="account-management">
-                            <!-- Form thêm tài khoản mới -->
-                            <div class="account-form">
-                                <h3>Thêm Tài Khoản</h3>
-                                <form class="accountAddTable" action="<%= request.getContextPath() %>/AddAccountServlet"
-                                      method="post">
-                                    <!-- Họ và tên -->
-                                    <div class="form-group">
-                                        <label for="username">Họ và tên:</label>
-                                        <input type="text" id="username" name="username" placeholder="Nhập họ và tên"
-                                               required/>
-                                    </div>
-                                    <!-- Email -->
-                                    <div class="form-group">
-                                        <label for="email">Email:</label>
-                                        <input type="email" id="email" name="email" placeholder="Nhập email" required/>
-                                    </div>
-                                    <!-- Mật khẩu -->
-                                    <div class="form-group">
-                                        <label for="password">Mật khẩu:</label>
-                                        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
-                                               minlength="6" required/>
-                                    </div>
-                                    <!-- Xác nhận mật khẩu -->
-                                    <div class="form-group">
-                                        <label for="confirm-password">Xác nhận mật khẩu:</label>
-                                        <input type="password" id="confirm-password" name="confirm-password"
-                                               placeholder="Xác nhận mật khẩu" minlength="6" required/>
-                                    </div>
-                                    <!-- Vai trò -->
-                                    <div class="form-group">
-                                        <label for="role">Phân quyền:</label>
-                                        <select id="role" name="role" class="accountRole" required>
-                                            <option value="" disabled selected>Chọn vai trò</option>
-                                            <option value="admin">Quản trị viên</option>
-                                            <option value="staff">Nhân viên</option>
-                                        </select>
-                                    </div>
-                                    <!-- Nút thêm tài khoản -->
-                                    <div class="form-group">
-                                        <button type="submit" class="btn-submit">Thêm tài khoản</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Danh sách tài khoản -->
-                        <div id="account-list">
-                            <h3>DANH SÁCH TÀI KHOẢN</h3>
-                            <table id = "userAdmin">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên đăng nhập</th>
-                                    <th>Email</th>
-                                    <th>Phân quyền</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="customer" items="${AdminStaff}">
-                                    <tr id="customer-${customer.idCustomer}">
-                                        <td>${customer.idCustomer}</td>
-                                        <td>${customer.customerName}</td>
-                                        <td>${customer.email}</td>
-                                        <td>${customer.role}</td>
-                                        <td>
-                                            <button onclick="window.location.href='remove-account?pid=${customer.idCustomer}'">
-                                                Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+    </div>
+</div>
+</main>
 </div>
 <div id="logoutOverlay" class="logout-overlay" style="display: none;"></div>
 <div id="logoutNotification" class="logout-notification" style="display: none;">
