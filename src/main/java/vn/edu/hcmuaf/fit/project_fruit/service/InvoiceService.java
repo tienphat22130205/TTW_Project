@@ -110,6 +110,9 @@ public class InvoiceService {
     public Double getRevenueGrowthPercent() {
         return invoiceDao.getRevenueGrowthPercent();
     }
+    public List<Map<String, Object>> getPurchasedProductsByUserId(int accountId) {
+        return invoiceDao.getPurchasedProductsByUserId(accountId);
+    }
     // Test nhanh từ service
     public static void main(String[] args) {
         InvoiceService service = new InvoiceService();

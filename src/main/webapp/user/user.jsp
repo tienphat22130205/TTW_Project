@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "f" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -136,6 +137,12 @@
 
         .logout-confirm-box .cancel-btn:hover {
             background-color: #aaa;
+        }
+        .tab-content {
+            padding-top: 20px;
+            min-height: 140px;
+            max-height: 400px; /* hoặc height: 400px; tùy ý */
+            overflow-y: auto;  /* bật scroll dọc */
         }
 
     </style>
@@ -499,7 +506,7 @@
         </div>
         <ul>
             <li><a class="active" href="#" onclick="showSection('account-info', this)"><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
-            <li><a href="#" onclick="showSection('order-management', this)"><i class="fas fa-box"></i> Quản lý đơn hàng</a></li>
+            <li><a href="#" onclick="showSection('order-management', this); loadOrders();"><i class="fas fa-box"></i> Quản lý đơn hàng</a></li>
             <li><a href="#" onclick="showSection('recent-viewed', this)"><i class="fas fa-clock"></i> Sản phẩm đã xem</a></li>
             <li><a href="#" onclick="showSection('change-password', this)"><i class="fas fa-key"></i> Đổi Mật Khẩu</a></li>
             <li>
@@ -570,7 +577,8 @@
 
             <div class="tab-content">
                 <div id="all-orders" class="tab-pane active">
-                    <p>Quý khách chưa có đơn hàng nào.</p>
+                    <%-- Tải fragment đơn hàng --%>
+                    <jsp:include page="/WEB-INF/views/user/orders_fragment.jsp" />
                 </div>
                 <div id="new-orders" class="tab-pane">
                     <p>Không có đơn hàng mới.</p>
@@ -704,6 +712,7 @@
 </div>
 <script src="${pageContext.request.contextPath}/assets/js/user.js" defer></script>
 <script src="${pageContext.request.contextPath}/assets/js/fruit.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Script để chuyển đổi giữa các section
     function showSection(sectionId, element) {
@@ -719,6 +728,52 @@
         document.getElementById("logoutOverlay").style.display = "flex";
     });
 </script>
+<script>
+    // Mở lại tab nếu servlet đã set
+    const activeSection = "${activeSection}";
+    if (activeSection) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const section = document.getElementById(activeSection);
+        if (section) section.classList.add('active');
+
+        document.querySelectorAll('.sidebar ul li a').forEach(a => a.classList.remove('active'));
+        const activeLink = document.querySelector(`.sidebar ul li a[onclick*='${activeSection}']`);
+        if (activeLink) activeLink.classList.add('active');
+    }
+
+    // Hiển thị thông báo nếu có
+    <c:if test="${not empty successMessage}">
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: '${successMessage}',
+        confirmButtonText: 'OK'
+    });
+    </c:if>
+
+    <c:if test="${not empty errorMessage}">
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: '${errorMessage}',
+        confirmButtonText: 'Thử lại'
+    });
+    </c:if>
+</script>
+<script>
+    function loadOrders() {
+        fetch('/project_fruit/user/purchased-orders?ajax=true')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('#all-orders').innerHTML = html;
+            })
+            .catch(err => {
+                console.error('Lỗi tải đơn hàng:', err);
+                document.querySelector('#all-orders').innerHTML = '<p>Không tải được đơn hàng.</p>';
+            });
+    }
+</script>
+
 </body>
 
 </html>
