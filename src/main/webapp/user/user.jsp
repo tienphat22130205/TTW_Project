@@ -138,6 +138,12 @@
         .logout-confirm-box .cancel-btn:hover {
             background-color: #aaa;
         }
+        .tab-content {
+            padding-top: 20px;
+            min-height: 140px;
+            max-height: 400px; /* hoặc height: 400px; tùy ý */
+            overflow-y: auto;  /* bật scroll dọc */
+        }
 
     </style>
 </head>

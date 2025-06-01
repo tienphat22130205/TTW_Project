@@ -206,13 +206,6 @@ body {
     color: #ff7800;
     border-bottom: 2px solid #ff7800;
 }
-
-.tab-content {
-    padding-top: 20px;
-    min-height: 140px;
-    max-height: 400px; /* hoặc height: 400px; tùy ý */
-    overflow-y: auto;  /* bật scroll dọc */
-}
 .tab-pane {
     display: none;
     min-height: none;
