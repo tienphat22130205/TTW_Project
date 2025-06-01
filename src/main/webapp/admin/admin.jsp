@@ -738,17 +738,17 @@
                     <span>Dashboard</span></a>
             </li>
             <li>
-                <a href="#" class="menu-item" onclick="showSection('customers', 'Quản lý khách hàng')"><span><i
+                <a href="#" class="menu-item" onclick="showSection('customers', 'Khách hàng')"><span><i
                         class="fa-solid fa-user"></i></span>
                     <span>Quản lý khách hàng</span></a>
             </li>
             <li>
-                <a href="#" class="menu-item" onclick="showSection('products', 'Quản lý sản phẩm')"><span><i
+                <a href="#" class="menu-item" onclick="showSection('products', 'Sản phẩm')"><span><i
                         class="fa-solid fa-box"></i></span>
                     <span>Quản lý sản phẩm</span></a>
             </li>
             <li>
-                <a href="#" class="menu-item" onclick="showSection('orders', 'Quản lý đặt hàng')"><span><i
+                <a href="#" class="menu-item" onclick="showSection('orders', 'Đặt hàng')"><span><i
                         class="fa-solid fa-bag-shopping"></i></span>
                     <span>Quản lý đặt hàng</span></a>
             </li>
@@ -1440,17 +1440,25 @@
                 </div>
             </div>
         </div>
+
         <div id="promotions" class="section">
             <div class="promotion-container">
                 <div class="promotion-header">
+                    <h1>Quản Lý Khuyến Mãi</h1>
                 </div>
                 <!-- Form Thêm Khuyến Mãi -->
                 <h3>Thêm khuyến mãi</h3>
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
                       method="POST">
+                    <div class="form-group"
+                        <label for="promotion-name">Tên khuyến mãi:</label>
+                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
+                               required/>
+                    </div>
+
                     <div class="form-group">
-                        <label for="promotion-code">Tên khuyến mãi:</label>
-                        <input type="text" id="promotion-code" name="promotion_code" placeholder="Nhập mã giảm giá"
+                        <label for="promotion-code">Mã khuyến mãi:</label>
+                        <input type="text" id="promotion-code-input" name="promotion_code_input" placeholder="Nhập mã giảm giá"
                                required/>
                     </div>
 
@@ -1496,11 +1504,15 @@
                         <thead>
                         <tr style="text-align: center">
                             <th style="text-align: left">Tên Khuyến Mãi</th>
+                            <th>Mã</th>
                             <th>Mô Tả</th>
                             <th>Ngày Bắt Đầu</th>
                             <th>Ngày Kết Thúc</th>
-                            <th>Phần Trăm Giảm Giá</th>
+                            <th>Phần Trăm Giảm</th>
                             <th>Loại</th>
+                            <th>Giá trị đơn tối thiểu</th>
+                            <th>Số lượt sử dụng tối đa</th>
+                            <th>Số lượt đã sử dụng</th>
                             <th>Hành Động</th>
                         </tr>
                         </thead>

@@ -88,7 +88,7 @@ public class ApplyVoucherServlet extends HttpServlet {
         PromotionService ps = new PromotionService();
         List<Promotions> list = ps.getAll();
         for (Promotions p : list) {
-            System.out.println(p.getCode() + " - " + p.getPercent_discount());
+            System.out.println(p.getPromotion_code() + " - " + p.getPercent_discount());
         }
     }
 
