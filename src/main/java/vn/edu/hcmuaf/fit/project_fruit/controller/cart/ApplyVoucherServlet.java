@@ -81,7 +81,6 @@ public class ApplyVoucherServlet extends HttpServlet {
             session.setAttribute("shipping_method", currentShipping);
         }
 
-        // 👉 Redirect về lại servlet /checkout để hiển thị trang payment.jsp
         response.sendRedirect("checkout");
     }
     public static void main(String[] args) {
