@@ -63,7 +63,7 @@ public class LoginController extends HttpServlet {
                     "Login",
                     "accounts",
                     null,
-                    null,
+                    "Người dùng ID#"+user.getId_account()+" đã đăng nhập",
                     user.getRole(),
                     false 
             );

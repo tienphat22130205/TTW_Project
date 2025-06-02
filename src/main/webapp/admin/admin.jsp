@@ -833,16 +833,211 @@
             Dashboard
         </h1>
         <div class="user-wrapper">
-            <div class="notification-icon" id="notificationBell">
-                <i class="fas fa-bell"></i>
-                <span class="notification-count" id="notificationCount">0</span>
+
+
+            <!-- chuong thong bao -->
+            <div class="notification-icon" id="notificationBell_Menu">
+                <a href="#" id="notificationToggle" class="notification-link" style="color: #000000">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-label">Thông báo</span>
+                    <span class="notification-count" id="notificationCount">0</span>
+                </a>
             </div>
-            <div class="notification-dropdown" id="notificationDropdown">
-                <h3 class="notification-title">Thông báo</h3>
-                <ul class="notification-list">
+            <div class="notification-popup" id="notificationPopup">
+                <ul>
 
                 </ul>
             </div>
+            <style>
+                .notification-icon {
+                    display: flex;
+                    position: relative;
+                    font-size: 25px;
+                    user-select: none;
+                }
+
+                .notification-link {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    text-decoration: none;
+                    gap: 2px;
+                    cursor: pointer;
+                    position: relative;
+                    padding-right: 30px;
+                }
+
+                .notification-label {
+                    font-size: 14px;
+                    white-space: nowrap;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .notification-count {
+                    position: absolute;
+                    top: -5px;
+                    right: 25px;
+                    background-color: red;
+                    color: white;
+                    border-radius: 50%;
+                    padding: 2px 6px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                .notification-link:hover i.fas.fa-bell {
+                    animation: shake 0.5s ease-in-out;
+                }
+
+                @keyframes shake {
+                    0%, 100% {
+                        transform: translateX(0);
+                    }
+                    20%, 60% {
+                        transform: translateX(-5px);
+                    }
+                    40%, 80% {
+                        transform: translateX(5px);
+                    }
+                }
+
+                .notification-popup {
+                    position: absolute;
+                    right: 0;
+                    top: 68px;
+                    margin-top: 4px;
+                    width: 430px;
+                    height: 500px;
+                    overflow-y: auto;
+                    background-color: white;
+                    color: black;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
+                    z-index: 9999;
+
+                    opacity: 0;
+                    pointer-events: none;
+                    transform: translateX(30px);
+                    transition: opacity 0.3s ease, transform 0.3s ease;
+                }
+
+                .notification-popup.active {
+                    display: block;
+                    opacity: 1;
+                    pointer-events: auto;
+                    transform: translateX(0);
+                }
+
+                .notification-popup-header {
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                    background-color: #f8f8f8;
+                    padding: 12px 16px;
+                    font-weight: bold;
+                    font-size: 18px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    word-break: break-word;
+                }
+
+                .notification-popup ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 10px;
+                }
+
+                .notification-popup ul li {
+                    padding: 8px 5px;
+                    border-bottom: 1px solid #eee;
+                    font-size: 14px;
+                }
+
+                .notification-popup ul li:last-child {
+                    border-bottom: none;
+                }
+
+            </style>
+            <script>
+                const bell = document.getElementById("notificationToggle");
+                const popup = document.getElementById("notificationPopup");
+                const countSpan = document.getElementById("notificationCount");
+                const notificationList = popup.querySelector('ul');
+
+                // Hàm tải thông báo
+                async function loadNotifications() {
+                    try {
+                        // Thay URL này nếu bạn dùng API admin
+                        const response = await fetch('/project_fruit/admin/notifications');
+                        if (!response.ok) throw new Error('Lỗi tải thông báo');
+
+                        const notifications = await response.json();
+
+                        // Xóa nội dung cũ
+                        notificationList.innerHTML = '';
+
+                        if (!notifications || notifications.length === 0) {
+                            notificationList.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
+                            countSpan.style.display = "none";
+                            countSpan.textContent = "";
+                        } else {
+                            // Kiểm tra dạng dữ liệu: nếu là chuỗi hoặc object chứa afterData
+                            notifications.forEach(item => {
+                                const li = document.createElement('li');
+                                if (typeof item === 'string') {
+                                    li.textContent = item;
+                                } else if (item.afterData) {
+                                    li.textContent = item.afterData;
+                                } else {
+                                    li.textContent = JSON.stringify(item);
+                                }
+                                notificationList.appendChild(li);
+                            });
+                            countSpan.style.display = "inline-block";
+                            countSpan.textContent = notifications.length;
+                        }
+                    } catch (error) {
+                        console.error('Lỗi khi lấy thông báo:', error);
+                        notificationList.innerHTML = '<li class="no-notification">Lỗi tải thông báo</li>';
+                        countSpan.style.display = "none";
+                        countSpan.textContent = "";
+                    }
+                }
+
+                // Xử lý click vào chuông
+                bell.addEventListener("click", async (event) => {
+                    event.preventDefault();
+                    popup.classList.toggle("active");
+
+                    if (popup.classList.contains("active")) {
+                        try {
+                            // Gọi API đánh dấu đã xem
+                            const res = await fetch('/project_fruit/notifications/mark-seen', { method: 'POST' });
+                            if (res.ok) {
+                                countSpan.style.display = "none";
+                                countSpan.textContent = "";
+                                // Không gọi loadNotifications lại để giữ popup hiện tại
+                            }
+                        } catch (error) {
+                            console.error('Lỗi đánh dấu đã xem:', error);
+                        }
+                    }
+                });
+
+                // Ẩn popup khi click ra ngoài
+                document.addEventListener("click", (event) => {
+                    if (!bell.contains(event.target) && !popup.contains(event.target)) {
+                        popup.classList.remove("active");
+                    }
+                });
+
+                // Tự động load thông báo khi DOM sẵn sàng
+                document.addEventListener('DOMContentLoaded', loadNotifications);
+
+            </script>
+            <!-- chuong thong bao -->
+
             <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px"
                  height="40px" alt="">
             <div>
@@ -1204,6 +1399,7 @@
                                 </div>
                                 <button type="submit" class="btn-submit">Cập nhật</button>
                             </form>
+
                             <h3>Danh sách sản phẩm</h3>
                             <div class="table-reponsive">
                                 <table id="productTable" class="product-table">
@@ -1506,7 +1702,6 @@
         <div id="promotions" class="section">
             <div class="promotion-container">
                 <div class="promotion-header">
-                    <h1>Quản Lý Khuyến Mãi</h1>
                 </div>
                 <!-- Form Thêm Khuyến Mãi -->
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
@@ -1519,7 +1714,7 @@
 
                     <div class="form-group">
                         <label for="promotion-code">Mã khuyến mãi:</label>
-                        <input type="text" id="promotion-code-input" name="promotion_code-input"
+                        <input type="text" id="promotion-code" name="promotion_code"
                                placeholder="Nhập mã giảm giá" required/>
                     </div>
 
@@ -1562,6 +1757,7 @@
 
                 <!-- Form Thêm Khuyến Mãi -->
 
+
                 <h3>Danh sách Khuyến mãi</h3>
                 <div class="promotion-table">
                     <%
@@ -1572,12 +1768,11 @@
                         <thead>
                         <tr style="text-align: center">
                             <th style="text-align: left">Tên Khuyến Mãi</th>
-                            <th>Mã</th>
                             <th>Mô Tả</th>
                             <th>Ngày Bắt Đầu</th>
                             <th>Ngày Kết Thúc</th>
-                            <th>Phần Trăm Giảm</th>
-                            <th>Giá trị đơn tối thiểu</th>
+                            <th>Phần Trăm Giảm Giá</th>
+                            <th>Loại</th>
                             <th>Hành Động</th>
                         </tr>
                         </thead>
@@ -1588,9 +1783,6 @@
                         <tr>
                             <td>
                                 <%= promotion.getPromotion_name() %>
-                            </td>
-                            <td>
-                                <%= promotion.getPromotion_code() %>
                             </td>
                             <td>
                                 <%= promotion.getDescribe_1() %>
@@ -1605,17 +1797,11 @@
                                 <%= promotion.getPercent_discount()%>%
                             </td>
                             <td>
-                                <%= promotion.getMin_order_amount() %>
+                                <%= promotion.getType() %>
                             </td>
                             <td>
-                                <button class="edit-button"
-                                        onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">
-                                    Chỉnh sửa
-                                </button>
-                                <button class="delete-button"
-                                        onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">
-                                    Xóa
-                                </button>
+                                <button class="edit-button" onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Chỉnh sửa</button>
+                                <button class="delete-button" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
                             </td>
                         </tr>
                         <%
@@ -1626,6 +1812,7 @@
                 </div>
             </div>
         </div>
+
         <div id="feedback" class="section">
             <div class="feedback-container">
                 <div class="feedback-content">

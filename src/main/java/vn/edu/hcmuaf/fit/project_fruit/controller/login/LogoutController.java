@@ -32,7 +32,7 @@ public class LogoutController extends HttpServlet {
                         "Login",
                         "accounts",
                         null,
-                        null,
+                        "Người dùng ID#"+user.getId_account()+" đã đăng xuất",
                         user.getRole(),
                         false
                 );

@@ -21,7 +21,7 @@ public class AddPromotion extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String promotionName = request.getParameter("promotion_name");
-        String promotionCode = request.getParameter("promotion_code-input");
+        String promotionCode = request.getParameter("promotion_code");
         String description = request.getParameter("description_add");
         String startDate = request.getParameter("start_date");
         String endDate = request.getParameter("expiration_date");
@@ -29,7 +29,7 @@ public class AddPromotion extends HttpServlet {
         String minOrderAmount = request.getParameter("min_order_amount");
         String maxUsage = request.getParameter("max_usage");
 
-        String query = "INSERT INTO promotions (promotion_name, promotion_code, describe_1, start_date, end_date, percent_discount, min_order_amount, max_usage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO promotions (promotion_name, code, describe_1, start_date, end_date, percent_discount, min_order_amount, max_usage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, promotionName);

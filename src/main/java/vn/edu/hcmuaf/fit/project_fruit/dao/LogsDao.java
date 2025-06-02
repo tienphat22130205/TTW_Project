@@ -33,6 +33,30 @@ public class LogsDao {
         }
     }
 
+    public List<Logs> getAllLogs() {
+        List<Logs> list = new ArrayList<>();
+        String sql = "SELECT * FROM logs ORDER BY created_at DESC";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Logs log = new Logs();
+                log.setUserId(rs.getInt("user_id"));
+                log.setLevel(rs.getString("level"));
+                log.setAction(rs.getString("action"));
+                log.setResource(rs.getString("resource"));
+                log.setBeforeData(rs.getString("before_data"));
+                log.setAfterData(rs.getString("after_data"));
+                log.setRole(rs.getString("role"));
+                log.setSeen(rs.getBoolean("seen"));
+                list.add(log);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
     public List<Logs> getLogsByUserIdExcludeLoginLogout(int userId) throws SQLException {
         List<Logs> logsList = new ArrayList<>();
         String sql = "SELECT * FROM logs WHERE user_id = ? AND action NOT IN ('login', 'logout') ORDER BY id DESC";
@@ -57,7 +81,7 @@ public class LogsDao {
 
 
     public List<Logs> getUnseenLogsByUserIdExcludeLoginLogout(int userId) throws SQLException {
-        String sql = "SELECT * FROM logs WHERE user_id = ? AND seen = FALSE AND action NOT IN ('login', 'logout') ORDER BY id DESC";
+        String sql = "SELECT * FROM logs WHERE user_id = ? AND seen = FALSE AND action NOT IN ('login', 'logout', 'add_product') ORDER BY id DESC";
         List<Logs> list = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -78,6 +102,28 @@ public class LogsDao {
         return list;
     }
 
+    public List<Logs> getUnseenLogs() throws SQLException {
+        String sql = "SELECT * FROM logs WHERE seen = FALSE ORDER BY id DESC";
+        List<Logs> list = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Logs log = new Logs();
+                log.setUserId(rs.getInt("user_id"));
+                log.setLevel(rs.getString("level"));
+                log.setAction(rs.getString("action"));
+                log.setResource(rs.getString("resource"));
+                log.setBeforeData(rs.getString("before_data"));
+                log.setAfterData(rs.getString("after_data"));
+                log.setRole(rs.getString("role"));
+                log.setSeen(rs.getBoolean("seen"));
+                list.add(log);
+            }
+        }
+        return list;
+    }
+
+
 
     public void markAllLogsAsSeenByUserId(int userId) throws SQLException {
         String sql = "UPDATE logs SET seen = TRUE WHERE user_id = ? AND seen = FALSE";
@@ -91,7 +137,7 @@ public class LogsDao {
         try (Connection conn = DbConnect.getConnection()) {
             LogsDao dao = new LogsDao(conn);
             int userId = 79;
-            List<Logs> logs = dao.getLogsByUserIdExcludeLoginLogout(userId);
+            List<Logs> logs = dao.getAllLogs();
 
             if (logs.isEmpty()) {
                 System.out.println("Không có logs cho userId = " + userId);
