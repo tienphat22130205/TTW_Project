@@ -135,8 +135,6 @@ public class UserService {
     public boolean isPasswordRecentlyUsed(String email, String newPassword) {
         return userDao.isPasswordRecentlyUsed(email, newPassword);
     }
-
-
 }
 
 

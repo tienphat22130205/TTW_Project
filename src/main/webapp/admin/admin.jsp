@@ -704,6 +704,52 @@
             background-color: #417dfa; /* màu vàng nhẹ */
             color: #d9e3f4;
         }
+        .user-profile {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .user-tooltip {
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(40, 40, 40, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-weight: 600;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* Mũi tên dưới tooltip */
+        .user-tooltip::after {
+            content: "";
+            position: absolute;
+            bottom: 100%; /* dưới tooltip */
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(40, 40, 40, 0.95) transparent transparent transparent;
+        }
+
+        .user-profile:hover .user-tooltip {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #topCustomersTable thead th tr td{
+            text-align: center;
+            vertical-align: middle; /* nếu muốn dọc cũng căn giữa */
+        }
     </style>
     <script>
         function showCustomToast(message, type = 'success') {
@@ -804,9 +850,14 @@
 
                 </ul>
             </div>
-            <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px" height="40px" alt="">
+            <div class="user-profile">
+                <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px" height="40px" />
+                <div class="user-tooltip">
+                    <h4><span class="role">${fn:toUpperCase(sessionScope.role)}</span> : ${sessionScope.fullname}</h4>
+                </div>
+            </div>
             <div>
-                <h4>Admin</h4>
+                <h4>VitaminFruit</h4>
             </div>
         </div>
     </header>
@@ -942,7 +993,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table width="100%">
+                                        <table id="topCustomersTable" width="100%">
                                             <thead>
                                             <tr>
                                                 <td>STT</td>
@@ -961,7 +1012,6 @@
                                                     <td>${customer.address}</td>
                                                     <td><fmt:formatNumber value="${customer.totalSpent}" type="currency" currencySymbol="₫"/></td>
                                                 </tr>
-                                                <p>Test topCustomers size: ${fn:length(topCustomers)}</p>
                                             </c:forEach>
                                             </tbody>
                                         </table>
@@ -1005,6 +1055,7 @@
 
         </div>
         <!-- Khach hang -->
+        <c:if test="${role == 'admin'}">
         <div id="customers" class="section">
             <div class="container">
                 <!-- Customer Table -->
@@ -1042,6 +1093,8 @@
                 </table>
             </div>
         </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="products" class="section">
             <div class="overview-section">
                 <!-- Tổng quan sản phẩm -->
@@ -1206,7 +1259,10 @@
                 </div>
             </div>
         </div>
+        </c:if>
         <div id="orders" class="section">
+            <c:choose>
+            <c:when test="${role == 'admin' || role == 'staff'}">
             <div class="orders">
                 <div class="overview-grid">
                     <div class="overview-item">
@@ -1228,6 +1284,105 @@
                         <h3>${cancelledOrders}</h3>
                         <p>Đơn hàng đã hủy</p>
                         <i class="fa-regular fa-circle-xmark"></i>
+                    </div>
+                </div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">
+                        <h3>Đơn hàng mới trong 24 giờ</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <c:choose>
+                            <c:when test="${not empty newInvoices}">
+                            <table id="newOrderTable" class="display" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>Họ tên</th>
+                                    <th>SĐT</th>
+                                    <th>Chi tiết hóa đơn</th>
+                                    <th>Phương thức thanh toán</th>
+                                    <th>Tình trạng thanh toán</th>
+                                    <th>Tình trạng đơn hàng</th>
+                                    <th>Hành động</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="invoice" items="${newInvoices}">
+                                    <tr>
+                                        <td>${invoice.accountName}</td>
+                                        <td>${invoice.phone}</td>
+                                        <td>
+                                            <button onclick='openInvoiceDetail({
+                                                    id: "${invoice.idInvoice}",
+                                                    name: "${invoice.receiverName}",
+                                                    phone: "${invoice.phone}",
+                                                    email: "${invoice.email}",
+                                                    address: "${invoice.addressFull}",
+                                                    paymentMethod: "${invoice.paymentMethod}",
+                                                    status: "${invoice.status}",
+                                                    createdAt: "${invoice.createDate}",
+                                                    accountName: "${invoice.accountName}",
+                                                    shippingFee: ${invoice.shippingFee},
+                                                    totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
+                                                    })'>
+                                                Xem chi tiết
+                                            </button>
+                                        </td>
+                                        <td>${invoice.paymentMethod}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${invoice.status == 'Đã thanh toán'}">
+                                                    <span class="badge status-paid">Đã thanh toán</span>
+                                                </c:when>
+                                                <c:when test="${invoice.status == 'Đã hủy'}">
+                                                    <span class="badge status-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge status-unpaid">Chưa thanh toán</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td class="order-status">
+                                            <c:choose>
+                                                <c:when test="${invoice.orderStatus == 'Đang xử lý'}">
+                                                    <span class="badge order-processing">Đang xử lý</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã giao'}">
+                                                    <span class="badge order-shipped">Đã giao</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã hủy'}">
+                                                    <span class="badge order-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đang chuẩn bị đơn hàng'}">
+                                                    <span class="badge order-processing">Đang chuẩn bị đơn hàng</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge order-delivered">${invoice.orderStatus}</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:if test="${invoice.status == 'Chưa thanh toán'}">
+                                                <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
+                                                    <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
+                                                        <i class="fas fa-check btn-icon"></i>
+                                                    </button>
+                                                    <button class="btn-circle btn-cancel" onclick="handleAction(${invoice.idInvoice}, 'cancel')">
+                                                        <i class="fas fa-times btn-icon"></i>
+                                                    </button>
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                            </c:when>
+                            <c:otherwise>
+                                <p style="padding: 10px; font-weight: bold;">Hôm nay không có đơn hàng nào.</p>
+                            </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
@@ -1303,6 +1458,7 @@
                                             </c:choose>
                                         </td>
                                         <td>
+                                            <c:if test="${role == 'admin' || role == 'staff'}">
                                             <c:if test="${invoice.status == 'Chưa thanh toán'}">
                                                 <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
                                                     <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
@@ -1312,6 +1468,7 @@
                                                         <i class="fas fa-times btn-icon"></i>
                                                     </button>
                                                 </div>
+                                            </c:if>
                                             </c:if>
                                         </td>
                                     </tr>
@@ -1324,8 +1481,14 @@
                 </div>
 
             </div>
+            </c:when>
+                <c:otherwise>
+                    <p>Bạn không có quyền truy cập phần này.</p>
+                </c:otherwise>
+            </c:choose>
 
         </div>
+        <c:if test="${role == 'admin'}">
         <div id="statistics" class="section">
             <div class="chart-box large-chart">
                 <h3>Doanh thu theo tháng</h3>
@@ -1342,6 +1505,8 @@
                 </div>
             </div>
         </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="suppliers" class="section">
             <div class="card">
                 <div class="card-body">
@@ -1440,7 +1605,8 @@
                 </div>
             </div>
         </div>
-
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="promotions" class="section">
             <div class="promotion-container">
                 <div class="promotion-header">
@@ -1450,219 +1616,126 @@
                 <h3>Thêm khuyến mãi</h3>
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
                       method="POST">
-                    <div class="form-group"
-                    <label for="promotion-name">Tên khuyến mãi:</label>
-                    <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
-                           required/>
-            </div>
-
-            <div class="form-group">
-                <label for="promotion-code">Mã khuyến mãi:</label>
-                <input type="text" id="promotion-code-input" name="promotion_code_input" placeholder="Nhập mã giảm giá"
-                       required/>
-            </div>
-
-            <div class="form-group">
-                <label for="description-add">Mô tả:</label>
-                <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
-                       required/>
-            </div>
-
-            <div class="form-group">
-                <label for="start-date">Ngày bắt đầu:</label>
-                <input type="date" id="start-date" name="start_date" required/>
-            </div>
-
-            <div class="form-group">
-                <label for="expiration-date">Ngày hết hạn:</label>
-                <input type="date" id="expiration-date" name="expiration_date" required/>
-            </div>
-
-            <div class="form-group">
-                <label for="promotion-discount">Mức giảm (%):</label>
-                <input type="number" id="promotion-discount" name="promotion_discount"
-                       placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
-            </div>
-
-            <div class="form-group">
-                <label for="promotion-type">Loại:</label>
-                <select id="promotion-type" name="promotion_type" class="promotionType" required>
-                    <option value="weekly">Weekly</option>
-                    <option value="general">General</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-submit">Cập nhật</button>
-            </form>
-
-            <h3>Danh sách Khuyến mãi</h3>
-            <div class="promotion-table">
-                <%
-                    PromotionsDao promotionsDao = new PromotionsDao();
-                    List<Promotions> promotionsList = promotionsDao.getAll();
-                %>
-                <table id="promotionTable">
-                    <thead>
-                    <tr style="text-align: center">
-                        <th style="text-align: left">Tên Khuyến Mãi</th>
-                        <th>Mã</th>
-                        <th>Mô Tả</th>
-                        <th>Ngày Bắt Đầu</th>
-                        <th>Ngày Kết Thúc</th>
-                        <th>Phần Trăm Giảm</th>
-                        <th>Loại</th>
-                        <th>Giá trị đơn tối thiểu</th>
-                        <th>Số lượt sử dụng tối đa</th>
-                        <th>Số lượt đã sử dụng</th>
-                        <th>Hành Động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        for (Promotions promotion : promotionsList) {
-                    %>
-                    <tr>
-                        <td>
-                            <%= promotion.getPromotion_name() %>
-                        </td>
-                        <td>
-                            <%= promotion.getDescribe_1() %>
-                        </td>
-                        <td>
-                            <%= promotion.getStart_date() %>
-                        </td>
-                        <td>
-                            <%= promotion.getEnd_date() %>
-                        </td>
-                        <td>
-                            <%= promotion.getPercent_discount()%>%
-                        </td>
-                        <td>
-                            <%= promotion.getType() %>
-                        </td>
-                        <td>
-                            <button class="edit-button" onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Chỉnh sửa</button>
-                            <button class="delete-button" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
-                        </td>
-                    </tr>
-                    <%
-                        }
-                    %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-</div>
-<div id="feedback" class="section">
-    <div class="feedback-container">
-        <div class="feedback-content">
-            <h1>Phản Hồi Khách Hàng</h1>
-            <table id="feedbackTable" class="feedback-table">
-                <thead>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Tên khách hàng</th>
-                    <th>Nội dung</th>
-                    <th>Ngày tạo</th>
-                    <th>Đánh giá</th>
-                    <th>Liên hệ</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Lặp qua danh sách feedback -->
-                <c:forEach var="feedback" items="${feedback}">
-                    <tr>
-                        <td>${feedback.productName}</td>
-                        <td>${feedback.cusName}</td>
-                        <td>${feedback.content}</td>
-                        <td>${feedback.dateCreate}</td>
-                        <td style="gap: 5px">${feedback.rating} <i class="fas fa-star" style="color: #ffeb98"></i></td>
-                        <td>
-                            <button class="contact-button">Liên hệ</button>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div id="system" class="section">
-    <div class="system-settings">
-        <div class="system-menu">
-            <!-- Tab Quản lý tài khoản -->
-            <div class="tab-content">
-                <h2>QUẢN LÝ TÀI KHOẢN</h2>
-                <!-- Khu vực thêm tài khoản -->
-                <div class="account-management">
-                    <!-- Form thêm tài khoản mới -->
-                    <div class="account-form">
-                        <h3>Thêm Tài Khoản</h3>
-                        <form class="accountAddTable" action="<%= request.getContextPath() %>/AddAccountServlet"
-                              method="post">
-                            <!-- Họ và tên -->
-                            <div class="form-group">
-                                <label for="username">Họ và tên:</label>
-                                <input type="text" id="username" name="username" placeholder="Nhập họ và tên"
-                                       required/>
-                            </div>
-                            <!-- Email -->
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" placeholder="Nhập email" required/>
-                            </div>
-                            <!-- Mật khẩu -->
-                            <div class="form-group">
-                                <label for="password">Mật khẩu:</label>
-                                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
-                                       minlength="6" required/>
-                            </div>
-                            <!-- Xác nhận mật khẩu -->
-                            <div class="form-group">
-                                <label for="confirm-password">Xác nhận mật khẩu:</label>
-                                <input type="password" id="confirm-password" name="confirm-password"
-                                       placeholder="Xác nhận mật khẩu" minlength="6" required/>
-                            </div>
-                            <!-- Vai trò -->
-                            <div class="form-group">
-                                <label for="role">Phân quyền:</label>
-                                <select id="role" name="role" class="accountRole" required>
-                                    <option value="" disabled selected>Chọn vai trò</option>
-                                    <option value="admin">Quản trị viên</option>
-                                    <option value="staff">Nhân viên</option>
-                                </select>
-                            </div>
-                            <!-- Nút thêm tài khoản -->
-                            <div class="form-group">
-                                <button type="submit" class="btn-submit">Thêm tài khoản</button>
-                            </div>
-                        </form>
+                    <div class="form-group">
+                        <label for="promotion-code">Tên khuyến mãi:</label>
+                        <input type="text" id="promotion-code" name="promotion_code" placeholder="Nhập mã giảm giá"
+                               required/>
                     </div>
-                </div>
 
-                <!-- Danh sách tài khoản -->
-                <div id="account-list">
-                    <h3>DANH SÁCH TÀI KHOẢN</h3>
-                    <table id = "userAdmin">
+                    <div class="form-group">
+                        <label for="description-add">Mô tả:</label>
+                        <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
+                               required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="start-date">Ngày bắt đầu:</label>
+                        <input type="date" id="start-date" name="start_date" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expiration-date">Ngày hết hạn:</label>
+                        <input type="date" id="expiration-date" name="expiration_date" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promotion-discount">Mức giảm (%):</label>
+                        <input type="number" id="promotion-discount" name="promotion_discount"
+                               placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promotion-type">Loại:</label>
+                        <select id="promotion-type" name="promotion_type" class="promotionType" required>
+                            <option value="weekly">Weekly</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">Cập nhật</button>
+                </form>
+
+                <h3>Danh sách Khuyến mãi</h3>
+                <div class="promotion-table">
+                    <%
+                        PromotionsDao promotionsDao = new PromotionsDao();
+                        List<Promotions> promotionsList = promotionsDao.getAll();
+                    %>
+                    <table id="promotionTable">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên đăng nhập</th>
-                            <th>Email</th>
-                            <th>Phân quyền</th>
-                            <th>Thao tác</th>
+                        <tr style="text-align: center">
+                            <th style="text-align: left">Tên Khuyến Mãi</th>
+                            <th>Mô Tả</th>
+                            <th>Ngày Bắt Đầu</th>
+                            <th>Ngày Kết Thúc</th>
+                            <th>Phần Trăm Giảm Giá</th>
+                            <th>Loại</th>
+                            <th>Hành Động</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="customer" items="${AdminStaff}">
-                            <tr id="customer-${customer.idCustomer}">
-                                <td>${customer.idCustomer}</td>
-                                <td>${customer.customerName}</td>
-                                <td>${customer.email}</td>
-                                <td>${customer.role}</td>
+                        <%
+                            for (Promotions promotion : promotionsList) {
+                        %>
+                        <tr>
+                            <td>
+                                <%= promotion.getPromotion_name() %>
+                            </td>
+                            <td>
+                                <%= promotion.getDescribe_1() %>
+                            </td>
+                            <td>
+                                <%= promotion.getStart_date() %>
+                            </td>
+                            <td>
+                                <%= promotion.getEnd_date() %>
+                            </td>
+                            <td>
+                                <%= promotion.getPercent_discount()%>%
+                            </td>
+                            <td>
+                                <%= promotion.getType() %>
+                            </td>
+                            <td>
+                                <button class="edit-button" onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Chỉnh sửa</button>
+                                <button class="delete-button" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
+        <div id="feedback" class="section">
+            <div class="feedback-container">
+                <div class="feedback-content">
+                    <h1>Phản Hồi Khách Hàng</h1>
+                    <table id="feedbackTable" class="feedback-table">
+                        <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Tên khách hàng</th>
+                            <th>Nội dung</th>
+                            <th>Ngày tạo</th>
+                            <th>Đánh giá</th>
+                            <th>Liên hệ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Lặp qua danh sách feedback -->
+                        <c:forEach var="feedback" items="${feedback}">
+                            <tr>
+                                <td>${feedback.productName}</td>
+                                <td>${feedback.cusName}</td>
+                                <td>${feedback.content}</td>
+                                <td>${feedback.dateCreate}</td>
+                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star" style="color: #ffeb98"></i></td>
                                 <td>
-                                    <button onclick="window.location.href='remove-account?pid=${customer.idCustomer}'">
-                                        Xóa
-                                    </button>
+                                    <button class="contact-button">Liên hệ</button>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -1671,9 +1744,97 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-</main>
+        </c:if>
+        <c:if test="${role == 'admin'}">
+        <div id="system" class="section">
+            <div class="system-settings">
+                <div class="system-menu">
+                    <!-- Tab Quản lý tài khoản -->
+                    <div class="tab-content">
+                        <h2>QUẢN LÝ TÀI KHOẢN</h2>
+                        <!-- Khu vực thêm tài khoản -->
+                        <div class="account-management">
+                            <!-- Form thêm tài khoản mới -->
+                            <div class="account-form">
+                                <h3>Thêm Tài Khoản</h3>
+                                <form class="accountAddTable" action="<%= request.getContextPath() %>/AddAccountServlet"
+                                      method="post">
+                                    <!-- Họ và tên -->
+                                    <div class="form-group">
+                                        <label for="username">Họ và tên:</label>
+                                        <input type="text" id="username" name="username" placeholder="Nhập họ và tên"
+                                               required/>
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input type="email" id="email" name="email" placeholder="Nhập email" required/>
+                                    </div>
+                                    <!-- Mật khẩu -->
+                                    <div class="form-group">
+                                        <label for="password">Mật khẩu:</label>
+                                        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
+                                               minlength="6" required/>
+                                    </div>
+                                    <!-- Xác nhận mật khẩu -->
+                                    <div class="form-group">
+                                        <label for="confirm-password">Xác nhận mật khẩu:</label>
+                                        <input type="password" id="confirm-password" name="confirm-password"
+                                               placeholder="Xác nhận mật khẩu" minlength="6" required/>
+                                    </div>
+                                    <!-- Vai trò -->
+                                    <div class="form-group">
+                                        <label for="role">Phân quyền:</label>
+                                        <select id="role" name="role" class="accountRole" required>
+                                            <option value="" disabled selected>Chọn vai trò</option>
+                                            <option value="admin">Quản trị viên</option>
+                                            <option value="staff">Nhân viên</option>
+                                        </select>
+                                    </div>
+                                    <!-- Nút thêm tài khoản -->
+                                    <div class="form-group">
+                                        <button type="submit" class="btn-submit">Thêm tài khoản</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách tài khoản -->
+                        <div id="account-list">
+                            <h3>DANH SÁCH TÀI KHOẢN</h3>
+                            <table id = "userAdmin">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Email</th>
+                                    <th>Phân quyền</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="customer" items="${AdminStaff}">
+                                    <tr id="customer-${customer.idCustomer}">
+                                        <td>${customer.idCustomer}</td>
+                                        <td>${customer.customerName}</td>
+                                        <td>${customer.email}</td>
+                                        <td>${customer.role}</td>
+                                        <td>
+                                            <button onclick="window.location.href='remove-account?pid=${customer.idCustomer}'">
+                                                Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </c:if>
+    </main>
 </div>
 <div id="logoutOverlay" class="logout-overlay" style="display: none;"></div>
 <div id="logoutNotification" class="logout-notification" style="display: none;">
@@ -1909,10 +2070,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
+        $('#topCustomersTable, #recent-customers').DataTable({
+            paging: true,
+            searching: false,
+            ordering: true,
+            pageLength: 10,
+            lengthMenu: [5, 10, 20, 50],
+            language: {
+                lengthMenu: "Hiển thị _MENU_ dòng mỗi trang",
+                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ dòng",
+                paginate: {
+                    previous: "Trước",
+                    next: "Tiếp"
+                }
+            }
+        });
         // Khởi tạo DataTable cho tất cả các bảng
-        $('#feedbackTable, #supplierTable, #customerTable, #productTable, #promotionTable, #orderTable, #userAdmin').DataTable({
+        $('#feedbackTable, #supplierTable, #customerTable, #productTable, #promotionTable, #orderTable, #userAdmin, #newOrderTable').DataTable({
             paging: true, // Kích hoạt phân trang
             searching: true, // Kích hoạt tìm kiếm
             ordering: true, // Kích hoạt sắp xếp
@@ -1967,7 +2144,6 @@
 <script>
     function openInvoiceDetail(invoice) {
         document.getElementById('invoiceOverlay').style.display = 'flex';
-
         document.getElementById('invoiceIdDisplay').innerText = invoice.id;
         document.getElementById('customerName').innerText = invoice.name;
         document.getElementById('createdAt').innerText = invoice.createdAt;
@@ -1980,7 +2156,7 @@
 
         // ✅ Sửa tại đây
         const contextPath = "/" + window.location.pathname.split("/")[1];
-        const fullUrl = `${contextPath}/admin/invoice-detail?id=${invoice.id}`;
+        const fullUrl = "/project_fruit/admin/invoice-detail?id=" + invoice.id;
         console.log("📤 Fetch URL:", fullUrl);
 
         fetch(fullUrl)
@@ -1990,6 +2166,11 @@
             })
             .then(products => {
                 console.log("📦 Sản phẩm nhận được:", products);
+                products.forEach((p, index) => {
+                    console.log(`🧾 [${index}]`, p);
+                });
+                const body = document.getElementById("invoiceProductBody");
+                body.innerHTML = "";
 
                 if (!products || products.length === 0) {
                     body.innerHTML = `<tr><td colspan="5" style="color:red;">Không có sản phẩm nào.</td></tr>`;
@@ -1997,27 +2178,26 @@
                 }
 
                 products.forEach((p, index) => {
-                    console.log(`🧾 [${index}]`, p);
-                    const subtotal = p.quantity * p.price * (1 - p.discount / 100);
+                    const subtotal = p.quantity * p.price * (1 - (p.discount || 0) / 100);
                     const row = `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${p.name}</td>
-                <td>${p.quantity}</td>
-                <td>${p.price.toLocaleString("vi-VN")} đ</td>
-                <td>${subtotal.toLocaleString("vi-VN")} đ</td>
-            </tr>`;
-                    console.log("📋 Dòng HTML tạo ra:", row);
+        <tr>
+            <td>${index + 1}</td>
+            <td>${p.name || p.productName || ''}</td>
+            <td>${p.quantity}</td>
+            <td>${p.price.toLocaleString("vi-VN")} đ</td>
+            <td>${subtotal.toLocaleString("vi-VN")} đ</td>
+        </tr>
+    `;
                     body.innerHTML += row;
                 });
             })
             .catch(err => {
                 console.error("❌ Lỗi khi fetch chi tiết sản phẩm:", err);
+                const body = document.getElementById("invoiceProductBody");
                 body.innerHTML = `<tr><td colspan="5" style="color:red;">Không thể tải danh sách sản phẩm.</td></tr>`;
             });
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function handleAction(id, action) {
         const actionText = action === 'approve' ? 'duyệt đơn hàng' : 'hủy đơn hàng';

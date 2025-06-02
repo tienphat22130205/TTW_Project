@@ -56,6 +56,9 @@ public class LoginController extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("customer", customer);
 
+            session.setAttribute("role", user.getRole());
+            session.setAttribute("fullname", customer.getCustomerName());
+
             // Sau khi đăng nhập thành công:
             Logs log = new Logs(
                     user.getId_account(),

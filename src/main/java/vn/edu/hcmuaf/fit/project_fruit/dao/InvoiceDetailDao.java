@@ -61,7 +61,7 @@
 
         // Main test
         public static void main(String[] args) {
-            int invoiceId = 24; // ✅ Thay ID đơn hàng bạn muốn test
+            int invoiceId = 55; // ✅ Thay ID đơn hàng bạn muốn test
             List<CartProduct> details = InvoiceDetailDao.getInvoiceDetails(invoiceId);
 
             if (details.isEmpty()) {

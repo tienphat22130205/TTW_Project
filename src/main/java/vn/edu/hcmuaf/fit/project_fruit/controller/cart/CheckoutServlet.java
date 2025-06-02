@@ -158,6 +158,15 @@ import java.util.*;
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                String emailBody = "<h3>Chào " + receiverName + ",</h3>" +
+                        "<p>Cảm ơn bạn đã đặt hàng tại VitaminFruit.</p>" +
+                        "<p>Mã hóa đơn của bạn là: <strong>#" + invoiceId + "</strong></p>" +
+                        "<p>Phương thức thanh toán: " + paymentMethod + "</p>" +
+                        "<p>Tổng tiền: " + finalTotal + " đ</p>" +
+                        "<p>Đơn hàng của bạn sẽ được xử lý trong thời gian sớm nhất.</p>";
+
+                vn.edu.hcmuaf.fit.project_fruit.utils.EmailUtils.sendEmail(
+                        email, "Xác nhận đơn hàng #" + invoiceId, emailBody);
                 if (paymentMethod.equalsIgnoreCase("VNPAY")) {
                     // Tạo tham số VNPAY
                     Map<String, String> vnp_Params = new HashMap<>();
@@ -208,16 +217,6 @@ import java.util.*;
                     response.sendRedirect(paymentUrl);
                     return;
                 }
-
-                String emailBody = "<h3>Chào " + receiverName + ",</h3>" +
-                        "<p>Cảm ơn bạn đã đặt hàng tại VitaminFruit.</p>" +
-                        "<p>Mã hóa đơn của bạn là: <strong>#" + invoiceId + "</strong></p>" +
-                        "<p>Phương thức thanh toán: " + paymentMethod + "</p>" +
-                        "<p>Tổng tiền: " + finalTotal + " đ</p>" +
-                        "<p>Đơn hàng của bạn sẽ được xử lý trong thời gian sớm nhất.</p>";
-
-                vn.edu.hcmuaf.fit.project_fruit.utils.EmailUtils.sendEmail(
-                        email, "Xác nhận đơn hàng #" + invoiceId, emailBody);
                 session.removeAttribute("cart");
                 session.removeAttribute("otp_verified");
                 session.removeAttribute("order_otp");

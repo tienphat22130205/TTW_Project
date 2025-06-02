@@ -3,33 +3,103 @@
 <html>
 <head>
     <title>Kết quả thanh toán</title>
-    <meta http-equiv="refresh" content="5;URL=${pageContext.request.contextPath}/home" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        body { font-family: Arial, sans-serif; padding: 30px; text-align: center; }
-        .success { color: green; font-size: 20px; }
-        .error { color: red; font-size: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            text-align: center;
+            background: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
+        }
+        .icon-success {
+            margin-bottom: 20px;
+            color: #7ca55c;
+            font-size: 80px;
+        }
+        h2 {
+            color: #7ca55c;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        p.desc {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background-color: #c37348;
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            user-select: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #a35b33;
+        }
+        .countdown {
+            font-size: 14px;
+            color: #888;
+        }
     </style>
+    <script>
+        // Đếm ngược 7 giây rồi chuyển về trang chủ
+        let timeLeft = 7;
+        function countdown() {
+            if(timeLeft <= 0) {
+                window.location.href = "${pageContext.request.contextPath}/home";
+            } else {
+                document.getElementById('countdown').innerText = timeLeft + " giây";
+                timeLeft--;
+                setTimeout(countdown, 1000);
+            }
+        }
+
+        function printReceipt() {
+            window.print();
+        }
+
+        window.onload = countdown;
+    </script>
 </head>
 <body>
-<h2>Kết quả thanh toán từ VNPAY</h2>
-<p>Mã đơn hàng: <strong>${param.vnp_TxnRef}</strong></p>
-<p>Trạng thái giao dịch: <strong>${param.vnp_TransactionStatus}</strong></p>
-<c:choose>
-    <c:when test="${param.vnp_ResponseCode == '00' && param.vnp_TransactionStatus == '00'}">
-        <p class="success">✅ Giao dịch thành công!</p>
-    </c:when>
-    <c:otherwise>
-        <p class="error">❌ Giao dịch thất bại hoặc bị hủy.</p>
-    </c:otherwise>
-</c:choose>
+<div class="container">
+    <div class="icon-success">
+        <i class="fas fa-check-circle"></i>
+    </div>
+    <h2>Thanh toán thành công</h2>
+    <p class="desc">Vui lòng lưu biên lai để xuất trình khi nhận kết quả hồ sơ tại cơ quan chức năng</p>
 
-<p>Bạn sẽ được chuyển hướng về trang chủ sau vài giây...</p>
+    <div class="buttons">
+        <a href="${pageContext.request.contextPath}/history" class="btn">LỊCH SỬ GIAO DỊCH</a>
+        <a href="${pageContext.request.contextPath}/receipt?orderId=${param.vnp_TxnRef}" target="_blank" class="btn">
+            TẢI BIÊN LAI
+        </a>
+    </div>
 
-<script>
-    setTimeout(function () {
-        window.location.href = "${pageContext.request.contextPath}/home";
-    }, 2000); // 2000ms = 2 giây
-</script>
+    <div class="countdown">
+        Bạn sẽ được chuyển về trang chủ sau <span id="countdown">7 giây</span>.
+    </div>
+</div>
 </body>
 </html>
-

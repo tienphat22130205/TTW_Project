@@ -113,6 +113,9 @@ public class InvoiceService {
     public List<Map<String, Object>> getPurchasedProductsByUserId(int accountId) {
         return invoiceDao.getPurchasedProductsByUserId(accountId);
     }
+    public List<Invoice> getNewInvoices(){
+        return invoiceDao.getNewInvoices();
+    }
     // Test nhanh từ service
     public static void main(String[] args) {
         InvoiceService service = new InvoiceService();
