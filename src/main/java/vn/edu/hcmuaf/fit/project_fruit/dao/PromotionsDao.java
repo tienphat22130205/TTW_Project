@@ -12,7 +12,7 @@ import java.util.List;
 public class PromotionsDao {
 
     public List<Promotions> getAll() {
-        PreparedStatement ps = DbConnect.getPreparedStatement("SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, code, min_order_amount, max_usage, usage_count FROM promotions ORDER BY id_promotion ASC",true);
+        PreparedStatement ps = DbConnect.getPreparedStatement("SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, promotion_code, min_order_amount, max_usage, usage_count FROM promotions ORDER BY id_promotion ASC",true);
 
         if (ps == null) return new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class PromotionsDao {
                         rs.getString("end_date"),
                         rs.getDouble("percent_discount"),
                         rs.getString("type"),
-                        rs.getString("code"),
+                        rs.getString("promotion_code"),
                         rs.getDouble("min_order_amount"),
                         rs.getInt("max_usage"),
                         rs.getInt("usage_count")
@@ -52,7 +52,7 @@ public class PromotionsDao {
     }
 
     public Promotions getById(int id) {
-        String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, code, min_order_amount, max_usage, usage_count FROM promotions WHERE id_promotion = ?";
+        String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, promotion_code, min_order_amount, max_usage, usage_count FROM promotions WHERE id_promotion = ?";
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query,true)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -66,7 +66,7 @@ public class PromotionsDao {
                         rs.getString("end_date"),
                         rs.getDouble("percent_discount"),
                         rs.getString("type"),
-                        rs.getString("code"),
+                        rs.getString("promotion_code"),
                         rs.getDouble("min_order_amount"),
                         rs.getInt("max_usage"),
                         rs.getInt("usage_count")
@@ -91,7 +91,7 @@ public class PromotionsDao {
     }
 
     public boolean updatePromotion(Promotions promotion) {
-        String query = "UPDATE promotions SET promotion_name = ?, describe_1 = ?, start_date = ?, end_date = ?, percent_discount = ?, type = ?, code = ?, min_order_amount = ?, max_usage = ?, usage_count = ? WHERE id_promotion = ?";
+        String query = "UPDATE promotions SET promotion_name = ?, describe_1 = ?, start_date = ?, end_date = ?, percent_discount = ?, type = ?, promotion_code = ?, min_order_amount = ?, max_usage = ?, usage_count = ? WHERE id_promotion = ?";
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query,true)) {
             ps.setString(1, promotion.getPromotion_name());
             ps.setString(2, promotion.getDescribe_1());
@@ -114,7 +114,7 @@ public class PromotionsDao {
 
     public List<Promotions> getPromotionsByPage(int page, int recordsPerPage) {
         List<Promotions> promotionsList = new ArrayList<>();
-        String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, code, min_order_amount, max_usage, usage_count FROM promotions ORDER BY id_promotion ASC LIMIT ?, ?";
+        String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, promotion_code, min_order_amount, max_usage, usage_count FROM promotions ORDER BY id_promotion ASC LIMIT ?, ?";
 
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query,true)) {
             ps.setInt(1, (page - 1) * recordsPerPage);
@@ -130,7 +130,7 @@ public class PromotionsDao {
                         rs.getString("end_date"),
                         rs.getDouble("percent_discount"),
                         rs.getString("type"),
-                        rs.getString("code"),
+                        rs.getString("promotion_code"),
                         rs.getDouble("min_order_amount"),
                         rs.getInt("max_usage"),
                         rs.getInt("usage_count")
@@ -157,7 +157,7 @@ public class PromotionsDao {
     }
 
     public Promotions getPromotionByCode(String code) {
-        String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, code, min_order_amount, max_usage, usage_count FROM promotions WHERE code = ?";
+        String query = "SELECT id_promotion, promotion_name, describe_1, start_date, end_date, percent_discount, type, promotion_code, min_order_amount, max_usage, usage_count FROM promotions WHERE code = ?";
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query,true)) {
             ps.setString(1, code);
             ResultSet rs = ps.executeQuery();
@@ -170,7 +170,7 @@ public class PromotionsDao {
                         rs.getString("end_date"),
                         rs.getDouble("percent_discount"),
                         rs.getString("type"),
-                        rs.getString("code"),
+                        rs.getString("promotion_code"),
                         rs.getDouble("min_order_amount"),
                         rs.getInt("max_usage"),
                         rs.getInt("usage_count")

@@ -14,7 +14,7 @@
     <title>Admin</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/custom-datatable.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <style>
@@ -24,7 +24,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             display: none;
             justify-content: center;
             align-items: center;
@@ -120,6 +120,7 @@
         .close-button:hover {
             color: red;
         }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -130,10 +131,14 @@
                 transform: translateY(0);
             }
         }
+
         #productOverlay.modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0,0,0,0.7);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -167,6 +172,7 @@
             color: #666;
             transition: color 0.3s ease;
         }
+
         #productCloseBtn.close-button:hover {
             color: #e74c3c;
         }
@@ -201,7 +207,7 @@
             height: 320px;
             object-fit: contain;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         /* Bảng thông tin */
@@ -248,29 +254,37 @@
                 width: 95%;
                 padding: 20px;
             }
+
             .product-detail-container {
                 flex-direction: column;
                 align-items: center;
             }
+
             .product-image-wrapper {
                 margin-bottom: 20px;
             }
+
             .product-info-wrapper {
                 width: 100%;
             }
+
             .product-info-table th {
                 width: 140px;
             }
         }
+
         #editProductOverlay.modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0,0,0,0.7);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            padding: 10px 20px;  /* giảm padding tổng */
+            padding: 10px 20px; /* giảm padding tổng */
             overflow: hidden;
             height: 100vh;
         }
@@ -278,10 +292,10 @@
         #editProductOverlay .modal-content {
             background: #fff;
             border-radius: 12px;
-            width: 1100px;       /* giảm chiều rộng */
+            width: 1100px; /* giảm chiều rộng */
             max-width: 95%;
-            max-height: 85vh;    /* giới hạn chiều cao */
-            padding: 20px 30px;  /* giảm padding */
+            max-height: 85vh; /* giới hạn chiều cao */
+            padding: 20px 30px; /* giảm padding */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #222;
@@ -296,7 +310,7 @@
             gap: 20px;
             flex: 1;
             overflow: hidden;
-            max-height: calc(85vh - 100px);  /* trừ header + footer */
+            max-height: calc(85vh - 100px); /* trừ header + footer */
         }
 
         /* Ảnh sản phẩm bên trái */
@@ -312,14 +326,14 @@
             width: 280px; /* nhỏ hơn để cân đối */
             height: auto;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         /* Bảng form bên phải */
         #editProductOverlay .product-info-wrapper {
             flex: 1;
-            overflow-y: auto;  /* cuộn dọc */
-            min-width: 0;      /* để tránh tràn */
+            overflow-y: auto; /* cuộn dọc */
+            min-width: 0; /* để tránh tràn */
         }
 
         /* Bảng form */
@@ -333,7 +347,7 @@
         #editProductOverlay .product-info-table th,
         #editProductOverlay .product-info-table td {
             border: 1px solid #ddd;
-            padding: 8px 12px;  /* giảm padding */
+            padding: 8px 12px; /* giảm padding */
             vertical-align: top;
             text-align: left;
         }
@@ -412,19 +426,23 @@
                 padding: 15px 20px;
                 max-height: 90vh;
             }
+
             #editProductOverlay .product-detail-container {
                 flex-direction: column;
                 max-height: none;
                 overflow: visible;
             }
+
             #editProductOverlay .product-image-wrapper {
                 margin-bottom: 20px;
                 flex: none;
             }
+
             #editProductOverlay .product-info-wrapper {
                 width: 100%;
                 overflow: visible;
             }
+
             #editProductOverlay .product-info-table th {
                 width: 140px;
             }
@@ -442,7 +460,7 @@
 
         /* chung cho cả 3 nút */
         #editProductOverlay button {
-            min-width: 110px;  /* chiều rộng tối thiểu */
+            min-width: 110px; /* chiều rộng tối thiểu */
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
@@ -488,6 +506,7 @@
         #editProductOverlay button:nth-child(3):hover {
             background-color: #c0392b;
         }
+
         #custom-toast-container {
             position: fixed;
             top: 20px;
@@ -502,7 +521,7 @@
             border-left: 5px solid #28a745;
             border-radius: 6px;
             padding: 12px 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
             min-width: 280px;
             animation: slideIn 0.4s ease;
@@ -538,9 +557,16 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to   { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
+
         .btn-circle {
             width: 36px;
             height: 36px;
@@ -576,6 +602,7 @@
         .btn-icon {
             pointer-events: none;
         }
+
         /* Trạng thái thanh toán */
         .status-paid {
             background-color: #d4f8d4; /* xanh nhạt */
@@ -631,6 +658,7 @@
             font-weight: bold;
             display: inline-block;
         }
+
         .swal2-smaller-popup {
             font-size: 14px;
             border-radius: 8px;
@@ -641,11 +669,12 @@
             padding: 6px 16px !important;
             border-radius: 4px !important;
         }
+
         .dashboard-summary-box {
             padding: 24px;
             border-radius: 12px;
             background-color: #fff;
-            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
             text-align: center;
         }
 
@@ -668,7 +697,7 @@
             padding: 12px 20px;
             border-radius: 8px;
             background: #f9f9f9;
-            box-shadow: inset 0 0 3px rgba(0,0,0,0.03);
+            box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.03);
         }
 
         .summary-item .icon {
@@ -688,9 +717,18 @@
             color: #111;
         }
 
-        .icon.green { color: #2ecc71; }
-        .icon.blue  { color: #3498db; }
-        .icon.red   { color: #e74c3c; }
+        .icon.green {
+            color: #2ecc71;
+        }
+
+        .icon.blue {
+            color: #3498db;
+        }
+
+        .icon.red {
+            color: #e74c3c;
+        }
+
         .contact-button {
             background-color: #6294f6; /* màu vàng nhẹ */
             color: #d9e3f4;
@@ -700,6 +738,7 @@
             font-size: 14px;
             cursor: pointer;
         }
+
         .contact-button:hover {
             background-color: #417dfa; /* màu vàng nhẹ */
             color: #d9e3f4;
@@ -804,7 +843,8 @@
 
                 </ul>
             </div>
-            <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px" height="40px" alt="">
+            <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px"
+                 height="40px" alt="">
             <div>
                 <h4>Admin</h4>
             </div>
@@ -959,7 +999,8 @@
                                                     <td>${customer.fullname}</td>
                                                     <td>${customer.phone}</td>
                                                     <td>${customer.address}</td>
-                                                    <td><fmt:formatNumber value="${customer.totalSpent}" type="currency" currencySymbol="₫"/></td>
+                                                    <td><fmt:formatNumber value="${customer.totalSpent}" type="currency"
+                                                                          currencySymbol="₫"/></td>
                                                 </tr>
                                                 <p>Test topCustomers size: ${fn:length(topCustomers)}</p>
                                             </c:forEach>
@@ -1029,12 +1070,19 @@
                             <td>${customer.email}</td>
                             <td>${customer.customerPhone}</td>
                             <td>
-                                <button class="detail-button" onclick="window.location.href='customer-detail?id=${customer.idCustomer}'">Xem chi tiết</button>
+                                <button class="detail-button"
+                                        onclick="window.location.href='customer-detail?id=${customer.idCustomer}'">Xem
+                                    chi tiết
+                                </button>
                             </td>
                             <td>${customer.dateRegister}</td>
                             <td>
-                                <button class="edit-button" data-customer='${fn:escapeXml(customerJsonMap[customer.idCustomer])}'>Chỉnh sửa</button>
-                                <button class="delete-button" onclick="window.location.href='remove-customer?id=${customer.idCustomer}'">Xóa</button>
+                                <button class="edit-button"
+                                        data-customer='${fn:escapeXml(customerJsonMap[customer.idCustomer])}'>Chỉnh sửa
+                                </button>
+                                <button class="delete-button"
+                                        onclick="window.location.href='remove-customer?id=${customer.idCustomer}'">Xóa
+                                </button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -1193,8 +1241,14 @@
 
                                             <td>
                                                 <!-- Thay vì onclick inline, dùng data attribute chứa JSON -->
-                                                <button class="edit-button" data-product='${fn:escapeXml(productJsonMap[product.id_product])}'>Chỉnh sửa</button>
-                                                <button class="delete-button" onclick="window.location.href='remove-product?pid=${product.id_product}'">Xóa</button>
+                                                <button class="edit-button"
+                                                        data-product='${fn:escapeXml(productJsonMap[product.id_product])}'>
+                                                    Chỉnh sửa
+                                                </button>
+                                                <button class="delete-button"
+                                                        onclick="window.location.href='remove-product?pid=${product.id_product}'">
+                                                    Xóa
+                                                </button>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -1304,11 +1358,14 @@
                                         </td>
                                         <td>
                                             <c:if test="${invoice.status == 'Chưa thanh toán'}">
-                                                <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
-                                                    <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
+                                                <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}"
+                                                     class="action-buttons">
+                                                    <button class="btn-circle btn-approve"
+                                                            onclick="handleAction(${invoice.idInvoice}, 'approve')">
                                                         <i class="fas fa-check btn-icon"></i>
                                                     </button>
-                                                    <button class="btn-circle btn-cancel" onclick="handleAction(${invoice.idInvoice}, 'cancel')">
+                                                    <button class="btn-circle btn-cancel"
+                                                            onclick="handleAction(${invoice.idInvoice}, 'cancel')">
                                                         <i class="fas fa-times btn-icon"></i>
                                                     </button>
                                                 </div>
@@ -1349,27 +1406,32 @@
                     <form class="supplierAddForm" action="<%= request.getContextPath() %>/addsupplier" method="post">
                         <div class="form-group">
                             <label for="supplier-name">Tên nhà cung cấp:</label>
-                            <input type="text" id="supplier-name" name="supplier-name" placeholder="Nhập tên nhà cung cấp" required />
+                            <input type="text" id="supplier-name" name="supplier-name"
+                                   placeholder="Nhập tên nhà cung cấp" required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-email">Email:</label>
-                            <input type="email" id="supplier-email" name="supplier-email" placeholder="Nhập email" required />
+                            <input type="email" id="supplier-email" name="supplier-email" placeholder="Nhập email"
+                                   required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-phone">Số điện thoại:</label>
-                            <input type="text" id="supplier-phone" name="supplier-phone" placeholder="Nhập số điện thoại" required />
+                            <input type="text" id="supplier-phone" name="supplier-phone"
+                                   placeholder="Nhập số điện thoại" required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-address">Địa chỉ:</label>
-                            <input type="text" id="supplier-address" name="supplier-address" placeholder="Nhập địa chỉ" required />
+                            <input type="text" id="supplier-address" name="supplier-address" placeholder="Nhập địa chỉ"
+                                   required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-rating">Đánh giá:</label>
-                            <input type="text" id="supplier-rating" name="supplier-rating" placeholder="Nhập đánh giá (số sao)" required />
+                            <input type="text" id="supplier-rating" name="supplier-rating"
+                                   placeholder="Nhập đánh giá (số sao)" required/>
                         </div>
 
                         <div class="form-group">
@@ -1447,222 +1509,150 @@
                     <h1>Quản Lý Khuyến Mãi</h1>
                 </div>
                 <!-- Form Thêm Khuyến Mãi -->
-                <h3>Thêm khuyến mãi</h3>
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
                       method="POST">
-                    <div class="form-group"
-                    <label for="promotion-name">Tên khuyến mãi:</label>
-                    <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
-                           required/>
-            </div>
-
-            <div class="form-group">
-                <label for="promotion-code">Mã khuyến mãi:</label>
-                <input type="text" id="promotion-code-input" name="promotion_code_input" placeholder="Nhập mã giảm giá"
-                       required/>
-            </div>
-
-            <div class="form-group">
-                <label for="description-add">Mô tả:</label>
-                <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
-                       required/>
-            </div>
-
-            <div class="form-group">
-                <label for="start-date">Ngày bắt đầu:</label>
-                <input type="date" id="start-date" name="start_date" required/>
-            </div>
-
-            <div class="form-group">
-                <label for="expiration-date">Ngày hết hạn:</label>
-                <input type="date" id="expiration-date" name="expiration_date" required/>
-            </div>
-
-            <div class="form-group">
-                <label for="promotion-discount">Mức giảm (%):</label>
-                <input type="number" id="promotion-discount" name="promotion_discount"
-                       placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
-            </div>
-
-            <div class="form-group">
-                <label for="promotion-type">Loại:</label>
-                <select id="promotion-type" name="promotion_type" class="promotionType" required>
-                    <option value="weekly">Weekly</option>
-                    <option value="general">General</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-submit">Cập nhật</button>
-            </form>
-
-            <h3>Danh sách Khuyến mãi</h3>
-            <div class="promotion-table">
-                <%
-                    PromotionsDao promotionsDao = new PromotionsDao();
-                    List<Promotions> promotionsList = promotionsDao.getAll();
-                %>
-                <table id="promotionTable">
-                    <thead>
-                    <tr style="text-align: center">
-                        <th style="text-align: left">Tên Khuyến Mãi</th>
-                        <th>Mã</th>
-                        <th>Mô Tả</th>
-                        <th>Ngày Bắt Đầu</th>
-                        <th>Ngày Kết Thúc</th>
-                        <th>Phần Trăm Giảm</th>
-                        <th>Loại</th>
-                        <th>Giá trị đơn tối thiểu</th>
-                        <th>Số lượt sử dụng tối đa</th>
-                        <th>Số lượt đã sử dụng</th>
-                        <th>Hành Động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        for (Promotions promotion : promotionsList) {
-                    %>
-                    <tr>
-                        <td>
-                            <%= promotion.getPromotion_name() %>
-                        </td>
-                        <td>
-                            <%= promotion.getDescribe_1() %>
-                        </td>
-                        <td>
-                            <%= promotion.getStart_date() %>
-                        </td>
-                        <td>
-                            <%= promotion.getEnd_date() %>
-                        </td>
-                        <td>
-                            <%= promotion.getPercent_discount()%>%
-                        </td>
-                        <td>
-                            <%= promotion.getType() %>
-                        </td>
-                        <td>
-                            <button class="edit-button" onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">Chỉnh sửa</button>
-                            <button class="delete-button" onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">Xóa</button>
-                        </td>
-                    </tr>
-                    <%
-                        }
-                    %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-</div>
-<div id="feedback" class="section">
-    <div class="feedback-container">
-        <div class="feedback-content">
-            <h1>Phản Hồi Khách Hàng</h1>
-            <table id="feedbackTable" class="feedback-table">
-                <thead>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Tên khách hàng</th>
-                    <th>Nội dung</th>
-                    <th>Ngày tạo</th>
-                    <th>Đánh giá</th>
-                    <th>Liên hệ</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Lặp qua danh sách feedback -->
-                <c:forEach var="feedback" items="${feedback}">
-                    <tr>
-                        <td>${feedback.productName}</td>
-                        <td>${feedback.cusName}</td>
-                        <td>${feedback.content}</td>
-                        <td>${feedback.dateCreate}</td>
-                        <td style="gap: 5px">${feedback.rating} <i class="fas fa-star" style="color: #ffeb98"></i></td>
-                        <td>
-                            <button class="contact-button">Liên hệ</button>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div id="system" class="section">
-    <div class="system-settings">
-        <div class="system-menu">
-            <!-- Tab Quản lý tài khoản -->
-            <div class="tab-content">
-                <h2>QUẢN LÝ TÀI KHOẢN</h2>
-                <!-- Khu vực thêm tài khoản -->
-                <div class="account-management">
-                    <!-- Form thêm tài khoản mới -->
-                    <div class="account-form">
-                        <h3>Thêm Tài Khoản</h3>
-                        <form class="accountAddTable" action="<%= request.getContextPath() %>/AddAccountServlet"
-                              method="post">
-                            <!-- Họ và tên -->
-                            <div class="form-group">
-                                <label for="username">Họ và tên:</label>
-                                <input type="text" id="username" name="username" placeholder="Nhập họ và tên"
-                                       required/>
-                            </div>
-                            <!-- Email -->
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" placeholder="Nhập email" required/>
-                            </div>
-                            <!-- Mật khẩu -->
-                            <div class="form-group">
-                                <label for="password">Mật khẩu:</label>
-                                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
-                                       minlength="6" required/>
-                            </div>
-                            <!-- Xác nhận mật khẩu -->
-                            <div class="form-group">
-                                <label for="confirm-password">Xác nhận mật khẩu:</label>
-                                <input type="password" id="confirm-password" name="confirm-password"
-                                       placeholder="Xác nhận mật khẩu" minlength="6" required/>
-                            </div>
-                            <!-- Vai trò -->
-                            <div class="form-group">
-                                <label for="role">Phân quyền:</label>
-                                <select id="role" name="role" class="accountRole" required>
-                                    <option value="" disabled selected>Chọn vai trò</option>
-                                    <option value="admin">Quản trị viên</option>
-                                    <option value="staff">Nhân viên</option>
-                                </select>
-                            </div>
-                            <!-- Nút thêm tài khoản -->
-                            <div class="form-group">
-                                <button type="submit" class="btn-submit">Thêm tài khoản</button>
-                            </div>
-                        </form>
+                    <div class="form-group">
+                        <label for="promotion-name">Tên khuyến mãi:</label>
+                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
+                               required/>
                     </div>
-                </div>
 
-                <!-- Danh sách tài khoản -->
-                <div id="account-list">
-                    <h3>DANH SÁCH TÀI KHOẢN</h3>
-                    <table id = "userAdmin">
+                    <div class="form-group">
+                        <label for="promotion-code">Mã khuyến mãi:</label>
+                        <input type="text" id="promotion-code-input" name="promotion_code-input"
+                               placeholder="Nhập mã giảm giá" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description-add">Mô tả:</label>
+                        <input type="text" id="description-add" name="description_add" placeholder="Nhập mô tả"
+                               required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="start-date">Ngày bắt đầu:</label>
+                        <input type="date" id="start-date" name="start_date" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expiration-date">Ngày hết hạn:</label>
+                        <input type="date" id="expiration-date" name="expiration_date" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promotion-discount">Mức giảm (%):</label>
+                        <input type="number" id="promotion-discount" name="promotion_discount"
+                               placeholder="Nhập mức giảm (%)" min="0" max="100" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="min-order-amount">Giá trị đơn tối thiểu (VNĐ):</label>
+                        <input type="number" id="min-order-amount" name="min_order_amount"
+                               placeholder="Nhập giá trị tối thiểu" min="0" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="max-usage">Số lượt sử dụng tối đa:</label>
+                        <input type="number" id="max-usage" name="max_usage" placeholder="Nhập số lượt tối đa" min="1"
+                               required/>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Thêm khuyến mãi</button>
+                </form>
+
+                <!-- Form Thêm Khuyến Mãi -->
+
+                <h3>Danh sách Khuyến mãi</h3>
+                <div class="promotion-table">
+                    <%
+                        PromotionsDao promotionsDao = new PromotionsDao();
+                        List<Promotions> promotionsList = promotionsDao.getAll();
+                    %>
+                    <table id="promotionTable">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên đăng nhập</th>
-                            <th>Email</th>
-                            <th>Phân quyền</th>
-                            <th>Thao tác</th>
+                        <tr style="text-align: center">
+                            <th style="text-align: left">Tên Khuyến Mãi</th>
+                            <th>Mã</th>
+                            <th>Mô Tả</th>
+                            <th>Ngày Bắt Đầu</th>
+                            <th>Ngày Kết Thúc</th>
+                            <th>Phần Trăm Giảm</th>
+                            <th>Giá trị đơn tối thiểu</th>
+                            <th>Hành Động</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="customer" items="${AdminStaff}">
-                            <tr id="customer-${customer.idCustomer}">
-                                <td>${customer.idCustomer}</td>
-                                <td>${customer.customerName}</td>
-                                <td>${customer.email}</td>
-                                <td>${customer.role}</td>
+                        <%
+                            for (Promotions promotion : promotionsList) {
+                        %>
+                        <tr>
+                            <td>
+                                <%= promotion.getPromotion_name() %>
+                            </td>
+                            <td>
+                                <%= promotion.getPromotion_code() %>
+                            </td>
+                            <td>
+                                <%= promotion.getDescribe_1() %>
+                            </td>
+                            <td>
+                                <%= promotion.getStart_date() %>
+                            </td>
+                            <td>
+                                <%= promotion.getEnd_date() %>
+                            </td>
+                            <td>
+                                <%= promotion.getPercent_discount()%>%
+                            </td>
+                            <td>
+                                <%= promotion.getMin_order_amount() %>
+                            </td>
+                            <td>
+                                <button class="edit-button"
+                                        onclick="openModal({promoTitle: '', promoDiscount: 0, promoStart: '', promoEnd: ''}, 'editPromotion')">
+                                    Chỉnh sửa
+                                </button>
+                                <button class="delete-button"
+                                        onclick="window.location.href='remove-promotion?pid=<%= promotion.getId_promotion() %>'">
+                                    Xóa
+                                </button>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="feedback" class="section">
+            <div class="feedback-container">
+                <div class="feedback-content">
+                    <h1>Phản Hồi Khách Hàng</h1>
+                    <table id="feedbackTable" class="feedback-table">
+                        <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Tên khách hàng</th>
+                            <th>Nội dung</th>
+                            <th>Ngày tạo</th>
+                            <th>Đánh giá</th>
+                            <th>Liên hệ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Lặp qua danh sách feedback -->
+                        <c:forEach var="feedback" items="${feedback}">
+                            <tr>
+                                <td>${feedback.productName}</td>
+                                <td>${feedback.cusName}</td>
+                                <td>${feedback.content}</td>
+                                <td>${feedback.dateCreate}</td>
+                                <td style="gap: 5px">${feedback.rating} <i class="fas fa-star"
+                                                                           style="color: #ffeb98"></i></td>
                                 <td>
-                                    <button onclick="window.location.href='remove-account?pid=${customer.idCustomer}'">
-                                        Xóa
-                                    </button>
+                                    <button class="contact-button">Liên hệ</button>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -1671,9 +1661,94 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-</main>
+        <div id="system" class="section">
+            <div class="system-settings">
+                <div class="system-menu">
+                    <!-- Tab Quản lý tài khoản -->
+                    <div class="tab-content">
+                        <h2>QUẢN LÝ TÀI KHOẢN</h2>
+                        <!-- Khu vực thêm tài khoản -->
+                        <div class="account-management">
+                            <!-- Form thêm tài khoản mới -->
+                            <div class="account-form">
+                                <h3>Thêm Tài Khoản</h3>
+                                <form class="accountAddTable" action="<%= request.getContextPath() %>/AddAccountServlet"
+                                      method="post">
+                                    <!-- Họ và tên -->
+                                    <div class="form-group">
+                                        <label for="username">Họ và tên:</label>
+                                        <input type="text" id="username" name="username" placeholder="Nhập họ và tên"
+                                               required/>
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input type="email" id="email" name="email" placeholder="Nhập email" required/>
+                                    </div>
+                                    <!-- Mật khẩu -->
+                                    <div class="form-group">
+                                        <label for="password">Mật khẩu:</label>
+                                        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
+                                               minlength="6" required/>
+                                    </div>
+                                    <!-- Xác nhận mật khẩu -->
+                                    <div class="form-group">
+                                        <label for="confirm-password">Xác nhận mật khẩu:</label>
+                                        <input type="password" id="confirm-password" name="confirm-password"
+                                               placeholder="Xác nhận mật khẩu" minlength="6" required/>
+                                    </div>
+                                    <!-- Vai trò -->
+                                    <div class="form-group">
+                                        <label for="role">Phân quyền:</label>
+                                        <select id="role" name="role" class="accountRole" required>
+                                            <option value="" disabled selected>Chọn vai trò</option>
+                                            <option value="admin">Quản trị viên</option>
+                                            <option value="staff">Nhân viên</option>
+                                        </select>
+                                    </div>
+                                    <!-- Nút thêm tài khoản -->
+                                    <div class="form-group">
+                                        <button type="submit" class="btn-submit">Thêm tài khoản</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách tài khoản -->
+                        <div id="account-list">
+                            <h3>DANH SÁCH TÀI KHOẢN</h3>
+                            <table id="userAdmin">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Email</th>
+                                    <th>Phân quyền</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="customer" items="${AdminStaff}">
+                                    <tr id="customer-${customer.idCustomer}">
+                                        <td>${customer.idCustomer}</td>
+                                        <td>${customer.customerName}</td>
+                                        <td>${customer.email}</td>
+                                        <td>${customer.role}</td>
+                                        <td>
+                                            <button onclick="window.location.href='remove-account?pid=${customer.idCustomer}'">
+                                                Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 <div id="logoutOverlay" class="logout-overlay" style="display: none;"></div>
 <div id="logoutNotification" class="logout-notification" style="display: none;">
@@ -1695,7 +1770,8 @@
 <%--chi tiết hóa đơn--%>
 <div id="invoiceOverlay" class="modal-overlay">
     <div class="modal-content invoice-modal">
-        <span class="close-button" onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
+        <span class="close-button"
+              onclick="document.getElementById('invoiceOverlay').style.display='none'">&times;</span>
         <h2 class="modal-title">🧾 Chi tiết đơn hàng</h2>
 
         <div class="invoice-info">
@@ -1882,7 +1958,8 @@
                         </tr>
                         <tr>
                             <th>Cách sử dụng</th>
-                            <td><input type="text" id="editProductUse" name="use_product" readonly></td> <!-- note corrected name -->
+                            <td><input type="text" id="editProductUse" name="use_product" readonly></td>
+                            <!-- note corrected name -->
                         </tr>
                         <tr>
                             <th>Lợi ích</th>
@@ -1904,7 +1981,8 @@
 <div id="custom-toast-container"></div>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -2043,7 +2121,7 @@
             if (result.isConfirmed) {
                 fetch('${pageContext.request.contextPath}/admin/approve-order', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     body: 'id=' + id + '&action=' + action
                 })
                     .then(response => response.json())
@@ -2092,6 +2170,7 @@
             console.error("Lỗi parse JSON:", e);
         }
     }
+
     function openProductOverlay(product) {
         document.getElementById('productIdDisplay').textContent = product.id_product || 'N/A';
         document.getElementById('productNameDisplay').textContent = product.name || 'N/A';
@@ -2271,8 +2350,8 @@
             .then(data => {
                 console.log("Dữ liệu từ servlet:", data);
 
-                const labels = Array.from({ length: 12 }, (_, i) => `Tháng ${i + 1}`);
-                const dataset = Array.from({ length: 12 }, (_, i) => data[i + 1] || 0);
+                const labels = Array.from({length: 12}, (_, i) => `Tháng ${i + 1}`);
+                const dataset = Array.from({length: 12}, (_, i) => data[i + 1] || 0);
 
                 labels.forEach((label, i) => {
                     console.log(`Label[${i}]:`, label);
@@ -2426,7 +2505,7 @@
                         }
                     },
                     plugins: {
-                        legend: { display: false },
+                        legend: {display: false},
                         tooltip: {
                             callbacks: {
                                 label: (ctx) => `${ctx.dataset.label}: ${ctx.raw} đơn`

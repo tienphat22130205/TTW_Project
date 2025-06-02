@@ -20,30 +20,28 @@ public class AddPromotion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy dữ liệu từ form
         String promotionName = request.getParameter("promotion_name");
+        String promotionCode = request.getParameter("promotion_code-input");
         String description = request.getParameter("description_add");
         String startDate = request.getParameter("start_date");
         String endDate = request.getParameter("expiration_date");
         String discountPercent = request.getParameter("promotion_discount");
-        String type = request.getParameter("promotion_type");
-        String promotion_code= request.getParameter("promotion_code_input");
+        String minOrderAmount = request.getParameter("min_order_amount");
+        String maxUsage = request.getParameter("max_usage");
 
-        // Câu lệnh SQL để thêm dữ liệu vào cơ sở dữ liệu
-        String query = "INSERT INTO promotions (promotion_name, describe_1, start_date, end_date, percent_discount, type,promotion_code) VALUES (?, ?, ?, ?, ?, ?,?)";
+        String query = "INSERT INTO promotions (promotion_name, promotion_code, describe_1, start_date, end_date, percent_discount, min_order_amount, max_usage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement ps = DbConnect.getPreparedStatement(query, true)) {
             ps.setString(1, promotionName);
-            ps.setString(2, description);
-            ps.setString(3, startDate);
-            ps.setString(4, endDate);
-            ps.setString(5, discountPercent);
-            ps.setString(6, type);
-            ps.setString(7, promotion_code);
+            ps.setString(2, promotionCode);
+            ps.setString(3, description);
+            ps.setString(4, startDate);
+            ps.setString(5, endDate);
+            ps.setString(6, discountPercent);
+            ps.setString(7, minOrderAmount);
+            ps.setString(8, maxUsage);
 
-
-            // Thực hiện thêm dữ liệu
             ps.executeUpdate();
-
 
             HttpSession session = request.getSession(false);
             int userId = 0;
@@ -74,10 +72,10 @@ public class AddPromotion extends HttpServlet {
 
 
             // Điều hướng quay lại trang admin với anchor #
-            response.sendRedirect(request.getContextPath() + "/admin#");
+            response.sendRedirect(request.getContextPath() + "/admin?msg=success");
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/admin#");
+            response.sendRedirect(request.getContextPath() + "/admin?msg=error");
         }
     }
 }
