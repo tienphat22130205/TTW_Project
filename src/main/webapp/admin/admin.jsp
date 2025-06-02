@@ -1055,6 +1055,7 @@
 
         </div>
         <!-- Khach hang -->
+        <c:if test="${role == 'admin'}">
         <div id="customers" class="section">
             <div class="container">
                 <!-- Customer Table -->
@@ -1092,6 +1093,8 @@
                 </table>
             </div>
         </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="products" class="section">
             <div class="overview-section">
                 <!-- Tổng quan sản phẩm -->
@@ -1256,7 +1259,10 @@
                 </div>
             </div>
         </div>
+        </c:if>
         <div id="orders" class="section">
+            <c:choose>
+            <c:when test="${role == 'admin' || role == 'staff'}">
             <div class="orders">
                 <div class="overview-grid">
                     <div class="overview-item">
@@ -1452,6 +1458,7 @@
                                             </c:choose>
                                         </td>
                                         <td>
+                                            <c:if test="${role == 'admin' || role == 'staff'}">
                                             <c:if test="${invoice.status == 'Chưa thanh toán'}">
                                                 <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
                                                     <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
@@ -1461,6 +1468,7 @@
                                                         <i class="fas fa-times btn-icon"></i>
                                                     </button>
                                                 </div>
+                                            </c:if>
                                             </c:if>
                                         </td>
                                     </tr>
@@ -1473,8 +1481,14 @@
                 </div>
 
             </div>
+            </c:when>
+                <c:otherwise>
+                    <p>Bạn không có quyền truy cập phần này.</p>
+                </c:otherwise>
+            </c:choose>
 
         </div>
+        <c:if test="${role == 'admin'}">
         <div id="statistics" class="section">
             <div class="chart-box large-chart">
                 <h3>Doanh thu theo tháng</h3>
@@ -1491,6 +1505,8 @@
                 </div>
             </div>
         </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="suppliers" class="section">
             <div class="card">
                 <div class="card-body">
@@ -1589,6 +1605,8 @@
                 </div>
             </div>
         </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="promotions" class="section">
             <div class="promotion-container">
                 <div class="promotion-header">
@@ -1689,6 +1707,8 @@
                 </div>
             </div>
         </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="feedback" class="section">
             <div class="feedback-container">
                 <div class="feedback-content">
@@ -1723,6 +1743,8 @@
                 </div>
             </div>
         </div>
+        </c:if>
+        <c:if test="${role == 'admin'}">
         <div id="system" class="section">
             <div class="system-settings">
                 <div class="system-menu">
@@ -1810,6 +1832,7 @@
                 </div>
             </div>
         </div>
+        </c:if>
     </main>
 </div>
 <div id="logoutOverlay" class="logout-overlay" style="display: none;"></div>
@@ -2142,6 +2165,11 @@
             })
             .then(products => {
                 console.log("📦 Sản phẩm nhận được:", products);
+                products.forEach((p, index) => {
+                    console.log(`🧾 [${index}]`, p);
+                });
+                const body = document.getElementById("invoiceProductBody");
+                body.innerHTML = "";
 
                 if (!products || products.length === 0) {
                     body.innerHTML = `<tr><td colspan="5" style="color:red;">Không có sản phẩm nào.</td></tr>`;
@@ -2149,22 +2177,22 @@
                 }
 
                 products.forEach((p, index) => {
-                    console.log(`🧾 [${index}]`, p);
-                    const subtotal = p.quantity * p.price * (1 - p.discount / 100);
+                    const subtotal = p.quantity * p.price * (1 - (p.discount || 0) / 100);
                     const row = `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${(p.productName == false) ? '' : (p.productName || p.name || '')}</td>
-                <td>${p.quantity}</td>
-                <td>${p.price.toLocaleString("vi-VN")} đ</td>
-                <td>${subtotal.toLocaleString("vi-VN")} đ</td>
-            </tr>`;
-                    console.log("📋 Dòng HTML tạo ra:", row);
+        <tr>
+            <td>${index + 1}</td>
+            <td>${p.name || p.productName || ''}</td>
+            <td>${p.quantity}</td>
+            <td>${p.price.toLocaleString("vi-VN")} đ</td>
+            <td>${subtotal.toLocaleString("vi-VN")} đ</td>
+        </tr>
+    `;
                     body.innerHTML += row;
                 });
             })
             .catch(err => {
                 console.error("❌ Lỗi khi fetch chi tiết sản phẩm:", err);
+                const body = document.getElementById("invoiceProductBody");
                 body.innerHTML = `<tr><td colspan="5" style="color:red;">Không thể tải danh sách sản phẩm.</td></tr>`;
             });
     }

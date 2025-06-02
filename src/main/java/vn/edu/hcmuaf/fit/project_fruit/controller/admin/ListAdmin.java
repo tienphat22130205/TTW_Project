@@ -209,7 +209,6 @@ public class ListAdmin extends HttpServlet {
         request.setAttribute("topCustomers", topCustomers);
         request.setAttribute("newInvoices", newInvoices);
 
-
         // Chuyển tiếp tới JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin.jsp");
         dispatcher.forward(request, response);
