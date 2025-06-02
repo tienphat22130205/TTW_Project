@@ -192,6 +192,7 @@ public class ListAdmin extends HttpServlet {
         // Lấy danh sách đơn hàng (Invoices)
         InvoiceService invoiceService = new InvoiceService();
         List<Invoice> invoices = invoiceService.getAllInvoices();
+        List<Invoice> newInvoices = invoiceService.getNewInvoices();
         int totalOrders = invoiceDao.getTotalOrders();
         int processingOrders = invoiceDao.getProcessingOrders();
         int paidOrders = invoiceDao.getPaidOrders();
@@ -206,6 +207,7 @@ public class ListAdmin extends HttpServlet {
         request.setAttribute("invoices", invoices);
         request.setAttribute("growthPercent", growth);
         request.setAttribute("topCustomers", topCustomers);
+        request.setAttribute("newInvoices", newInvoices);
 
 
         // Chuyển tiếp tới JSP

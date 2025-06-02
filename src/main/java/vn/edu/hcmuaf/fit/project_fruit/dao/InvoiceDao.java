@@ -74,7 +74,7 @@ public class InvoiceDao {
             while (rs.next()) {
                 Invoice invoice = new Invoice();
                 invoice.setIdInvoice(rs.getInt("id"));
-                invoice.setAccountName(rs.getString("account_name")); // tên người mua từ bảng customers
+                invoice.setAccountName(rs.getString("account_name"));
                 invoice.setReceiverName(rs.getString("receiver_name"));
                 invoice.setPhone(rs.getString("phone"));
                 invoice.setEmail(rs.getString("email"));
@@ -410,7 +410,52 @@ public class InvoiceDao {
 
         return result;
     }
+    public List<Invoice> getNewInvoices() {
+        List<Invoice> newInvoices = new ArrayList<>();
+        String sql = """
+        SELECT 
+            i.id_invoice AS id,
+            c.customer_name AS account_name,
+            i.receiver_name,
+            i.phone,
+            i.email,
+            i.payment_method,
+            i.status,
+            i.order_status,
+            i.address_full,
+            i.total_price,
+            i.shipping_fee,
+            i.create_date AS created_at
+        FROM invoices i
+        JOIN accounts a ON i.id_account = a.id_account
+        JOIN customers c ON a.id_customer = c.id_customer
+        WHERE i.create_date >= NOW() - INTERVAL 1 DAY
+        ORDER BY i.create_date DESC
+    """;
 
+        try (PreparedStatement ps = DbConnect.getPreparedStatement(sql, true)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Invoice invoice = new Invoice();
+                invoice.setIdInvoice(rs.getInt("id"));
+                invoice.setAccountName(rs.getString("account_name"));
+                invoice.setReceiverName(rs.getString("receiver_name"));
+                invoice.setPhone(rs.getString("phone"));
+                invoice.setEmail(rs.getString("email"));
+                invoice.setPaymentMethod(rs.getString("payment_method"));
+                invoice.setStatus(rs.getString("status"));
+                invoice.setOrderStatus(rs.getString("order_status"));
+                invoice.setShippingFee(rs.getDouble("shipping_fee"));
+                invoice.setAddressFull(rs.getString("address_full"));
+                invoice.setTotalPrice(rs.getDouble("total_price"));
+                invoice.setCreateDate(rs.getTimestamp("created_at"));
+                newInvoices.add(invoice);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return newInvoices;
+    }
     public static void main(String[] args) {
         InvoiceDao dao = new InvoiceDao();
         int testAccountId = 56; // Thay bằng ID tài khoản có dữ liệu thực tế

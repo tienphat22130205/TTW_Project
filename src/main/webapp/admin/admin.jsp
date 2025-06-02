@@ -1280,6 +1280,105 @@
                         <i class="fa-regular fa-circle-xmark"></i>
                     </div>
                 </div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">
+                        <h3>Đơn hàng mới trong 24 giờ</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <c:choose>
+                            <c:when test="${not empty newInvoices}">
+                            <table id="newOrderTable" class="display" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>Họ tên</th>
+                                    <th>SĐT</th>
+                                    <th>Chi tiết hóa đơn</th>
+                                    <th>Phương thức thanh toán</th>
+                                    <th>Tình trạng thanh toán</th>
+                                    <th>Tình trạng đơn hàng</th>
+                                    <th>Hành động</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="invoice" items="${newInvoices}">
+                                    <tr>
+                                        <td>${invoice.accountName}</td>
+                                        <td>${invoice.phone}</td>
+                                        <td>
+                                            <button onclick='openInvoiceDetail({
+                                                    id: "${invoice.idInvoice}",
+                                                    name: "${invoice.receiverName}",
+                                                    phone: "${invoice.phone}",
+                                                    email: "${invoice.email}",
+                                                    address: "${invoice.addressFull}",
+                                                    paymentMethod: "${invoice.paymentMethod}",
+                                                    status: "${invoice.status}",
+                                                    createdAt: "${invoice.createDate}",
+                                                    accountName: "${invoice.accountName}",
+                                                    shippingFee: ${invoice.shippingFee},
+                                                    totalPrice: ${invoice.totalPrice != null ? invoice.totalPrice.intValue() : 0}
+                                                    })'>
+                                                Xem chi tiết
+                                            </button>
+                                        </td>
+                                        <td>${invoice.paymentMethod}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${invoice.status == 'Đã thanh toán'}">
+                                                    <span class="badge status-paid">Đã thanh toán</span>
+                                                </c:when>
+                                                <c:when test="${invoice.status == 'Đã hủy'}">
+                                                    <span class="badge status-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge status-unpaid">Chưa thanh toán</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td class="order-status">
+                                            <c:choose>
+                                                <c:when test="${invoice.orderStatus == 'Đang xử lý'}">
+                                                    <span class="badge order-processing">Đang xử lý</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã giao'}">
+                                                    <span class="badge order-shipped">Đã giao</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đã hủy'}">
+                                                    <span class="badge order-canceled">Đã hủy</span>
+                                                </c:when>
+                                                <c:when test="${invoice.orderStatus == 'Đang chuẩn bị đơn hàng'}">
+                                                    <span class="badge order-processing">Đang chuẩn bị đơn hàng</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge order-delivered">${invoice.orderStatus}</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:if test="${invoice.status == 'Chưa thanh toán'}">
+                                                <div id="action-${invoice.idInvoice}" data-id="${invoice.idInvoice}" class="action-buttons">
+                                                    <button class="btn-circle btn-approve" onclick="handleAction(${invoice.idInvoice}, 'approve')">
+                                                        <i class="fas fa-check btn-icon"></i>
+                                                    </button>
+                                                    <button class="btn-circle btn-cancel" onclick="handleAction(${invoice.idInvoice}, 'cancel')">
+                                                        <i class="fas fa-times btn-icon"></i>
+                                                    </button>
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                            </c:when>
+                            <c:otherwise>
+                                <p style="padding: 10px; font-weight: bold;">Hôm nay không có đơn hàng nào.</p>
+                            </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -1947,6 +2046,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
         $('#topCustomersTable, #recent-customers').DataTable({
@@ -1965,7 +2065,7 @@
             }
         });
         // Khởi tạo DataTable cho tất cả các bảng
-        $('#feedbackTable, #supplierTable, #customerTable, #productTable, #promotionTable, #orderTable, #userAdmin').DataTable({
+        $('#feedbackTable, #supplierTable, #customerTable, #productTable, #promotionTable, #orderTable, #userAdmin, #newOrderTable').DataTable({
             paging: true, // Kích hoạt phân trang
             searching: true, // Kích hoạt tìm kiếm
             ordering: true, // Kích hoạt sắp xếp
@@ -2020,7 +2120,6 @@
 <script>
     function openInvoiceDetail(invoice) {
         document.getElementById('invoiceOverlay').style.display = 'flex';
-
         document.getElementById('invoiceIdDisplay').innerText = invoice.id;
         document.getElementById('customerName').innerText = invoice.name;
         document.getElementById('createdAt').innerText = invoice.createdAt;
@@ -2033,7 +2132,7 @@
 
         // ✅ Sửa tại đây
         const contextPath = "/" + window.location.pathname.split("/")[1];
-        const fullUrl = `${contextPath}/admin/invoice-detail?id=${invoice.id}`;
+        const fullUrl = "/project_fruit/admin/invoice-detail?id=" + invoice.id;
         console.log("📤 Fetch URL:", fullUrl);
 
         fetch(fullUrl)
@@ -2055,7 +2154,7 @@
                     const row = `
             <tr>
                 <td>${index + 1}</td>
-                <td>${p.name}</td>
+                <td>${(p.productName == false) ? '' : (p.productName || p.name || '')}</td>
                 <td>${p.quantity}</td>
                 <td>${p.price.toLocaleString("vi-VN")} đ</td>
                 <td>${subtotal.toLocaleString("vi-VN")} đ</td>
@@ -2070,7 +2169,6 @@
             });
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function handleAction(id, action) {
         const actionText = action === 'approve' ? 'duyệt đơn hàng' : 'hủy đơn hàng';

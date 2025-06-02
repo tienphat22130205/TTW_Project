@@ -50,7 +50,13 @@
             text-align: right;
             padding-right: 20px;
         }
-        .btn-print {
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-print , .btn-home{
             display: block;
             margin: 0 auto;
             padding: 12px 30px;
@@ -64,7 +70,8 @@
             user-select: none;
             transition: background-color 0.3s ease;
         }
-        .btn-print:hover {
+        .btn-print:hover,
+        .btn-home:hover {
             background-color: #a35b33;
         }
     </style>
@@ -126,8 +133,9 @@
     </tr>
     </tbody>
 </table>
-
-<button class="btn-print" onclick="printReceipt()">In biên lai</button>
-<button class="btn-home" onclick="goHome()">Quay về trang chủ</button>
+<div class="button-group">
+    <button class="btn-print" onclick="printReceipt()">In biên lai</button>
+    <button class="btn-home" onclick="goHome()">Quay về trang chủ</button>
+</div>
 </body>
 </html>
