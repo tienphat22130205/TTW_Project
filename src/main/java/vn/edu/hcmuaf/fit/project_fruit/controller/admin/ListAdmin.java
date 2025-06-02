@@ -197,6 +197,7 @@ public class ListAdmin extends HttpServlet {
         int paidOrders = invoiceDao.getPaidOrders();
         int cancelledOrders = invoiceDao.getCancelledOrders();
         Double growth = invoiceService.getRevenueGrowthPercent();
+        List<Map<String, Object>> topCustomers = invoiceService.getTopSpendingCustomers(7);
 
         request.setAttribute("totalOrders", totalOrders);
         request.setAttribute("processingOrders", processingOrders);
@@ -204,6 +205,7 @@ public class ListAdmin extends HttpServlet {
         request.setAttribute("cancelledOrders", cancelledOrders);
         request.setAttribute("invoices", invoices);
         request.setAttribute("growthPercent", growth);
+        request.setAttribute("topCustomers", topCustomers);
 
 
         // Chuyển tiếp tới JSP

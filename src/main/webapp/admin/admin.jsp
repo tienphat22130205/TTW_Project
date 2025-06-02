@@ -704,6 +704,52 @@
             background-color: #417dfa; /* màu vàng nhẹ */
             color: #d9e3f4;
         }
+        .user-profile {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .user-tooltip {
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(40, 40, 40, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-weight: 600;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* Mũi tên dưới tooltip */
+        .user-tooltip::after {
+            content: "";
+            position: absolute;
+            bottom: 100%; /* dưới tooltip */
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(40, 40, 40, 0.95) transparent transparent transparent;
+        }
+
+        .user-profile:hover .user-tooltip {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #topCustomersTable thead th tr td{
+            text-align: center;
+            vertical-align: middle; /* nếu muốn dọc cũng căn giữa */
+        }
     </style>
     <script>
         function showCustomToast(message, type = 'success') {
@@ -804,9 +850,14 @@
 
                 </ul>
             </div>
-            <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px" height="40px" alt="">
+            <div class="user-profile">
+                <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px" height="40px" />
+                <div class="user-tooltip">
+                    <h4><span class="role">${fn:toUpperCase(sessionScope.role)}</span> : ${sessionScope.fullname}</h4>
+                </div>
+            </div>
             <div>
-                <h4>Admin</h4>
+                <h4>VitaminFruit</h4>
             </div>
         </div>
     </header>
@@ -942,7 +993,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table width="100%">
+                                        <table id="topCustomersTable" width="100%">
                                             <thead>
                                             <tr>
                                                 <td>STT</td>
@@ -961,7 +1012,6 @@
                                                     <td>${customer.address}</td>
                                                     <td><fmt:formatNumber value="${customer.totalSpent}" type="currency" currencySymbol="₫"/></td>
                                                 </tr>
-                                                <p>Test topCustomers size: ${fn:length(topCustomers)}</p>
                                             </c:forEach>
                                             </tbody>
                                         </table>
@@ -1899,6 +1949,21 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 <script>
     $(document).ready(function () {
+        $('#topCustomersTable, #recent-customers').DataTable({
+            paging: true,
+            searching: false,
+            ordering: true,
+            pageLength: 10,
+            lengthMenu: [5, 10, 20, 50],
+            language: {
+                lengthMenu: "Hiển thị _MENU_ dòng mỗi trang",
+                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ dòng",
+                paginate: {
+                    previous: "Trước",
+                    next: "Tiếp"
+                }
+            }
+        });
         // Khởi tạo DataTable cho tất cả các bảng
         $('#feedbackTable, #supplierTable, #customerTable, #productTable, #promotionTable, #orderTable, #userAdmin').DataTable({
             paging: true, // Kích hoạt phân trang
