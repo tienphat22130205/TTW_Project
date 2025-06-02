@@ -977,18 +977,6 @@ body.scrolled-up .menu-bar {
 .swiper-slide {
     transition: opacity 2s ease-in-out;
 }
-.home-container {
-    max-width: 1200px; /* giới hạn chiều rộng tối đa */
-    width: 100%;       /* chiếm full chiều rộng cha */
-    height: 80vh;      /* chiều cao theo % cửa sổ */
-    min-height: 400px; /* chiều cao tối thiểu */
-    margin: 0 auto;    /* căn giữa ngang */
-    overflow: hidden;  /* ẩn phần thừa */
-    border-radius: 10px; /* nếu muốn bo góc */
-    position: relative;  /* để điều khiển con bên trong */
-    background-color: #000; /* màu nền nếu ảnh có vùng trong suốt */
-}
-
 /* Giữ nguyên .home như cũ, chỉ sửa chiều cao thành 100% để phủ container */
 .home {
     position: relative;
@@ -999,6 +987,7 @@ body.scrolled-up .menu-bar {
     background-size: cover;
     border-radius: 10px;
 }
+
 .background-slider .swiper-slide img {
     width: 100%;
     height: 100%;

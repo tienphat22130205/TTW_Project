@@ -34,7 +34,7 @@ public class NotificationController extends HttpServlet {
         if (userId > 0) {
             try (Connection conn = DbConnect.getConnection()) {
                 LogsDao logsDao = new LogsDao(conn);
-                logsList = logsDao.getLogsByUserIdExcludeLoginLogout(userId);
+                logsList = logsDao.getUnseenLogsByUserIdExcludeLoginLogout(userId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -45,15 +45,14 @@ public class NotificationController extends HttpServlet {
                 afterDataList.add(log.getAfterData());
             }
         }
-        // Set response as JSON
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        // Convert logs list to JSON
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new Gson();
         String json = gson.toJson(afterDataList);
 
-        // Write JSON to response
         response.getWriter().write(json);
     }
 }
+

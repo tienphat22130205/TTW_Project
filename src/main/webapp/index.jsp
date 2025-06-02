@@ -70,23 +70,10 @@
                     <span class="notification-count" id="notificationCount">0</span>
                 </a>
             </div>
-            <div class="notification-popup" id="notificationPopup" >
+            <div class="notification-popup" id="notificationPopup">
                 <header style="font-size: 20px">Thông báo mới</header>
                 <ul>
-                    <c:choose>
-                        <c:when test="${empty logsList}">
-                            <li class="no-notification">Không có thông báo mới</li>
-                        </c:when>
-                        <c:otherwise>
-                            <c:forEach var="log" items="${logsList}">
-                                <li>
-                                    <strong>${log.action}</strong> - <em>${log.resource}</em><br/>
-                                    <small>Trước: ${log.beforeData}</small><br/>
-                                    <small>Sau: ${log.afterData}</small>
-                                </li>
-                            </c:forEach>
-                        </c:otherwise>
-                    </c:choose>
+
                 </ul>
             </div>
             <style>
@@ -197,77 +184,59 @@
                 const bell = document.getElementById("notificationToggle");
                 const popup = document.getElementById("notificationPopup");
                 const countSpan = document.getElementById("notificationCount");
-
-                let seen = false; // trạng thái đã xem thông báo
-
-                function updateNotificationCount() {
-                    const notifications = popup.querySelectorAll("ul li");
-                    const count = notifications.length;
-                    if (count === 1 && notifications[0].classList.contains('no-notification')) {
-                        countSpan.textContent = "";
-                        countSpan.style.display = "none"; // ẩn số thông báo
-                    } else {
-                        countSpan.style.display = "inline-block"; // hiện lại khi có thông báo
-                        if (!seen) {
-                            countSpan.textContent = count;
-                        }
-                    }
-                }
+                const ul = popup.querySelector('ul');
 
                 async function loadNotifications() {
                     try {
                         const response = await fetch('/project_fruit/notifications');
                         if (!response.ok) throw new Error('Lỗi tải thông báo');
-                        const afterDataList = await response.json(); // Mảng chứa các chuỗi afterData
+                        const notifications = await response.json();
 
-                        const ul = popup.querySelector('ul');
                         ul.innerHTML = '';
 
-                        if (!afterDataList || afterDataList.length === 0) {
+                        if (!notifications || notifications.length === 0) {
                             ul.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
+                            countSpan.style.display = "none";
+                            countSpan.textContent = "";
                         } else {
-                            afterDataList.forEach(afterData => {
+                            notifications.forEach(afterData => {
                                 const li = document.createElement('li');
                                 li.textContent = afterData;
                                 ul.appendChild(li);
                             });
+                            countSpan.style.display = "inline-block";
+                            countSpan.textContent = notifications.length;
                         }
-
-                        updateNotificationCount();
                     } catch (error) {
                         console.error('Lỗi khi lấy thông báo:', error);
                     }
                 }
 
-
-                // Load thông báo khi trang load xong
-                document.addEventListener('DOMContentLoaded', loadNotifications);
-
-                bell.addEventListener("click", function (event) {
+                bell.addEventListener("click", async (event) => {
                     event.preventDefault();
                     popup.classList.toggle("active");
 
                     if (popup.classList.contains("active")) {
-                        // Khi mở popup, coi như đã xem thông báo
-                        seen = true;
-                        countSpan.textContent = "0";
-                    } else {
-                        // Khi đóng popup, chỉ cập nhật số nếu chưa xem lần nào
-                        if (!seen) {
-                            updateNotificationCount();
+                        try {
+                            const res = await fetch('/project_fruit/notifications/mark-seen', { method: 'POST' });
+                            if (res.ok) {
+                                countSpan.style.display = "none";
+                                countSpan.textContent = "";
+                                // Giữ nguyên nội dung popup hiện tại, không gọi loadNotifications() lại
+                            }
+                        } catch (error) {
+                            console.error('Lỗi đánh dấu đã xem:', error);
                         }
                     }
                 });
 
-                document.addEventListener("click", function (event) {
+                document.addEventListener("click", (event) => {
                     if (!bell.contains(event.target) && !popup.contains(event.target)) {
                         popup.classList.remove("active");
-                        // Khi đóng popup, cập nhật số nếu chưa xem
-                        if (!seen) {
-                            updateNotificationCount();
-                        }
                     }
                 });
+                document.addEventListener('DOMContentLoaded', loadNotifications);
+
             </script>
             <!-- chuong thong bao -->
 

@@ -64,8 +64,10 @@ public class LoginController extends HttpServlet {
                     "accounts",
                     null,
                     null,
-                    user.getRole() // 👈 Truyền vai trò
+                    user.getRole(),
+                    false 
             );
+
             LogsDao logDao = new LogsDao(DbConnect.getConnection());
             try {
                 logDao.insertLog(log);
