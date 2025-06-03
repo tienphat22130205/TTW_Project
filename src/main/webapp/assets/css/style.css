@@ -980,7 +980,7 @@ body.scrolled-up .menu-bar {
 /* Giữ nguyên .home như cũ, chỉ sửa chiều cao thành 100% để phủ container */
 .home {
     position: relative;
-    padding: 0;
+    padding: 200px 100px;
     width: 100%;
     height: 100%;  /* phủ 100% container cha */
     background-position: center;
