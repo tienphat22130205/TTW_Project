@@ -2061,6 +2061,38 @@
         </form>
     </div>
 </div>
+<a href="https://zalo.me/0334286049" target="_blank" title="Chat với Zalo" class="zalo-chat-button">
+    <img src="./assets/img/logoBank/Icon_of_Zalo.svg.webp" alt="Chat Zalo">
+</a>
+
+<style>
+    .zalo-chat-button {
+        position: fixed;
+        bottom: 20px;  /* cách đáy trang 20px */
+        right: 20px;   /* cách mép phải 20px */
+        width: 60px;
+        height: 60px;
+        z-index: 9999;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+    }
+
+    .zalo-chat-button img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .zalo-chat-button:hover {
+        transform: scale(1.1);
+    }
+</style>
+
 <div id="custom-toast-container"></div>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
