@@ -57,6 +57,7 @@
         <i class="fas fa-phone"></i>
         <span>Hotline: 0865660775</span>
       </div>
+      <!-- chuong thong bao -->
       <div class="notification-icon" id="notificationBell_Menu">
         <a href="#" id="notificationToggle" class="notification-link" style="color: #FFFFFF">
           <i class="fas fa-bell"></i>
@@ -64,33 +65,26 @@
           <span class="notification-count" id="notificationCount">0</span>
         </a>
       </div>
-      <div class="notification-popup" id="notificationPopup" >
+      <div class="notification-popup" id="notificationPopup">
         <header style="font-size: 20px">Thông báo mới</header>
-        <ul>
-          <c:choose>
-            <c:when test="${empty logsList}">
-              <li class="no-notification">Không có thông báo mới</li>
-            </c:when>
-            <c:otherwise>
-              <c:forEach var="log" items="${logsList}">
-                <li>
-                  <strong>${log.action}</strong> - <em>${log.resource}</em><br/>
-                  <small>Trước: ${log.beforeData}</small><br/>
-                  <small>Sau: ${log.afterData}</small>
-                </li>
-              </c:forEach>
-            </c:otherwise>
-          </c:choose>
-        </ul>
+        <table class="notification-table">
+          <tbody>
+          <!-- Dòng thông báo sẽ được chèn vào đây -->
+          </tbody>
+        </table>
       </div>
       <style>
+        /* Icon chuông thông báo */
         .notification-icon {
+          position: relative;  /* cần để z-index hoạt động */
+          z-index: 99999;      /* cao hơn các phần tử khác */
           display: flex;
-          position: relative;
           font-size: 25px;
           user-select: none;
+          cursor: pointer;     /* con trỏ tay khi hover */
         }
 
+        /* Link chứa icon + label */
         .notification-link {
           display: flex;
           flex-direction: column;
@@ -102,6 +96,7 @@
           position: relative;
         }
 
+        /* Nhãn thông báo */
         .notification-label {
           font-size: 14px;
           white-space: nowrap;
@@ -109,6 +104,7 @@
           align-items: center;
         }
 
+        /* Số lượng thông báo chưa xem */
         .notification-count {
           position: absolute;
           top: -5px;
@@ -119,8 +115,10 @@
           padding: 2px 6px;
           font-size: 12px;
           font-weight: bold;
+          user-select: none;
         }
 
+        /* Hiệu ứng rung khi hover chuông */
         .notification-link:hover i.fas.fa-bell {
           animation: shake 0.5s ease-in-out;
         }
@@ -137,6 +135,7 @@
           }
         }
 
+        /* Popup thông báo */
         .notification-popup {
           position: absolute;
           right: 0;
@@ -164,26 +163,41 @@
           transform: translateX(0);
         }
 
+        /* Tiêu đề popup */
         .notification-popup header {
           padding: 10px;
           font-weight: bold;
+          font-size: 20px;
           border-bottom: 1px solid #ddd;
         }
 
-        .notification-popup ul {
-          list-style: none;
+        /* Bảng trong popup */
+        .notification-table {
+          width: 100%;
+          border-collapse: collapse;
           margin: 0;
           padding: 10px;
-        }
-
-        .notification-popup ul li {
-          padding: 8px 5px;
-          border-bottom: 1px solid #eee;
           font-size: 14px;
         }
 
-        .notification-popup ul li:last-child {
+        .notification-table tbody tr {
+          border-bottom: 1px solid #eee;
+        }
+
+        .notification-table tbody tr:last-child {
           border-bottom: none;
+        }
+
+        .notification-table tbody tr td {
+          padding: 8px 10px;
+        }
+
+        /* Khi không có thông báo */
+        .no-notification {
+          padding: 12px;
+          color: #666;
+          font-style: italic;
+          text-align: center;
         }
 
       </style>
@@ -191,85 +205,71 @@
         const bell = document.getElementById("notificationToggle");
         const popup = document.getElementById("notificationPopup");
         const countSpan = document.getElementById("notificationCount");
-
-        let seen = false; // trạng thái đã xem thông báo
-
-        function updateNotificationCount() {
-          const notifications = popup.querySelectorAll("ul li");
-          const count = notifications.length;
-          if (count === 1 && notifications[0].classList.contains('no-notification')) {
-            countSpan.textContent = "";
-            countSpan.style.display = "none"; // ẩn số thông báo
-          } else {
-            countSpan.style.display = "inline-block"; // hiện lại khi có thông báo
-            if (!seen) {
-              countSpan.textContent = count;
-            }
-          }
-        }
+        const tbody = popup.querySelector('tbody');
 
         async function loadNotifications() {
           try {
             const response = await fetch('/project_fruit/notifications');
             if (!response.ok) throw new Error('Lỗi tải thông báo');
-            const afterDataList = await response.json(); // Mảng chứa các chuỗi afterData
+            const notifications = await response.json();
 
-            const ul = popup.querySelector('ul');
-            ul.innerHTML = '';
+            tbody.innerHTML = '';
 
-            if (!afterDataList || afterDataList.length === 0) {
-              ul.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
+            if (!notifications || notifications.length === 0) {
+              const tr = document.createElement('tr');
+              const td = document.createElement('td');
+              td.classList.add('no-notification');
+              td.textContent = 'Không có thông báo mới';
+              td.colSpan = 1;
+              tr.appendChild(td);
+              tbody.appendChild(tr);
+
+              countSpan.style.display = "none";
+              countSpan.textContent = "";
             } else {
-              afterDataList.forEach(afterData => {
-                const li = document.createElement('li');
-                li.textContent = afterData;
-                ul.appendChild(li);
+              notifications.forEach(text => {
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.textContent = text;
+                tr.appendChild(td);
+                tbody.appendChild(tr);
               });
+              countSpan.style.display = "inline-block";
+              countSpan.textContent = notifications.length;
             }
-
-            updateNotificationCount();
           } catch (error) {
             console.error('Lỗi khi lấy thông báo:', error);
           }
         }
 
-
-        // Load thông báo khi trang load xong
-        document.addEventListener('DOMContentLoaded', loadNotifications);
-
-        bell.addEventListener("click", function (event) {
+        bell.addEventListener("click", async (event) => {
           event.preventDefault();
           popup.classList.toggle("active");
 
           if (popup.classList.contains("active")) {
-            // Khi mở popup, coi như đã xem thông báo
-            seen = true;
-            countSpan.textContent = "0";
-          } else {
-            // Khi đóng popup, chỉ cập nhật số nếu chưa xem lần nào
-            if (!seen) {
-              updateNotificationCount();
+            try {
+              const res = await fetch('/project_fruit/notifications/mark-seen', { method: 'POST' });
+              if (res.ok) {
+                countSpan.style.display = "none";
+                countSpan.textContent = "";
+                // Giữ nguyên nội dung popup hiện tại, không gọi loadNotifications() lại
+              }
+            } catch (error) {
+              console.error('Lỗi đánh dấu đã xem:', error);
             }
           }
         });
 
-        document.addEventListener("click", function (event) {
+        document.addEventListener("click", (event) => {
           if (!bell.contains(event.target) && !popup.contains(event.target)) {
             popup.classList.remove("active");
-            // Khi đóng popup, cập nhật số nếu chưa xem
-            if (!seen) {
-              updateNotificationCount();
-            }
           }
         });
+
+        document.addEventListener('DOMContentLoaded', loadNotifications);
+
       </script>
-      <div class="cart">
-        <a href="${pageContext.request.contextPath}/show-cart" style="color: white">
-          <i class="fa-solid fa-cart-shopping"></i>
-          <span>Giỏ hàng</span>
-          <span class="cart-badge">${sessionScope.cart != null ? sessionScope.cart.getTotalQuantity() : 0}</span>
-        </a>
-      </div>
+      <!-- chuong thong bao -->
       <div class="account">
         <!-- Kiểm tra nếu người dùng đã đăng nhập -->
         <c:if test="${not empty sessionScope.user}">

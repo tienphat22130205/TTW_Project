@@ -5,8 +5,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.edu.hcmuaf.fit.project_fruit.dao.CustomerDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Customer;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Logs;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 
@@ -25,23 +27,32 @@ public class LogoutController extends HttpServlet {
             User user = (User) session.getAttribute("user");
 
             if (user != null) {
-                // Tạo log logout
+                CustomerDao customerDao = new CustomerDao();
+                Customer customer = null;
+                try {
+                    customer = customerDao.getCustomerById(user.getIdCustomer());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                String customerName = (customer != null) ? customer.getCustomerName() : "Unknown";
+
                 Logs log = new Logs(
                         user.getId_account(),
                         "INFO",
                         "logout",
                         "accounts",
                         null,
-                        "Người dùng ID#"+user.getId_account()+" đã đăng xuất",
+                        "Người dùng " + customerName +"("+ user.getRole() +") đã đăng xuất",
                         user.getRole(),
                         false
                 );
+
                 LogsDao logDao = new LogsDao(DbConnect.getConnection());
                 try {
                     logDao.insertLog(log);
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    // Có thể ghi log lỗi hoặc xử lý tiếp nếu cần
                 }
             }
             String logoutMessage = "Đăng xuất thành công!";

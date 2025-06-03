@@ -890,16 +890,23 @@
                 </a>
             </div>
             <div class="notification-popup" id="notificationPopup">
-                <ul>
-
-                </ul>
+                <div class="notification-popup-header">Thông báo mới</div>
+                <table class="notification-table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <!-- Các dòng thông báo sẽ được chèn vào đây bằng JS -->
+                    </tbody>
+                </table>
             </div>
+
             <style>
                 .notification-icon {
                     display: flex;
                     position: relative;
-                    font-size: 25px;
+                    font-size: 26px;
                     user-select: none;
+                    cursor: pointer;
                 }
 
                 .notification-link {
@@ -907,101 +914,145 @@
                     flex-direction: column;
                     align-items: center;
                     text-decoration: none;
-                    gap: 2px;
-                    cursor: pointer;
-                    position: relative;
+                    gap: 4px;
+                    color: #222;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     padding-right: 30px;
+                    transition: color 0.2s ease;
+                }
+
+                .notification-link:hover {
+                    color: #007bff;
                 }
 
                 .notification-label {
-                    font-size: 14px;
+                    font-size: 13px;
+                    font-weight: 600;
                     white-space: nowrap;
-                    display: flex;
-                    align-items: center;
+                    user-select: none;
                 }
 
                 .notification-count {
                     position: absolute;
-                    top: -5px;
-                    right: 25px;
-                    background-color: red;
-                    color: white;
+                    top: -6px;
+                    right: 20px;
+                    background-color: #e03e2f; /* đỏ đậm */
+                    color: #fff;
                     border-radius: 50%;
-                    padding: 2px 6px;
+                    min-width: 20px;
+                    height: 20px;
+                    line-height: 20px;
+                    padding: 0 6px;
                     font-size: 12px;
-                    font-weight: bold;
+                    font-weight: 700;
+                    text-align: center;
+                    box-shadow: 0 0 4px rgba(224, 62, 47, 0.6);
+                    user-select: none;
                 }
 
                 .notification-link:hover i.fas.fa-bell {
-                    animation: shake 0.5s ease-in-out;
+                    animation: bell-shake 0.6s ease-in-out;
+                    color: #e03e2f;
                 }
 
-                @keyframes shake {
+                @keyframes bell-shake {
                     0%, 100% {
-                        transform: translateX(0);
+                        transform: rotate(0deg);
                     }
-                    20%, 60% {
-                        transform: translateX(-5px);
+                    25% {
+                        transform: rotate(-15deg);
                     }
-                    40%, 80% {
-                        transform: translateX(5px);
+                    50% {
+                        transform: rotate(15deg);
+                    }
+                    75% {
+                        transform: rotate(-10deg);
                     }
                 }
 
                 .notification-popup {
                     position: absolute;
-                    right: 0;
-                    top: 68px;
-                    margin-top: 4px;
-                    width: 430px;
-                    height: 500px;
+                    right: 40px; /* tăng khoảng cách tránh avatar bên phải */
+                    top: 58px;
+                    margin-top: 8px;
+                    width: 360px;
+                    max-height: 420px;
                     overflow-y: auto;
-                    background-color: white;
-                    color: black;
-                    border-radius: 6px;
-                    box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
+                    background-color: #ffffff;
+                    color: #333;
+                    border-radius: 12px;
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
                     z-index: 9999;
+
+                    padding: 8px 12px;
+                    box-sizing: border-box;
 
                     opacity: 0;
                     pointer-events: none;
-                    transform: translateX(30px);
-                    transition: opacity 0.3s ease, transform 0.3s ease;
+                    transform: translateY(-10px);
+                    transition: opacity 0.25s ease, transform 0.25s ease;
                 }
 
                 .notification-popup.active {
-                    display: block;
                     opacity: 1;
                     pointer-events: auto;
-                    transform: translateX(0);
+                    transform: translateY(0);
                 }
 
                 .notification-popup-header {
                     position: sticky;
                     top: 0;
-                    z-index: 10;
-                    background-color: #f8f8f8;
-                    padding: 12px 16px;
-                    font-weight: bold;
+                    background-color: #fafafa;
+                    padding: 14px 20px;
+                    font-weight: 700;
                     font-size: 18px;
+                    border-bottom: 1px solid #ddd;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+                    border-radius: 12px 12px 0 0;
+                    user-select: none;
+                }
+
+                /* Bảng thông báo */
+                .notification-table {
                     width: 100%;
-                    box-sizing: border-box;
-                    word-break: break-word;
-                }
-
-                .notification-popup ul {
-                    list-style: none;
-                    margin: 0;
-                    padding: 10px;
-                }
-
-                .notification-popup ul li {
-                    padding: 8px 5px;
-                    border-bottom: 1px solid #eee;
+                    border-collapse: collapse;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     font-size: 14px;
+                    color: #444;
+                    table-layout: fixed;
+                    word-wrap: break-word;
                 }
 
-                .notification-popup ul li:last-child {
+                .notification-table thead tr {
+                    background-color: #f1f4ff;
+                    font-weight: 600;
+                    text-align: left;
+                    border-bottom: 2px solid #a0b4ff;
+                }
+
+                .notification-table th,
+                .notification-table td {
+                    padding: 12px 10px;
+                    border-bottom: 1px solid #eee;
+                    vertical-align: middle;
+                    overflow-wrap: break-word;
+                }
+
+                .notification-table tbody tr:hover {
+                    background-color: #f0f4ff;
+                    cursor: default;
+                }
+
+                .notification-table tbody tr:last-child td {
                     border-bottom: none;
+                }
+
+                /* Thông báo khi không có thông báo */
+                .no-notification {
+                    padding: 12px;
+                    color: #666;
+                    font-style: italic;
+                    text-align: center;
                 }
 
             </style>
@@ -1009,11 +1060,11 @@
                 const bell = document.getElementById("notificationToggle");
                 const popup = document.getElementById("notificationPopup");
                 const countSpan = document.getElementById("notificationCount");
-                const notificationList = popup.querySelector('ul');
+                const notificationTableBody = popup.querySelector('tbody');
 
                 let oldNotificationCount = 0;
 
-                // Hàm tải thông báo và cập nhật UI nếu có thay đổi
+                // Hàm tải thông báo và cập nhật bảng nếu có thay đổi số lượng
                 async function pollNotifications() {
                     try {
                         const response = await fetch('/project_fruit/admin/notifications');
@@ -1021,27 +1072,44 @@
 
                         const notifications = await response.json();
 
-                        // Chỉ cập nhật nếu số lượng thông báo thay đổi
+                        if (!Array.isArray(notifications)) {
+                            console.warn('Dữ liệu thông báo không phải mảng');
+                            return; // không cập nhật UI nếu dữ liệu không đúng
+                        }
+
                         if (notifications.length !== oldNotificationCount) {
                             oldNotificationCount = notifications.length;
 
-                            notificationList.innerHTML = '';
+                            notificationTableBody.innerHTML = '';
 
-                            if (!notifications || notifications.length === 0) {
-                                notificationList.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
+                            if (notifications.length === 0) {
+                                const tr = document.createElement('tr');
+                                const td = document.createElement('td');
+                                td.colSpan = 1;  // 1 cột nội dung
+                                td.classList.add('no-notification');
+                                td.textContent = 'Không có thông báo mới';
+                                tr.appendChild(td);
+                                notificationTableBody.appendChild(tr);
+
                                 countSpan.style.display = "none";
                                 countSpan.textContent = "";
                             } else {
                                 notifications.forEach(item => {
-                                    const li = document.createElement('li');
-                                    if (typeof item === 'string') {
-                                        li.textContent = item;
-                                    } else if (item.afterData) {
-                                        li.textContent = item.afterData;
+                                    const tr = document.createElement('tr');
+                                    const tdContent = document.createElement('td');
+
+                                    if (item.afterData) {
+                                        tdContent.textContent = item.afterData;
+                                    } else if (item.content) {
+                                        tdContent.textContent = item.content;
+                                    } else if (typeof item === 'string') {
+                                        tdContent.textContent = item;
                                     } else {
-                                        li.textContent = JSON.stringify(item);
+                                        tdContent.textContent = JSON.stringify(item);
                                     }
-                                    notificationList.appendChild(li);
+
+                                    tr.appendChild(tdContent);
+                                    notificationTableBody.appendChild(tr);
                                 });
 
                                 countSpan.style.display = "inline-block";
@@ -1053,28 +1121,29 @@
                     }
                 }
 
-                // Gọi polling định kỳ 10 giây
+                // Gọi polling định kỳ 5 giây
                 setInterval(pollNotifications, 5000);
 
-                // Khi load trang thì gọi luôn lần đầu
+                // Gọi lần đầu khi load trang
                 document.addEventListener('DOMContentLoaded', () => {
                     pollNotifications();
                 });
 
-                // Xử lý click chuông bật/tắt popup và gọi API đánh dấu đã xem
+                // Bật/tắt popup khi click icon chuông, gọi API đánh dấu đã xem khi bật
                 bell.addEventListener("click", async (event) => {
                     event.preventDefault();
                     popup.classList.toggle("active");
 
                     if (popup.classList.contains("active")) {
                         try {
-                            const res = await fetch('/project_fruit/notifications/mark-seen', { method: 'POST' });
+                            const res = await fetch('/project_fruit/admin/notifications/mark-seen', { method: 'POST' });
                             if (res.ok) {
-                                oldNotificationCount = 0;  // Reset số lượng chưa xem
+                                oldNotificationCount = 0;
                                 countSpan.style.display = "none";
                                 countSpan.textContent = "";
-                                // Tải lại danh sách thông báo để cập nhật UI popup
                                 pollNotifications();
+                            } else {
+                                console.error('Lỗi đánh dấu đã xem, status:', res.status);
                             }
                         } catch (error) {
                             console.error('Lỗi đánh dấu đã xem:', error);
@@ -1082,7 +1151,7 @@
                     }
                 });
 
-                // Ẩn popup khi click ra ngoài
+                // Ẩn popup khi click ra ngoài popup và icon chuông
                 document.addEventListener("click", (event) => {
                     if (!bell.contains(event.target) && !popup.contains(event.target)) {
                         popup.classList.remove("active");

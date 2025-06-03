@@ -72,18 +72,24 @@
             </div>
             <div class="notification-popup" id="notificationPopup">
                 <header style="font-size: 20px">Thông báo mới</header>
-                <ul>
-
-                </ul>
+                <table class="notification-table">
+                    <tbody>
+                    <!-- Dòng thông báo sẽ được chèn vào đây -->
+                    </tbody>
+                </table>
             </div>
             <style>
+                /* Icon chuông thông báo */
                 .notification-icon {
+                    position: relative;  /* cần để z-index hoạt động */
+                    z-index: 99999;      /* cao hơn các phần tử khác */
                     display: flex;
-                    position: relative;
                     font-size: 25px;
                     user-select: none;
+                    cursor: pointer;     /* con trỏ tay khi hover */
                 }
 
+                /* Link chứa icon + label */
                 .notification-link {
                     display: flex;
                     flex-direction: column;
@@ -95,6 +101,7 @@
                     position: relative;
                 }
 
+                /* Nhãn thông báo */
                 .notification-label {
                     font-size: 14px;
                     white-space: nowrap;
@@ -102,6 +109,7 @@
                     align-items: center;
                 }
 
+                /* Số lượng thông báo chưa xem */
                 .notification-count {
                     position: absolute;
                     top: -5px;
@@ -112,8 +120,10 @@
                     padding: 2px 6px;
                     font-size: 12px;
                     font-weight: bold;
+                    user-select: none;
                 }
 
+                /* Hiệu ứng rung khi hover chuông */
                 .notification-link:hover i.fas.fa-bell {
                     animation: shake 0.5s ease-in-out;
                 }
@@ -130,6 +140,7 @@
                     }
                 }
 
+                /* Popup thông báo */
                 .notification-popup {
                     position: absolute;
                     right: 0;
@@ -157,26 +168,41 @@
                     transform: translateX(0);
                 }
 
+                /* Tiêu đề popup */
                 .notification-popup header {
                     padding: 10px;
                     font-weight: bold;
+                    font-size: 20px;
                     border-bottom: 1px solid #ddd;
                 }
 
-                .notification-popup ul {
-                    list-style: none;
+                /* Bảng trong popup */
+                .notification-table {
+                    width: 100%;
+                    border-collapse: collapse;
                     margin: 0;
                     padding: 10px;
-                }
-
-                .notification-popup ul li {
-                    padding: 8px 5px;
-                    border-bottom: 1px solid #eee;
                     font-size: 14px;
                 }
 
-                .notification-popup ul li:last-child {
+                .notification-table tbody tr {
+                    border-bottom: 1px solid #eee;
+                }
+
+                .notification-table tbody tr:last-child {
                     border-bottom: none;
+                }
+
+                .notification-table tbody tr td {
+                    padding: 8px 10px;
+                }
+
+                /* Khi không có thông báo */
+                .no-notification {
+                    padding: 12px;
+                    color: #666;
+                    font-style: italic;
+                    text-align: center;
                 }
 
             </style>
@@ -184,7 +210,7 @@
                 const bell = document.getElementById("notificationToggle");
                 const popup = document.getElementById("notificationPopup");
                 const countSpan = document.getElementById("notificationCount");
-                const ul = popup.querySelector('ul');
+                const tbody = popup.querySelector('tbody');
 
                 async function loadNotifications() {
                     try {
@@ -192,17 +218,26 @@
                         if (!response.ok) throw new Error('Lỗi tải thông báo');
                         const notifications = await response.json();
 
-                        ul.innerHTML = '';
+                        tbody.innerHTML = '';
 
                         if (!notifications || notifications.length === 0) {
-                            ul.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
+                            const tr = document.createElement('tr');
+                            const td = document.createElement('td');
+                            td.classList.add('no-notification');
+                            td.textContent = 'Không có thông báo mới';
+                            td.colSpan = 1;
+                            tr.appendChild(td);
+                            tbody.appendChild(tr);
+
                             countSpan.style.display = "none";
                             countSpan.textContent = "";
                         } else {
-                            notifications.forEach(afterData => {
-                                const li = document.createElement('li');
-                                li.textContent = afterData;
-                                ul.appendChild(li);
+                            notifications.forEach(text => {
+                                const tr = document.createElement('tr');
+                                const td = document.createElement('td');
+                                td.textContent = text;
+                                tr.appendChild(td);
+                                tbody.appendChild(tr);
                             });
                             countSpan.style.display = "inline-block";
                             countSpan.textContent = notifications.length;
@@ -235,6 +270,7 @@
                         popup.classList.remove("active");
                     }
                 });
+
                 document.addEventListener('DOMContentLoaded', loadNotifications);
 
             </script>

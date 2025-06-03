@@ -6,8 +6,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.edu.hcmuaf.fit.project_fruit.dao.CustomerDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Customer;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.Logs;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 import vn.edu.hcmuaf.fit.project_fruit.service.UserService;
@@ -47,6 +49,15 @@ public class ChangePasswordServlet extends HttpServlet {
                 if (result) {
                     req.setAttribute("successMessage", " Đổi mật khẩu thành công!");
 
+                    CustomerDao customerDao = new CustomerDao();
+                    Customer customer = null;
+                    try {
+                        customer = customerDao.getCustomerById(user.getIdCustomer());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    String customerName = (customer != null) ? customer.getCustomerName() : "Unknown";
                     // Ghi log
                     try (Connection conn = DbConnect.getConnection()) {
                         LogsDao logsDao = new LogsDao(conn);
@@ -56,7 +67,7 @@ public class ChangePasswordServlet extends HttpServlet {
                         log.setAction("change_password");
                         log.setResource("user_" + user.getId_account());
                         log.setBeforeData("");
-                        log.setAfterData("Người dùng ID#" + user.getId_account() +" đã thay đổi mật khẩu");
+                        log.setAfterData("Người dùng " + customerName +" đã thay đổi mật khẩu");
                         log.setRole(user.getRole());
                         log.setSeen(false);
                         logsDao.insertLog(log);

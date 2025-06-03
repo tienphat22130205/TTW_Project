@@ -26,7 +26,7 @@ public class AdminNotificationController extends HttpServlet {
             logsList = logsDao.getUnseenLogs();
 
             // Đánh dấu tất cả log đã xem
-            logsDao.markAllLogsAsSeen();
+           // logsDao.markAllLogsAsSeen();
         } catch (Exception e) {
             e.printStackTrace();
         }
