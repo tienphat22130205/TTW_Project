@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -71,7 +72,7 @@
                     <input type="password" id="confirmPassword" name="confirmPassword" class="form__input" required>
                 </div>
             </div>
-
+            <div class="g-recaptcha" data-sitekey="6LfPlFQrAAAAABzqTVN411qdQNf5Lrk5xTAvhLRJ"></div>
             <!-- Nút Đăng Ký -->
             <input type="submit" class="form__button" value="Đăng Ký">
 
@@ -96,9 +97,21 @@
             </div>
         </form>
     </div>
+    <c:if test="${not empty errorMessage}">
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '${fn:escapeXml(errorMessage)}',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    </c:if>
 </div>
 
 <script src="${pageContext.request.contextPath}/assets/js/formlogin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 

@@ -17,6 +17,14 @@ public class RegisterController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        // Kiểm tra với Google reCAPTCHA
+        boolean captchaVerified = RecaptchaUtils.verify(gRecaptchaResponse);
+        if (!captchaVerified) {
+            request.setAttribute("errorMessage", "Vui lòng xác minh reCAPTCHA!");
+            request.getRequestDispatcher("/user/register.jsp").forward(request, response);
+            return;
+        }
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
