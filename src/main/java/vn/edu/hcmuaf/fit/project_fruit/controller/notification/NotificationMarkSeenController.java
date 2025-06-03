@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller.notification;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

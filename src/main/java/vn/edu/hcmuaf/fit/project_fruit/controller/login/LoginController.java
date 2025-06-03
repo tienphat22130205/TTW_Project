@@ -60,7 +60,7 @@ public class LoginController extends HttpServlet {
             Logs log = new Logs(
                     user.getId_account(),
                     "INFO",
-                    "Login",
+                    "login",
                     "accounts",
                     null,
                     "Người dùng ID#"+user.getId_account()+" đã đăng nhập",

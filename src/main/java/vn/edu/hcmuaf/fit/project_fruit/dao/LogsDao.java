@@ -132,6 +132,13 @@ public class LogsDao {
             ps.executeUpdate();
         }
     }
+    public void markAllLogsAsSeen() throws SQLException {
+        String sql = "UPDATE logs SET seen = TRUE WHERE seen = FALSE";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        }
+    }
+
 
     public static void main(String[] args) {
         try (Connection conn = DbConnect.getConnection()) {

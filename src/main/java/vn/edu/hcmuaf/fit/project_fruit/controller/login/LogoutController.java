@@ -29,7 +29,7 @@ public class LogoutController extends HttpServlet {
                 Logs log = new Logs(
                         user.getId_account(),
                         "INFO",
-                        "Login",
+                        "logout",
                         "accounts",
                         null,
                         "Người dùng ID#"+user.getId_account()+" đã đăng xuất",

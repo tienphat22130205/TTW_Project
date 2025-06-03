@@ -6,10 +6,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
+import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Logs;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 import vn.edu.hcmuaf.fit.project_fruit.service.UserService;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @WebServlet("/change-password")
 public class ChangePasswordServlet extends HttpServlet {
@@ -41,6 +46,25 @@ public class ChangePasswordServlet extends HttpServlet {
                 boolean result = userService.changePassword(user.getEmail(), currentPassword, newPassword);
                 if (result) {
                     req.setAttribute("successMessage", " Đổi mật khẩu thành công!");
+
+                    // Ghi log
+                    try (Connection conn = DbConnect.getConnection()) {
+                        LogsDao logsDao = new LogsDao(conn);
+                        Logs log = new Logs();
+                        log.setUserId(user.getId_account());
+                        log.setLevel("INFO");
+                        log.setAction("change_password");
+                        log.setResource("user_" + user.getId_account());
+                        log.setBeforeData("");
+                        log.setAfterData("Người dùng ID#" + user.getId_account() +" đã thay đổi mật khẩu");
+                        log.setRole(user.getRole());
+                        log.setSeen(false);
+                        logsDao.insertLog(log);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+
                 } else {
                     req.setAttribute("errorMessage", " Mật khẩu hiện tại không đúng!");
                 }

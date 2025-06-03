@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller.notification;
 
 import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
@@ -19,12 +19,14 @@ import java.util.List;
 public class AdminNotificationController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         List<Logs> logsList = new ArrayList<>();
 
         try (Connection conn = DbConnect.getConnection()) {
             LogsDao logsDao = new LogsDao(conn);
             logsList = logsDao.getUnseenLogs();
+
+            // Đánh dấu tất cả log đã xem
+            logsDao.markAllLogsAsSeen();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,5 +39,6 @@ public class AdminNotificationController extends HttpServlet {
 
         response.getWriter().write(json);
     }
+
 }
 
