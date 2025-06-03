@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
-    // Không cần setAttribute cho request, dùng trực tiếp trong EL
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +50,14 @@
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
-
+        /* Thu nhỏ hộp reCAPTCHA */
+        .g-recaptcha {
+            transform: scale(0.85); /* Tỉ lệ 85% */
+            -webkit-transform: scale(0.85);
+            transform-origin: 0 0; /* Căn góc trên trái */
+            -webkit-transform-origin: 0 0;
+            margin-bottom: 15px; /* Khoảng cách dưới */
+        }
     </style>
 </head>
 <body>
@@ -92,7 +99,7 @@
 
             <!-- Quên mật khẩu -->
             <a href="${pageContext.request.contextPath}/user/forgotPassword.jsp" class="form__forgot">Quên mật khẩu ?</a>
-
+            <div class="g-recaptcha" data-sitekey="6LfPlFQrAAAAABzqTVN411qdQNf5Lrk5xTAvhLRJ"></div>
             <!-- Submit -->
             <input type="submit" class="form__button" value="Đăng nhập">
 
@@ -142,16 +149,22 @@
                 }
             </script>
         </c:if>
-
-
     </div>
+    <c:if test="${not empty errorMessage}">
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '${fn:escapeXml(errorMessage)}',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    </c:if>
 </div>
-
-<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="${pageContext.request.contextPath}/assets/js/formlogin.js"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="https://connect.facebook.net/en_US/sdk.js"></script>
-
-
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>

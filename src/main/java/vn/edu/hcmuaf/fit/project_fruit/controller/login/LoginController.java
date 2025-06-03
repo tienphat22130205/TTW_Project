@@ -24,6 +24,14 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        boolean captchaVerified = RecaptchaUtils.verify(gRecaptchaResponse);
+
+        if (!captchaVerified) {
+            request.setAttribute("errorMessage", "Vui lòng xác minh reCAPTCHA!");
+            request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+            return;
+        }
         String email = request.getParameter("useremail");
         String password = request.getParameter("pass");
 
