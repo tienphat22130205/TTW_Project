@@ -8,7 +8,7 @@ public class Promotions {
     private String end_date;
     private double percent_discount;
     private String type;
-    private String promotion_code;
+    private String code;
     private double min_order_amount;
     private int max_usage;
     private int usage_count;
@@ -17,7 +17,7 @@ public class Promotions {
     }
 
     public Promotions(int id_promotion, String promotion_name, String describe_1, String start_date, String end_date,
-                      double percent_discount, String type, String promotion_code, double min_order_amount,
+                      double percent_discount, String type, String code, double min_order_amount,
                       int max_usage, int usage_count) {
         this.id_promotion = id_promotion;
         this.promotion_name = promotion_name;
@@ -26,7 +26,7 @@ public class Promotions {
         this.end_date = end_date;
         this.percent_discount = percent_discount;
         this.type = type;
-        this.promotion_code = promotion_code;
+        this.code = code;
         this.min_order_amount = min_order_amount;
         this.max_usage = max_usage;
         this.usage_count = usage_count;
@@ -89,12 +89,12 @@ public class Promotions {
         this.type = type;
     }
 
-    public String getPromotion_code() {
-        return promotion_code;
+    public String getCode() {
+        return code;
     }
 
-    public void setPromotion_code(String promotion_code) {
-        this.promotion_code = promotion_code;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public double getMin_order_amount() {
@@ -131,7 +131,7 @@ public class Promotions {
                 ", end_date='" + end_date + '\'' +
                 ", percent_discount=" + percent_discount +
                 ", type='" + type + '\'' +
-                ", code='" + promotion_code + '\'' +
+                ", code='" + code + '\'' +
                 ", min_order_amount=" + min_order_amount +
                 ", max_usage=" + max_usage +
                 ", usage_count=" + usage_count +

@@ -58,7 +58,7 @@ public class PromotionService {
                 System.out.println("📅 Đến ngày: " + promotion.getEnd_date());
                 System.out.println("💸 Giảm giá: " + promotion.getPercent_discount() + "%");
                 System.out.println("📂 Loại: " + promotion.getType());
-                System.out.println("🏷️ Mã giảm giá: " + promotion.getPromotion_code());
+                System.out.println("🏷️ Mã giảm giá: " + promotion.getCode());
                 System.out.println("📦 Đơn hàng tối thiểu: " + promotion.getMin_order_amount() + " VND");
             }
         }

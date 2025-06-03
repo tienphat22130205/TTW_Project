@@ -29,11 +29,12 @@ public class LogoutController extends HttpServlet {
                 Logs log = new Logs(
                         user.getId_account(),
                         "INFO",
-                        "Logout",
+                        "logout",
                         "accounts",
                         null,
-                        null,
-                        user.getRole()
+                        "Người dùng ID#"+user.getId_account()+" đã đăng xuất",
+                        user.getRole(),
+                        false
                 );
                 LogsDao logDao = new LogsDao(DbConnect.getConnection());
                 try {

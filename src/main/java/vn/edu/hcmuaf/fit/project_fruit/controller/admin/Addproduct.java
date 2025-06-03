@@ -5,7 +5,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.Logs;
+import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -88,6 +91,33 @@ public class Addproduct extends HttpServlet {
                             imageStmt.setBoolean(3, true); // Ảnh chính
                             imageStmt.executeUpdate();
                         }
+                        //Log
+
+                        User user = (User) request.getSession().getAttribute("user");
+                        if (user == null) {
+                            response.sendRedirect(request.getContextPath() + "/login");
+                            return;
+                        }
+
+                        int userId = user.getId_account();
+                        String role = user.getRole();
+
+                        LogsDao logsDao = new LogsDao(conn);
+
+                        String afterData = "Đã thêm sản phẩm mới " + productName + " ID#" + productId;
+
+                        Logs log = new Logs();
+                        log.setUserId(userId);
+                        log.setLevel("INFO");
+                        log.setAction("add_product");
+                        log.setResource("products");
+                        log.setBeforeData(null);
+                        log.setAfterData(afterData);
+                        log.setRole(role);
+                        log.setSeen(false);
+
+                        logsDao.insertLog(log);
+                        //log
                     }
                 }
 

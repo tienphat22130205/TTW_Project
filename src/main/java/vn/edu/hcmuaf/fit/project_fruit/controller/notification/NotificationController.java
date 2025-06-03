@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.project_fruit.controller;
+package vn.edu.hcmuaf.fit.project_fruit.controller.notification;
 
 import vn.edu.hcmuaf.fit.project_fruit.dao.LogsDao;
 import vn.edu.hcmuaf.fit.project_fruit.dao.db.DbConnect;
@@ -6,7 +6,6 @@ import vn.edu.hcmuaf.fit.project_fruit.dao.model.Logs;
 import vn.edu.hcmuaf.fit.project_fruit.dao.model.User;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -34,7 +33,7 @@ public class NotificationController extends HttpServlet {
         if (userId > 0) {
             try (Connection conn = DbConnect.getConnection()) {
                 LogsDao logsDao = new LogsDao(conn);
-                logsList = logsDao.getLogsByUserIdExcludeLoginLogout(userId);
+                logsList = logsDao.getUnseenLogsByUserIdExcludeLoginLogout(userId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -45,15 +44,14 @@ public class NotificationController extends HttpServlet {
                 afterDataList.add(log.getAfterData());
             }
         }
-        // Set response as JSON
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        // Convert logs list to JSON
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new Gson();
         String json = gson.toJson(afterDataList);
 
-        // Write JSON to response
         response.getWriter().write(json);
     }
 }
+

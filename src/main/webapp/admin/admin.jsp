@@ -14,7 +14,7 @@
     <title>Admin</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/custom-datatable.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <style>
@@ -24,7 +24,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             display: none;
             justify-content: center;
             align-items: center;
@@ -120,6 +120,7 @@
         .close-button:hover {
             color: red;
         }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -130,10 +131,14 @@
                 transform: translateY(0);
             }
         }
+
         #productOverlay.modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0,0,0,0.7);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -167,6 +172,7 @@
             color: #666;
             transition: color 0.3s ease;
         }
+
         #productCloseBtn.close-button:hover {
             color: #e74c3c;
         }
@@ -201,7 +207,7 @@
             height: 320px;
             object-fit: contain;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         /* Bảng thông tin */
@@ -248,29 +254,37 @@
                 width: 95%;
                 padding: 20px;
             }
+
             .product-detail-container {
                 flex-direction: column;
                 align-items: center;
             }
+
             .product-image-wrapper {
                 margin-bottom: 20px;
             }
+
             .product-info-wrapper {
                 width: 100%;
             }
+
             .product-info-table th {
                 width: 140px;
             }
         }
+
         #editProductOverlay.modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0,0,0,0.7);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            padding: 10px 20px;  /* giảm padding tổng */
+            padding: 10px 20px; /* giảm padding tổng */
             overflow: hidden;
             height: 100vh;
         }
@@ -278,10 +292,10 @@
         #editProductOverlay .modal-content {
             background: #fff;
             border-radius: 12px;
-            width: 1100px;       /* giảm chiều rộng */
+            width: 1100px; /* giảm chiều rộng */
             max-width: 95%;
-            max-height: 85vh;    /* giới hạn chiều cao */
-            padding: 20px 30px;  /* giảm padding */
+            max-height: 85vh; /* giới hạn chiều cao */
+            padding: 20px 30px; /* giảm padding */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #222;
@@ -296,7 +310,7 @@
             gap: 20px;
             flex: 1;
             overflow: hidden;
-            max-height: calc(85vh - 100px);  /* trừ header + footer */
+            max-height: calc(85vh - 100px); /* trừ header + footer */
         }
 
         /* Ảnh sản phẩm bên trái */
@@ -312,14 +326,14 @@
             width: 280px; /* nhỏ hơn để cân đối */
             height: auto;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         /* Bảng form bên phải */
         #editProductOverlay .product-info-wrapper {
             flex: 1;
-            overflow-y: auto;  /* cuộn dọc */
-            min-width: 0;      /* để tránh tràn */
+            overflow-y: auto; /* cuộn dọc */
+            min-width: 0; /* để tránh tràn */
         }
 
         /* Bảng form */
@@ -333,7 +347,7 @@
         #editProductOverlay .product-info-table th,
         #editProductOverlay .product-info-table td {
             border: 1px solid #ddd;
-            padding: 8px 12px;  /* giảm padding */
+            padding: 8px 12px; /* giảm padding */
             vertical-align: top;
             text-align: left;
         }
@@ -412,19 +426,23 @@
                 padding: 15px 20px;
                 max-height: 90vh;
             }
+
             #editProductOverlay .product-detail-container {
                 flex-direction: column;
                 max-height: none;
                 overflow: visible;
             }
+
             #editProductOverlay .product-image-wrapper {
                 margin-bottom: 20px;
                 flex: none;
             }
+
             #editProductOverlay .product-info-wrapper {
                 width: 100%;
                 overflow: visible;
             }
+
             #editProductOverlay .product-info-table th {
                 width: 140px;
             }
@@ -442,7 +460,7 @@
 
         /* chung cho cả 3 nút */
         #editProductOverlay button {
-            min-width: 110px;  /* chiều rộng tối thiểu */
+            min-width: 110px; /* chiều rộng tối thiểu */
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
@@ -488,6 +506,7 @@
         #editProductOverlay button:nth-child(3):hover {
             background-color: #c0392b;
         }
+
         #custom-toast-container {
             position: fixed;
             top: 20px;
@@ -502,7 +521,7 @@
             border-left: 5px solid #28a745;
             border-radius: 6px;
             padding: 12px 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
             min-width: 280px;
             animation: slideIn 0.4s ease;
@@ -538,9 +557,16 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to   { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
+
         .btn-circle {
             width: 36px;
             height: 36px;
@@ -576,6 +602,7 @@
         .btn-icon {
             pointer-events: none;
         }
+
         /* Trạng thái thanh toán */
         .status-paid {
             background-color: #d4f8d4; /* xanh nhạt */
@@ -631,6 +658,7 @@
             font-weight: bold;
             display: inline-block;
         }
+
         .swal2-smaller-popup {
             font-size: 14px;
             border-radius: 8px;
@@ -641,11 +669,12 @@
             padding: 6px 16px !important;
             border-radius: 4px !important;
         }
+
         .dashboard-summary-box {
             padding: 24px;
             border-radius: 12px;
             background-color: #fff;
-            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
             text-align: center;
         }
 
@@ -668,7 +697,7 @@
             padding: 12px 20px;
             border-radius: 8px;
             background: #f9f9f9;
-            box-shadow: inset 0 0 3px rgba(0,0,0,0.03);
+            box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.03);
         }
 
         .summary-item .icon {
@@ -688,9 +717,18 @@
             color: #111;
         }
 
-        .icon.green { color: #2ecc71; }
-        .icon.blue  { color: #3498db; }
-        .icon.red   { color: #e74c3c; }
+        .icon.green {
+            color: #2ecc71;
+        }
+
+        .icon.blue {
+            color: #3498db;
+        }
+
+        .icon.red {
+            color: #e74c3c;
+        }
+
         .contact-button {
             background-color: #6294f6; /* màu vàng nhẹ */
             color: #d9e3f4;
@@ -700,6 +738,7 @@
             font-size: 14px;
             cursor: pointer;
         }
+
         .contact-button:hover {
             background-color: #417dfa; /* màu vàng nhẹ */
             color: #d9e3f4;
@@ -840,16 +879,219 @@
             Dashboard
         </h1>
         <div class="user-wrapper">
-            <div class="notification-icon" id="notificationBell">
-                <i class="fas fa-bell"></i>
-                <span class="notification-count" id="notificationCount">0</span>
+
+
+            <!-- chuong thong bao -->
+            <div class="notification-icon" id="notificationBell_Menu">
+                <a href="#" id="notificationToggle" class="notification-link" style="color: #000000">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-label">Thông báo</span>
+                    <span class="notification-count" id="notificationCount">0</span>
+                </a>
             </div>
-            <div class="notification-dropdown" id="notificationDropdown">
-                <h3 class="notification-title">Thông báo</h3>
-                <ul class="notification-list">
+            <div class="notification-popup" id="notificationPopup">
+                <ul>
 
                 </ul>
             </div>
+            <style>
+                .notification-icon {
+                    display: flex;
+                    position: relative;
+                    font-size: 25px;
+                    user-select: none;
+                }
+
+                .notification-link {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    text-decoration: none;
+                    gap: 2px;
+                    cursor: pointer;
+                    position: relative;
+                    padding-right: 30px;
+                }
+
+                .notification-label {
+                    font-size: 14px;
+                    white-space: nowrap;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .notification-count {
+                    position: absolute;
+                    top: -5px;
+                    right: 25px;
+                    background-color: red;
+                    color: white;
+                    border-radius: 50%;
+                    padding: 2px 6px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                .notification-link:hover i.fas.fa-bell {
+                    animation: shake 0.5s ease-in-out;
+                }
+
+                @keyframes shake {
+                    0%, 100% {
+                        transform: translateX(0);
+                    }
+                    20%, 60% {
+                        transform: translateX(-5px);
+                    }
+                    40%, 80% {
+                        transform: translateX(5px);
+                    }
+                }
+
+                .notification-popup {
+                    position: absolute;
+                    right: 0;
+                    top: 68px;
+                    margin-top: 4px;
+                    width: 430px;
+                    height: 500px;
+                    overflow-y: auto;
+                    background-color: white;
+                    color: black;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
+                    z-index: 9999;
+
+                    opacity: 0;
+                    pointer-events: none;
+                    transform: translateX(30px);
+                    transition: opacity 0.3s ease, transform 0.3s ease;
+                }
+
+                .notification-popup.active {
+                    display: block;
+                    opacity: 1;
+                    pointer-events: auto;
+                    transform: translateX(0);
+                }
+
+                .notification-popup-header {
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                    background-color: #f8f8f8;
+                    padding: 12px 16px;
+                    font-weight: bold;
+                    font-size: 18px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    word-break: break-word;
+                }
+
+                .notification-popup ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 10px;
+                }
+
+                .notification-popup ul li {
+                    padding: 8px 5px;
+                    border-bottom: 1px solid #eee;
+                    font-size: 14px;
+                }
+
+                .notification-popup ul li:last-child {
+                    border-bottom: none;
+                }
+
+            </style>
+            <script>
+                const bell = document.getElementById("notificationToggle");
+                const popup = document.getElementById("notificationPopup");
+                const countSpan = document.getElementById("notificationCount");
+                const notificationList = popup.querySelector('ul');
+
+                let oldNotificationCount = 0;
+
+                // Hàm tải thông báo và cập nhật UI nếu có thay đổi
+                async function pollNotifications() {
+                    try {
+                        const response = await fetch('/project_fruit/admin/notifications');
+                        if (!response.ok) throw new Error('Lỗi tải thông báo');
+
+                        const notifications = await response.json();
+
+                        // Chỉ cập nhật nếu số lượng thông báo thay đổi
+                        if (notifications.length !== oldNotificationCount) {
+                            oldNotificationCount = notifications.length;
+
+                            notificationList.innerHTML = '';
+
+                            if (!notifications || notifications.length === 0) {
+                                notificationList.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
+                                countSpan.style.display = "none";
+                                countSpan.textContent = "";
+                            } else {
+                                notifications.forEach(item => {
+                                    const li = document.createElement('li');
+                                    if (typeof item === 'string') {
+                                        li.textContent = item;
+                                    } else if (item.afterData) {
+                                        li.textContent = item.afterData;
+                                    } else {
+                                        li.textContent = JSON.stringify(item);
+                                    }
+                                    notificationList.appendChild(li);
+                                });
+
+                                countSpan.style.display = "inline-block";
+                                countSpan.textContent = notifications.length;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Lỗi khi lấy thông báo:', error);
+                    }
+                }
+
+                // Gọi polling định kỳ 10 giây
+                setInterval(pollNotifications, 5000);
+
+                // Khi load trang thì gọi luôn lần đầu
+                document.addEventListener('DOMContentLoaded', () => {
+                    pollNotifications();
+                });
+
+                // Xử lý click chuông bật/tắt popup và gọi API đánh dấu đã xem
+                bell.addEventListener("click", async (event) => {
+                    event.preventDefault();
+                    popup.classList.toggle("active");
+
+                    if (popup.classList.contains("active")) {
+                        try {
+                            const res = await fetch('/project_fruit/notifications/mark-seen', { method: 'POST' });
+                            if (res.ok) {
+                                oldNotificationCount = 0;  // Reset số lượng chưa xem
+                                countSpan.style.display = "none";
+                                countSpan.textContent = "";
+                                // Tải lại danh sách thông báo để cập nhật UI popup
+                                pollNotifications();
+                            }
+                        } catch (error) {
+                            console.error('Lỗi đánh dấu đã xem:', error);
+                        }
+                    }
+                });
+
+                // Ẩn popup khi click ra ngoài
+                document.addEventListener("click", (event) => {
+                    if (!bell.contains(event.target) && !popup.contains(event.target)) {
+                        popup.classList.remove("active");
+                    }
+                });
+
+            </script>
+            <!-- chuong thong bao -->
+
             <div class="user-profile">
                 <img src="${pageContext.request.contextPath}/assets/img/anhdaidien.jpg" alt="Ảnh đại diện" width="40px" height="40px" />
                 <div class="user-tooltip">
@@ -1010,7 +1252,8 @@
                                                     <td>${customer.fullname}</td>
                                                     <td>${customer.phone}</td>
                                                     <td>${customer.address}</td>
-                                                    <td><fmt:formatNumber value="${customer.totalSpent}" type="currency" currencySymbol="₫"/></td>
+                                                    <td><fmt:formatNumber value="${customer.totalSpent}" type="currency"
+                                                                          currencySymbol="₫"/></td>
                                                 </tr>
                                             </c:forEach>
                                             </tbody>
@@ -1514,27 +1757,32 @@
                     <form class="supplierAddForm" action="<%= request.getContextPath() %>/addsupplier" method="post">
                         <div class="form-group">
                             <label for="supplier-name">Tên nhà cung cấp:</label>
-                            <input type="text" id="supplier-name" name="supplier-name" placeholder="Nhập tên nhà cung cấp" required />
+                            <input type="text" id="supplier-name" name="supplier-name"
+                                   placeholder="Nhập tên nhà cung cấp" required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-email">Email:</label>
-                            <input type="email" id="supplier-email" name="supplier-email" placeholder="Nhập email" required />
+                            <input type="email" id="supplier-email" name="supplier-email" placeholder="Nhập email"
+                                   required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-phone">Số điện thoại:</label>
-                            <input type="text" id="supplier-phone" name="supplier-phone" placeholder="Nhập số điện thoại" required />
+                            <input type="text" id="supplier-phone" name="supplier-phone"
+                                   placeholder="Nhập số điện thoại" required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-address">Địa chỉ:</label>
-                            <input type="text" id="supplier-address" name="supplier-address" placeholder="Nhập địa chỉ" required />
+                            <input type="text" id="supplier-address" name="supplier-address" placeholder="Nhập địa chỉ"
+                                   required/>
                         </div>
 
                         <div class="form-group">
                             <label for="supplier-rating">Đánh giá:</label>
-                            <input type="text" id="supplier-rating" name="supplier-rating" placeholder="Nhập đánh giá (số sao)" required />
+                            <input type="text" id="supplier-rating" name="supplier-rating"
+                                   placeholder="Nhập đánh giá (số sao)" required/>
                         </div>
 
                         <div class="form-group">
@@ -1617,9 +1865,15 @@
                 <form class="promotionAddTable" action="<%= request.getContextPath() %>/AddPromotionServlet"
                       method="POST">
                     <div class="form-group">
-                        <label for="promotion-code">Tên khuyến mãi:</label>
-                        <input type="text" id="promotion-code" name="promotion_code" placeholder="Nhập mã giảm giá"
+                        <label for="promotion-name">Tên khuyến mãi:</label>
+                        <input type="text" id="promotion-name" name="promotion_name" placeholder="Nhập tên khuyến mãi"
                                required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promotion-code">Mã khuyến mãi:</label>
+                        <input type="text" id="promotion-code" name="promotion_code"
+                               placeholder="Nhập mã giảm giá" required/>
                     </div>
 
                     <div class="form-group">
@@ -1645,13 +1899,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="promotion-type">Loại:</label>
-                        <select id="promotion-type" name="promotion_type" class="promotionType" required>
-                            <option value="weekly">Weekly</option>
-                            <option value="general">General</option>
-                        </select>
+                        <label for="min-order-amount">Giá trị đơn tối thiểu (VNĐ):</label>
+                        <input type="number" id="min-order-amount" name="min_order_amount"
+                               placeholder="Nhập giá trị tối thiểu" min="0" required/>
                     </div>
-                    <button type="submit" class="btn-submit">Cập nhật</button>
+
+                    <div class="form-group">
+                        <label for="max-usage">Số lượt sử dụng tối đa:</label>
+                        <input type="number" id="max-usage" name="max_usage" placeholder="Nhập số lượt tối đa" min="1"
+                               required/>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Thêm khuyến mãi</button>
                 </form>
 
                 <h3>Danh sách Khuyến mãi</h3>

@@ -71,12 +71,14 @@ public class LoginController extends HttpServlet {
             Logs log = new Logs(
                     user.getId_account(),
                     "INFO",
-                    "Login",
+                    "login",
                     "accounts",
                     null,
-                    null,
-                    user.getRole() // 👈 Truyền vai trò
+                    "Người dùng ID#"+user.getId_account()+" đã đăng nhập",
+                    user.getRole(),
+                    false 
             );
+
             LogsDao logDao = new LogsDao(DbConnect.getConnection());
             try {
                 logDao.insertLog(log);

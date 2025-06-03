@@ -1,8 +1,5 @@
 package vn.edu.hcmuaf.fit.project_fruit.dao.model;
 
-
-import java.sql.Timestamp;
-
 public class Logs {
     private int userId;
     private String level;
@@ -10,12 +7,13 @@ public class Logs {
     private String resource;
     private String beforeData;
     private String afterData;
-    private String role; // Thêm
+    private String role;
+    private boolean seen;
 
     public Logs() {}
 
     public Logs(int userId, String level, String action, String resource,
-               String beforeData, String afterData, String role) {
+                String beforeData, String afterData, String role, boolean seen) {
         this.userId = userId;
         this.level = level;
         this.action = action;
@@ -23,9 +21,10 @@ public class Logs {
         this.beforeData = beforeData;
         this.afterData = afterData;
         this.role = role;
+        this.seen = seen;
     }
 
-    // Getter/setter
+    // Getter/setter các trường
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 
@@ -46,4 +45,7 @@ public class Logs {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public boolean isSeen() { return seen; }
+    public void setSeen(boolean seen) { this.seen = seen; }
 }

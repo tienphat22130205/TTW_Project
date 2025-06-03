@@ -99,7 +99,7 @@ public class PromotionsDao {
             ps.setString(4, promotion.getEnd_date());
             ps.setDouble(5, promotion.getPercent_discount());
             ps.setString(6, promotion.getType());
-            ps.setString(7, promotion.getPromotion_code());
+            ps.setString(7, promotion.getCode());
             ps.setDouble(8, promotion.getMin_order_amount());
             ps.setInt(9, promotion.getMax_usage());
             ps.setInt(10, promotion.getUsage_count());
@@ -181,9 +181,6 @@ public class PromotionsDao {
         }
         return null;
     }
-
-
-
 
     public static void main(String[] args) {
         PromotionsDao dao = new PromotionsDao();
