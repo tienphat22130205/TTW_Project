@@ -965,59 +965,70 @@
                 const countSpan = document.getElementById("notificationCount");
                 const notificationList = popup.querySelector('ul');
 
-                // Hàm tải thông báo
-                async function loadNotifications() {
+                let oldNotificationCount = 0;
+
+                // Hàm tải thông báo và cập nhật UI nếu có thay đổi
+                async function pollNotifications() {
                     try {
-                        // Thay URL này nếu bạn dùng API admin
                         const response = await fetch('/project_fruit/admin/notifications');
                         if (!response.ok) throw new Error('Lỗi tải thông báo');
 
                         const notifications = await response.json();
 
-                        // Xóa nội dung cũ
-                        notificationList.innerHTML = '';
+                        // Chỉ cập nhật nếu số lượng thông báo thay đổi
+                        if (notifications.length !== oldNotificationCount) {
+                            oldNotificationCount = notifications.length;
 
-                        if (!notifications || notifications.length === 0) {
-                            notificationList.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
-                            countSpan.style.display = "none";
-                            countSpan.textContent = "";
-                        } else {
-                            // Kiểm tra dạng dữ liệu: nếu là chuỗi hoặc object chứa afterData
-                            notifications.forEach(item => {
-                                const li = document.createElement('li');
-                                if (typeof item === 'string') {
-                                    li.textContent = item;
-                                } else if (item.afterData) {
-                                    li.textContent = item.afterData;
-                                } else {
-                                    li.textContent = JSON.stringify(item);
-                                }
-                                notificationList.appendChild(li);
-                            });
-                            countSpan.style.display = "inline-block";
-                            countSpan.textContent = notifications.length;
+                            notificationList.innerHTML = '';
+
+                            if (!notifications || notifications.length === 0) {
+                                notificationList.innerHTML = '<li class="no-notification">Không có thông báo mới</li>';
+                                countSpan.style.display = "none";
+                                countSpan.textContent = "";
+                            } else {
+                                notifications.forEach(item => {
+                                    const li = document.createElement('li');
+                                    if (typeof item === 'string') {
+                                        li.textContent = item;
+                                    } else if (item.afterData) {
+                                        li.textContent = item.afterData;
+                                    } else {
+                                        li.textContent = JSON.stringify(item);
+                                    }
+                                    notificationList.appendChild(li);
+                                });
+
+                                countSpan.style.display = "inline-block";
+                                countSpan.textContent = notifications.length;
+                            }
                         }
                     } catch (error) {
                         console.error('Lỗi khi lấy thông báo:', error);
-                        notificationList.innerHTML = '<li class="no-notification">Lỗi tải thông báo</li>';
-                        countSpan.style.display = "none";
-                        countSpan.textContent = "";
                     }
                 }
 
-                // Xử lý click vào chuông
+                // Gọi polling định kỳ 10 giây
+                setInterval(pollNotifications, 5000);
+
+                // Khi load trang thì gọi luôn lần đầu
+                document.addEventListener('DOMContentLoaded', () => {
+                    pollNotifications();
+                });
+
+                // Xử lý click chuông bật/tắt popup và gọi API đánh dấu đã xem
                 bell.addEventListener("click", async (event) => {
                     event.preventDefault();
                     popup.classList.toggle("active");
 
                     if (popup.classList.contains("active")) {
                         try {
-                            // Gọi API đánh dấu đã xem
                             const res = await fetch('/project_fruit/notifications/mark-seen', { method: 'POST' });
                             if (res.ok) {
+                                oldNotificationCount = 0;  // Reset số lượng chưa xem
                                 countSpan.style.display = "none";
                                 countSpan.textContent = "";
-                                // Không gọi loadNotifications lại để giữ popup hiện tại
+                                // Tải lại danh sách thông báo để cập nhật UI popup
+                                pollNotifications();
                             }
                         } catch (error) {
                             console.error('Lỗi đánh dấu đã xem:', error);
@@ -1031,9 +1042,6 @@
                         popup.classList.remove("active");
                     }
                 });
-
-                // Tự động load thông báo khi DOM sẵn sàng
-                document.addEventListener('DOMContentLoaded', loadNotifications);
 
             </script>
             <!-- chuong thong bao -->
