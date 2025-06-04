@@ -45,7 +45,6 @@ public class DbConnect {
             return null;
         }
     }
-
     // Trả về Connection
     public static Connection getConnection() {
         try {

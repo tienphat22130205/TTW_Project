@@ -49,7 +49,7 @@ java {
 }
 remotes {
     host {
-        host = '192.168.40.131'
+        host = '192.168.40.133'
         user = 'root'
         password = 'tphat'
     }
@@ -62,7 +62,8 @@ task docker_app_start {
         println 'begin docker_app_start'
         ssh.run {
             session(remotes.host) {
-                execute 'docker stop tomcat', ignoreError: true
+                // Đảm bảo sử dụng tên container chính xác hoặc ID container
+                execute 'docker stop tomcat', ignoreError: true // Sử dụng "tomcat" thay vì "tomcat:latest" hoặc ID container
                 execute 'docker run -it --rm -d ' +
                         '--name tomcat ' +
                         '-v /usr/deploy:/usr/local/tomcat/webapps ' +
@@ -72,14 +73,13 @@ task docker_app_start {
         }
     }
 }
+
 task docker_upload_file_to_server {
     doLast {
         println 'begin docker_upload_file_to_server'
         ssh.run {
             session(remotes.host) {
                 remove '/usr/deploy/project_fruit.war'
-                remove '/usr/deploy/project_fruit/'
-                remove '/usr/deploy/project_fruit-1/'
                 put from: "${project.projectDir}/build/libs/project_fruit-1.0-SNAPSHOT.war",
                         into: "/usr/deploy/project_fruit.war"
             }
